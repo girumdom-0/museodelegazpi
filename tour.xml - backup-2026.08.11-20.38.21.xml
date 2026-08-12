@@ -1,0 +1,656 @@
+﻿<krpano version="1.24" title="Virtual Tour">
+
+	<include url="skin/vtourskin.xml" />
+
+	<layer name="intro"
+       type="container"
+       keep="true" 
+       width="100%" 
+       height="100%"
+       bgcolor="0x000000"
+       bgalpha="0.2"
+       zorder="9999"
+       enabled="true"
+       bgcapture="true"
+       onclick="on_intro_click();">
+       
+    <layer name="intro_guide" 
+           enabled="false" 
+           url="skin/intro.png" 
+           align="center" 
+           scale="0.8" />
+</layer>
+
+<action name="on_intro_click">
+    tween(layer[intro].alpha, 0, 0.5, easeOutQuad, set(layer[intro].visible, false));
+</action>
+
+<!-- Place these OUTSIDE the <scene> block in your main tour.xml file -->
+
+<!-- Container Layer for the Image Pop-up Overlay -->
+<layer name="img_popup_bg" 
+       type="container" 
+       keep="true" 
+       width="100%" 
+       height="100%" 
+       bgcolor="0x000000" 
+       bgalpha="0.7" 
+       zorder="9999" 
+       visible="false" 
+       alpha="0.0" 
+       bgcapture="true" 
+       onclick="hide_image_popup();">
+
+    <!-- Pop-up Image -->
+    <layer name="img_popup_photo" 
+           url="" 
+           align="center" 
+           width="prop" 
+           height="80%" 
+           enabled="false" />
+
+    <!-- Close Hint Text -->
+    <layer name="img_popup_close_text" 
+           type="text" 
+           html="[ Click anywhere to close ]" 
+           align="bottom" 
+           y="30" 
+           css="color:#FFFFFF; font-size:14px; font-family:Arial;" 
+           bg="false" 
+           enabled="false" />
+</layer>
+
+<!-- Container Layer for the Image Pop-up Overlay -->
+<layer name="img_popup_bg" 
+       type="container" 
+       keep="true" 
+       width="100%" 
+       height="100%" 
+       bgcolor="0x000000" 
+       bgalpha="0.8" 
+       zorder="9999" 
+       visible="false" 
+       alpha="0.0" 
+       bgcapture="true">
+
+    <!-- Pop-up Photo (Draggable) -->
+    <layer name="img_popup_photo" 
+           url="" 
+           align="center" 
+           x="0" y="0"
+           width="prop" 
+           height="75%" 
+           scale="1.0" 
+           enabled="true" 
+           ondown="draglayer();" />
+
+    <!-- Zoom In Button (+) -->
+    <layer name="img_popup_zoomin" 
+           type="text" 
+           html="+" 
+           align="right" x="30" y="-30" 
+           css="color:#FFFFFF; font-size:24px; font-weight:bold; text-align:center; background-color:rgba(255,255,255,0.2); width:40px; height:40px; line-height:38px; border-radius:20px; cursor:pointer;" 
+           bg="false" 
+           onclick="mul(layer[img_popup_photo].scale, 1.2);" />
+
+    <!-- Zoom Out Button (-) -->
+    <layer name="img_popup_zoomout" 
+           type="text" 
+           html="&amp;minus;" 
+           align="right" x="30" y="30" 
+           css="color:#FFFFFF; font-size:24px; font-weight:bold; text-align:center; background-color:rgba(255,255,255,0.2); width:40px; height:40px; line-height:38px; border-radius:20px; cursor:pointer;" 
+           bg="false" 
+           onclick="div(layer[img_popup_photo].scale, 1.2);" />
+
+    <!-- Close Button -->
+    <layer name="img_popup_close" 
+           type="text" 
+           html="✕ Close" 
+           align="topright" x="20" y="20" 
+           css="color:#FFFFFF; font-size:14px; background-color:rgba(0,0,0,0.5); padding:6px 12px; border-radius:4px; cursor:pointer;" 
+           bg="false" 
+           onclick="hide_image_popup();" />
+
+    <!-- Close Hint Text -->
+    <layer name="img_popup_close_text" 
+           type="text" 
+           html="[ Drag to move • Click outside or hit Close to exit ]" 
+           align="bottom" y="20" 
+           css="color:#CCCCCC; font-size:13px; font-family:Arial;" 
+           bg="false" 
+           onclick="hide_image_popup();" />
+</layer>
+
+<!-- Action to Show the Image Pop-up -->
+<action name="show_image_popup">
+    set(layer[img_popup_photo].url, %1);
+    set(layer[img_popup_photo].scale, 1.0);
+    set(layer[img_popup_photo].x, 0);
+    set(layer[img_popup_photo].y, 0);
+    set(layer[img_popup_bg].visible, true);
+    tween(layer[img_popup_bg].alpha, 1.0, 0.3);
+</action>
+
+<!-- Action to Hide the Image Pop-up -->
+<action name="hide_image_popup">
+    tween(layer[img_popup_bg].alpha, 0.0, 0.3, easeOutQuad, set(layer[img_popup_bg].visible, false));
+</action>
+
+<!-- Generic Action for Dragging Layers -->
+<action name="draglayer">
+    copy(drag_x, mouse.stagex);
+    copy(drag_y, mouse.stagey);
+    copy(drag_layerx, x);
+    copy(drag_layery, y);
+    asyncloop(pressed,
+        sub(dx, mouse.stagex, drag_x);
+        sub(dy, mouse.stagey, drag_y);
+        add(x, drag_layerx, dx);
+        add(y, drag_layery, dy);
+    );
+</action>
+<!-- Container Layer for 3D Model Overlay -->
+<layer name="model3d_container" 
+       type="container" 
+       keep="true" 
+       width="100%" 
+       height="100%" 
+       bgcolor="0x000000" 
+       bgalpha="0.85" 
+       zorder="9999" 
+       visible="false" 
+       alpha="0.0" 
+       bgcapture="true">
+
+    <!-- Close Button -->
+    <layer name="model3d_close" 
+           type="text" 
+           html="✕ Close 3D View" 
+           align="topright" x="20" y="20" 
+           css="color:#FFFFFF; font-size:14px; background-color:rgba(0,0,0,0.6); padding:8px 16px; border-radius:4px; cursor:pointer;" 
+           bg="false" 
+           onclick="hide_3d_obj();" />
+
+    <!-- Hint Text -->
+    <layer name="model3d_hint" 
+           type="text" 
+           html="[ Left Click + Drag to Rotate • Scroll to Zoom ]" 
+           align="bottom" y="20" 
+           css="color:#CCCCCC; font-size:13px; font-family:Arial;" 
+           bg="false" 
+           enabled="false" />
+</layer>
+
+<!-- Actions -->
+<action name="show_3d_obj">
+    set(layer[model3d_container].visible, true);
+    tween(layer[model3d_container].alpha, 1.0, 0.3);
+    js(loadOBJModel(%1));
+</action>
+
+<action name="hide_3d_obj">
+    tween(layer[model3d_container].alpha, 0.0, 0.3, easeOutQuad, set(layer[model3d_container].visible, false));
+    js(clearOBJModel());
+</action>
+
+<!-- Actions -->
+<action name="show_3d_obj">
+    js(loadGLBModel(%1, %2));
+</action>
+
+<action name="hide_3d_obj">
+    js(clearGLBModel());
+</action>
+
+	<!-- customize skin settings: maps, gyro, webvr, thumbnails, tooltips, layout, design, ... -->
+	<skin_settings maps="false"
+	               maps_type="openstreetmaps"
+	               maps_bing_api_key=""
+	               maps_google_api_key=""
+	               maps_zoombuttons="false"
+	               maps_loadonfirstuse="true"
+	               gyro="true"
+	               gyro_keeplookingdirection="false"
+	               webvr="true"
+	               webvr_keeplookingdirection="true"
+	               webvr_prev_next_hotspots="true"
+	               autotour="false"
+	               littleplanetintro="true"
+	               followmousecontrol="false"
+	               title="true"
+	               thumbs="true"
+	               thumbs_width="120" thumbs_height="80" thumbs_padding="10" thumbs_crop="0|40|240|160"
+	               thumbs_opened="false"
+	               thumbs_text="false"
+	               thumbs_dragging="true"
+	               thumbs_onhoverscrolling="false"
+	               thumbs_scrollbuttons="false"
+	               thumbs_scrollindicator="false"
+	               thumbs_loop="false"
+	               tooltips_buttons="false"
+	               tooltips_thumbs="false"
+	               tooltips_hotspots="false"
+	               tooltips_mapspots="false"
+	               deeplinking="false"
+	               loadscene_flags="MERGE"
+	               loadscene_blend="OPENBLEND(0.5, 0.0, 0.75, 0.05, linear)"
+	               loadscene_blend_prev="SLIDEBLEND(0.5, 180, 0.75, linear)"
+	               loadscene_blend_next="SLIDEBLEND(0.5,   0, 0.75, linear)"
+	               loadingtext=""
+	               layout_width="100%"
+	               layout_maxwidth="814"
+	               controlbar_width="-24"
+	               controlbar_height="40"
+	               controlbar_offset="20"
+	               controlbar_offset_closed="-40"
+	               controlbar_overlap.no-fractionalscaling="10"
+	               controlbar_overlap.fractionalscaling="0"
+	               design_skin_images="vtourskin.png"
+	               design_bgcolor="0x2D3E50"
+	               design_bgalpha="0.8"
+	               design_bgborder="0"
+	               design_bgroundedge="1"
+	               design_bgshadow="0 4 10 0x000000 0.3"
+	               design_thumbborder_bgborder="3 0xFFFFFF 1.0"
+	               design_thumbborder_padding="2"
+	               design_thumbborder_bgroundedge="0"
+	               design_text_css="color:#FFFFFF; font-family:Arial;"
+	               design_text_shadow="1"
+	               />
+
+	<!--
+	    For an alternative skin design either change the <skin_settings> values 
+	    from above or optionally include one of the predefined designs from below.
+	-->
+	<!-- <include url="skin/vtourskin_design_flat_light.xml"  /> -->
+	<include url="skin/vtourskin_design_glass.xml"       />
+	<!-- <include url="skin/vtourskin_design_ultra_light.xml" /> -->
+	<!-- <include url="skin/vtourskin_design_117.xml"         /> -->
+	<!-- <include url="skin/vtourskin_design_117round.xml"    /> -->
+	<!-- <include url="skin/vtourskin_design_black.xml"       /> -->
+	
+
+	
+	<scene name="scene_1" title="1" onstart="" thumburl="panos/1.tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/1.tiles/preview.jpg" />
+
+		<image>
+			<sphere url="panos/1.tiles/l%l/%0v/l%l_%0v_%0h.jpg" multires="512,2048x1024,4096x2048,7936x3968" />
+		</image>
+
+		<hotspot name="spot2085339555" style="skin_hotspotstyle" ath="-12.103" atv="4.788" depth="1000.0" linkedscene="scene_2" linkedscene_lookat="19.08,1.35,120.0" />
+
+	</scene>
+
+	<scene name="scene_2" title="2" onstart="" thumburl="panos/2.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/2.tiles/preview.webp" />
+
+		<image>
+			<sphere url="panos/2.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+		</image>
+
+		<hotspot name="spot2085339706" style="skin_hotspotstyle" ath="59.768" atv="-5.189" depth="1000.0" linkedscene="scene_3" linkedscene_lookat="-17.74,1.12,120.0" />
+		<hotspot name="spot2085346480" style="skin_hotspotstyle" ath="167.165" atv="32.759" depth="1000.0" linkedscene="scene_1" linkedscene_lookat="-2.25,-5.16,120.0" />
+
+	</scene>
+
+	<scene name="scene_3" title="3" onstart="" thumburl="panos/3.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/3.tiles/preview.webp" />
+
+		<image>
+			<sphere url="panos/3.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+		</image>
+
+		<hotspot name="spot2085339894" style="skin_hotspotstyle" ath="-43.326" atv="5.46" depth="1000.0" linkedscene="scene_4" linkedscene_lookat="19.53,-4.49,120.0" />
+		<hotspot name="spot2085346232" style="skin_hotspotstyle" ath="104.161" atv="17.351" depth="1000.0" linkedscene="scene_2" linkedscene_lookat="161.41,0.14,120.0" />
+
+	</scene>
+
+	<scene name="scene_4" title="4" onstart="" thumburl="panos/4.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/4.tiles/preview.webp" />
+
+		<image>
+			<sphere url="panos/4.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+		</image>
+
+		<hotspot name="spot2085340045" style="skin_hotspotstyle" ath="23.486" atv="-11.429" depth="1000.0" linkedscene="scene_5" linkedscene_lookat="82.4,5.16,120.0" />
+		<hotspot name="spot2085346092" style="skin_hotspotstyle" ath="173.115" atv="32.87" depth="1000.0" linkedscene="scene_3" linkedscene_lookat="107.28,2.1,120.0" />
+		
+
+	</scene>
+
+	<scene name="scene_5" title="5" onstart="" thumburl="panos/5.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/5.tiles/preview.webp" />
+
+		<image>
+			<sphere url="panos/5.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+		</image>
+
+		<hotspot name="spot2085340207" style="skin_hotspotstyle" ath="90.884" atv="-4.774" depth="1000.0" linkedscene="scene_6" linkedscene_lookat="-176.3,2.53,120.0" />
+		<hotspot name="spot2085345652" style="skin_hotspotstyle" ath="14.119" atv="17.232" depth="1000.0" linkedscene="scene_4" linkedscene_lookat="177.32,4.65,120.0" />
+
+	</scene>
+<scene name="scene_6" title="6" onstart="" thumburl="panos/6.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+        
+    <control bouncinglimits="calc:image.cube ? true : false" />
+
+    <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+    <preview url="panos/6.tiles/preview.webp" />
+
+    <image>
+        <sphere url="panos/6.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+    </image>
+
+    <!-- Navigation Hotspots -->
+    <hotspot name="spot2085340357" style="skin_hotspotstyle" ath="-156.32" atv="3.346" depth="1000.0" linkedscene="scene_7" linkedscene_lookat="152.96,4.2,120.0" />
+    <hotspot name="spot2085345507" style="skin_hotspotstyle" ath="82.076" atv="16.81" depth="1000.0" linkedscene="scene_5" linkedscene_lookat="0.0,0.0,120.0" />
+
+    <!-- Info Hotspot -->
+    <hotspot name="info_bust" 
+             style="skin_hotspotstyle" 
+             url="skin/info.png" 
+             ath="5" 
+             atv="10" 
+             scale="0.4" 
+             onclick="show_image_popup('images/scene6.png');" />
+
+
+    <!-- 3D Model Hotspot -->
+    <hotspot name="spot_bust_3d" 
+         style="skin_hotspotstyle" 
+         url="skin/info.png" 
+         ath="-35" 
+         atv="20" 
+         scale="0.4" 
+         onclick="show_3d_obj('models/bust.glb', 'models/bust_texture.png');" />
+
+		 <hotspot name="spot_sister_city_text" 
+         style="skin_hotspotstyle" 
+         url="skin/info.png" 
+         ath="-3.5" 
+         atv="-10" 
+         scale="0.4" 
+         onclick="show_sister_city_info();" />
+
+		 <hotspot name="spot_miguel_panel" 
+         style="skin_hotspotstyle" 
+         url="skin/info.png" 
+         ath="-120" 
+         atv="-20" 
+         scale="0.4" 
+         onclick="show_miguel_legazpi_panel();" />
+
+</scene>
+
+<action name="show_sister_city_info">
+    js(showTextModal(
+        'SISTER CITY RELATIONSHIP BETWEEN THE CITY OF LEGAZPI AND AYUNTAMIENTO ZUMARRAGA', 
+        '1999-2000 Legazpi City', 
+        'In seeking the roots of the picture from where the city was named, the officials of the City of Legazpi signed a Sister City Relationship Agreement with the Ayuntamiento de Zumarraga, España on October 27, 1978. Zumarraga in Guipuzcoa, a province of the Basque Country of Spain, is the birthplace of Adelantado Miguel Lopez de Legazpi.', 
+        'Adelantado was a title used by Spanish conquistadors of the 16th century who served as a governor of a province in Spain or of a Spanish colonial province.'
+    ));
+</action>
+
+<action name="show_miguel_legazpi_panel">
+    js(showInfoPanel(
+        'THE CITY NAMED AFTER MIGUEL LOPEZ DE LEGAZPI',
+        '1999-2000 Legazpi City',
+        'The naming of the City is credited to Don Ramon Montero of the Gobierno Superior de las Islas Filipinas who, in July 17, 1856, signed a decree creating the visita of Pueblo Viejo out of Binanuahan and the adjacent villages.\n\nLegazpi was actually the name of a place in the municipality of Zumarraga in Gipuzkoa, a province of the Basque Country autonomous community of Spain.',
+        'Miguel Lopez de Legazpi was born in 1502 in Zumarraga, Spain. In 1564, he was commissioned by King Philip II of Spain to lead an expedition to the Pacific Ocean in search of the Spice Islands.',
+        'images/mig.png',
+        'images/scene6(1).png',
+        'images/scene6(2).png',
+        'images/scene6(3).png',
+    ));
+</action>
+
+	<scene name="scene_7" title="7" onstart="" thumburl="panos/7.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/7.tiles/preview.webp" />
+
+		<image>
+			<sphere url="panos/7.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+		</image>
+
+		<hotspot name="spot2085340577" style="skin_hotspotstyle" ath="144.025" atv="15.202" depth="1000.0" linkedscene="scene_8" linkedscene_lookat="-13.24,-1.12,120.0" />
+		<hotspot name="spot2085345356" style="skin_hotspotstyle" ath="-155.527" atv="11.493" depth="1000.0" linkedscene="scene_6" linkedscene_lookat="69.72,3.26,120.0" />
+
+<!-- Hotspot positioned on the Sawangan wall board -->
+<hotspot name="spot_sawangan_board" 
+         style="skin_hotspotstyle" 
+         url="skin/info.png" 
+         ath="-35" 
+         atv="-15" 
+         scale="0.4" 
+         onclick="show_sawangan_panel();" />
+	</scene>
+<!-- Action for the Sawangan Display Board -->
+<action name="show_sawangan_panel">
+    js(showInfoPanel(
+        'THE SETTLEMENT CALLED SAWANGAN',
+        'Museo de Legazpi',
+        'Most of the great cities of the world were born where the rivers meet the sea... The City of Legazpi was born between the Tibu and Makabalo rivers. It grew from a humble fishing village and pockets of settlements on the swamps called Sawangan.\n\nThe area which is now Legazpi City and Albay District had a thriving civilization long before the Spanish explorers came to its shores.',
+        'The name Sawangan had two connotations: anchorage (from the word "sawang") and delta (from the word "sabang").',
+        'images/sawangan_aerial.jpg',     <!-- Left Top Image -->
+        'images/sawangan_landscape.jpg'  <!-- Left Middle Image -->
+        /* Pass null or omit if there are no bottom images */
+    ));
+</action>
+	<scene name="scene_8" title="8" onstart="" thumburl="panos/8.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/8.tiles/preview.webp" />
+
+		<image>
+			<sphere url="panos/8.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+		</image>
+
+		<hotspot name="spot2085340728" style="skin_hotspotstyle" ath="-8.524" atv="4.61" depth="1000.0" linkedscene="scene_9" linkedscene_lookat="31.88,1.8,120.0" />
+		<hotspot name="spot2085345084" style="skin_hotspotstyle" ath="-86.515" atv="11.006" depth="1000.0" linkedscene="scene_7" linkedscene_lookat="-495.38,0.25,120.0" />
+
+	</scene>
+
+	<scene name="scene_9" title="9" onstart="" thumburl="panos/9.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/9.tiles/preview.webp" />
+
+		<image>
+			<sphere url="panos/9.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+		</image>
+
+		<hotspot name="spot2085340932" style="skin_hotspotstyle" ath="38.061" atv="9.119" depth="1000.0" linkedscene="scene_10" linkedscene_lookat="219.9,9.02,120.0" />
+		<hotspot name="spot2085344786" style="skin_hotspotstyle" ath="111.014" atv="8.096" depth="1000.0" linkedscene="scene_8" linkedscene_lookat="-83.22,0.44,120.0" />
+
+	</scene>
+
+	<scene name="scene_10" title="10" onstart="" thumburl="panos/10.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/10.tiles/preview.webp" />
+
+		<image>
+			<sphere url="panos/10.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+		</image>
+
+		<hotspot name="spot2085341092" style="skin_hotspotstyle" ath="-141.152" atv="12.309" depth="1000.0" linkedscene="scene_11" linkedscene_lookat="132.66,1.05,120.0" />
+		<hotspot name="spot2085344546" style="skin_hotspotstyle" ath="150.232" atv="10.222" depth="1000.0" linkedscene="scene_9" linkedscene_lookat="108.2,1.73,120.0" />
+
+	</scene>
+
+	<scene name="scene_11" title="11" onstart="" thumburl="panos/11.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/11.tiles/preview.webp" />
+
+		<image>
+			<sphere url="panos/11.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+		</image>
+
+		<hotspot name="spot2085341273" style="skin_hotspotstyle" ath="143.487" atv="12.99" depth="1000.0" linkedscene="scene_12" linkedscene_lookat="-124.28,6.14,120.0" />
+		<hotspot name="spot2085344135" style="skin_hotspotstyle" ath="-156.486" atv="10.677" depth="1000.0" linkedscene="scene_10" linkedscene_lookat="-205.85,1.06,120.0" />
+
+	</scene>
+
+	<scene name="scene_12" title="12" onstart="" thumburl="panos/12.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/12.tiles/preview.webp" />
+
+		<image>
+			<sphere url="panos/12.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+		</image>
+
+		<hotspot name="spot2085341720" style="skin_hotspotstyle" ath="-112.342" atv="10.435" depth="1000.0" linkedscene="scene_13" linkedscene_lookat="5.61,15.27,120.0" />
+		<hotspot name="spot2085343972" style="skin_hotspotstyle" ath="65.459" atv="6.542" depth="1000.0" linkedscene="scene_11" linkedscene_lookat="-164.35,-3.73,120.0" />
+
+	</scene>
+
+	<scene name="scene_13" title="13" onstart="" thumburl="panos/13.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/13.tiles/preview.webp" />
+
+		<image>
+			<sphere url="panos/13.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+		</image>
+
+		<hotspot name="spot2085341842" style="skin_hotspotstyle" ath="-0.486" atv="33.968" depth="1000.0" linkedscene="scene_14" linkedscene_lookat="22.89,-0.23,120.0" />
+		<hotspot name="spot2085343781" style="skin_hotspotstyle" ath="-176.447" atv="-11.421" depth="1000.0" linkedscene="scene_12" linkedscene_lookat="66.08,4.69,120.0" />
+
+	</scene>
+
+	<scene name="scene_14" title="14" onstart="" thumburl="panos/14.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/14.tiles/preview.webp" />
+
+		<image>
+			<sphere url="panos/14.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+		</image>
+
+		<hotspot name="spot2085342031" style="skin_hotspotstyle" ath="44.097" atv="2.662" depth="1000.0" linkedscene="scene_15" linkedscene_lookat="-67.97,-3.37,120.0" />
+		<hotspot name="spot2085343580" style="skin_hotspotstyle" ath="-76.981" atv="3.631" depth="1000.0" linkedscene="scene_13" linkedscene_lookat="-182.81,-0.31,120.0" />
+
+	</scene>
+
+	<scene name="scene_15" title="15" onstart="" thumburl="panos/15.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/15.tiles/preview.webp" />
+
+		<image>
+			<sphere url="panos/15.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+		</image>
+
+		<hotspot name="spot2085342375" style="skin_hotspotstyle" ath="-73.659" atv="7.969" depth="1000.0" linkedscene="scene_16" linkedscene_lookat="-87.94,-1.95,120.0" />
+		<hotspot name="spot2085343401" style="skin_hotspotstyle" ath="54.083" atv="10.001" depth="1000.0" linkedscene="scene_14" linkedscene_lookat="-93.59,7.49,120.0" />
+
+	</scene>
+
+	<scene name="scene_16" title="16" onstart="" thumburl="panos/16.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/16.tiles/preview.webp" />
+
+		<image>
+			<sphere url="panos/16.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+		</image>
+
+		<hotspot name="spot2085342476" style="skin_hotspotstyle" ath="-90.198" atv="2.977" depth="1000.0" linkedscene="scene_17" linkedscene_lookat="-39.06,-4.27,120.0" />
+		<hotspot name="spot2085343232" style="skin_hotspotstyle" ath="-3.935" atv="15.328" depth="1000.0" linkedscene="scene_15" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+	</scene>
+
+	<scene name="scene_17" title="17" onstart="" thumburl="panos/17.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/17.tiles/preview.webp" />
+
+		<image>
+			<sphere url="panos/17.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+		</image>
+
+		<hotspot name="spot2085342586" style="skin_hotspotstyle" ath="-41.938" atv="-1.593" depth="1000.0" linkedscene="scene_18" linkedscene_lookat="-11.23,3.14,120.0" />
+
+	</scene>
+
+	<scene name="scene_18" title="18" onstart="" thumburl="panos/18.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+		
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/18.tiles/preview.webp" />
+
+		<image>
+			<sphere url="panos/18.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+		</image>
+
+		<hotspot name="spot2085342706" style="skin_hotspotstyle" ath="8.127" atv="-0.916" depth="1000.0" linkedscene="scene_1" linkedscene_lookat="1.35,-3.82,120.0" />
+		<hotspot name="spot2085342897" style="skin_hotspotstyle" ath="-177.776" atv="20.903" depth="1000.0" linkedscene="scene_16" linkedscene_lookat="-42.43,6.74,120.0" />
+
+	</scene>
+
+
+</krpano>
