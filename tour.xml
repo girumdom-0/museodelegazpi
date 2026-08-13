@@ -28,7 +28,7 @@
              align="center"
              width="90%"
              height="prop"
-             scale="0.8"
+             scale="0.6"
              width.mobile="calc:stagewidth*0.82"
              height.mobile="calc:stageheight*0.78"
              scale.mobile="1.0"
