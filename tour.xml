@@ -553,7 +553,69 @@
         </image>
         <hotspot name="spot2085340932" style="skin_hotspotstyle" ath="38.061" atv="9.119" depth="1000.0" linkedscene="scene_10" linkedscene_lookat="219.9,9.02,120.0" />
         <hotspot name="spot2085344786" style="skin_hotspotstyle" ath="111.014" atv="8.096" depth="1000.0" linkedscene="scene_8" linkedscene_lookat="-83.22,0.44,120.0" />
+
+
+        <hotspot name="perils"
+             url="skin/info.png"
+             ath="144" 
+             atv="-15.5"
+             scale="0.3"
+             zoom="true"
+             onclick="show_perils_panel();" />
+
+        <hotspot name="the_battle"
+             url="skin/info.png"
+             ath="-79" 
+             atv="-19.5"
+             scale="0.3"
+             zoom="true"
+             onclick="show_the_battle_panel();" />
+
+        <hotspot name="economic"
+             url="skin/info.png"
+             ath="5" 
+             atv="-10"
+             scale="0.3"
+             zoom="true"
+             onclick="show_economic_trans_panel();" />
+
     </scene>
+
+    <action name="show_perils_panel" type="Javascript"><![CDATA[
+        showInfoPanel(
+            "PERILS FROM THE SEA",
+            "",
+            "Legazpi experienced not only destruction from natural disasters but also repeated attacks caused by war, particularly by Moro raids and Dutch invasions during the Spanish colonial period. The Dutch War of Independence (1568–1648) between Spain and the Netherlands extended to the Philippines, affecting the Bicol region. In 1600, Dutch Admiral Oliver van Noort attempted to attack Albay but retreated after encountering resistance from Spanish forces and local warriors. In 1636, the Dutch returned and successfully destroyed Albay during a town fiesta, extending their attacks to Cagsawa and nearby villages. Although the war officially ended with the Treaty of Westphalia in 1648, Dutch incursions in the Philippines continued until 1735.",
+            "",
+            "images/perils.png",
+            "images/perils1.png",
+            "images/perils2.png"
+        );
+    ]]></action>
+
+    <action name="show_the_battle_panel" type="Javascript"><![CDATA[
+        showInfoPanel(
+            "THE BATTLE OF LEGAZPI USHERED IN THE  AMERICAN REGIME",
+            "",
+            "The American invasion of Bikol in 1900 was largely driven by the region’s highly profitable abaca industry, particularly in Albay, which was then the wealthiest province in the Philippines. Following the Treaty of Paris in 1898, the Philippine Revolutionary Government (PRG) raised over ₱600,000 in Albay through war bonds to finance resistance against the Americans and blockaded the Port of Legazpi in 1899 to stop abaca exports. In response, American forces under General William Kobbe attacked Legazpi on January 23, 1900 using the warships Castellano, Venus, and Nashville. Despite the determined defense of more than 800 Filipino fighters, many of whom were poorly armed, the Americans' superior naval artillery and Krag rifles quickly overwhelmed the defenders. After hours of intense bombardment and ground assaults, the Filipinos were forced to retreat, resulting in the death of 172 Filipino soldiers, the capture of many others, and only 7 American wounded. The Battle of Legazpi ended in an American victory, leaving the city devastated and largely deserted, and it is remembered today through the monument marking the historic battle.",
+            "",
+            "images/the_battle.png",
+            "images/the_battle1.png",
+            "images/the_battle2.png"
+        );
+    ]]></action>
+
+    <action name="show_economic_trans_panel" type="Javascript"><![CDATA[
+        showInfoPanel(
+            "ECONOMIC TRANSFORMATIONS UNDER THE AMERICAN REGIME",
+            "",
+            "Following the 1898 Treaty of Paris, the United States took control of the Philippines and established the First Philippine Commission under Jacob Schurman to assess the country's future. The Philippine-American War began on February 4, 1899, and American occupation of Albay started with the Battle of Legazpi on January 23, 1900, with resistance continuing until Simeon Ola's surrender in 1903. The Second Philippine Commission, led by William Howard Taft, introduced democratic governance by creating the judicial system, civil service, legal code, and public education. On April 25, 1900, Taft met with Albay officials to discuss the Municipal Code. Although there were proposals to move the provincial capital to Tabaco, Albay remained the provincial seat, and a new capitol building was later designed by American architect William E. Parsons. In 1907, Act No. 1731 merged the municipalities of Albay, Legazpi, and Daraga into one municipality called Albay, which was officially renamed Legazpi in 1925 through Legislative Act No. 3253.",
+            "",
+            "images/eco.png",
+            "images/eco1.png",
+            "images/eco2.png"
+        );
+    ]]></action>
 
     <!-- SCENE 10 -->
     <scene name="scene_10" title="10" onstart="" thumburl="panos/10.tiles/thumb.webp" lat="" lng="" alt="" heading="">
