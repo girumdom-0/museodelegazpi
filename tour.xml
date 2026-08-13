@@ -33,6 +33,7 @@
              height.mobile="calc:stageheight*0.78"
              scale.mobile="1.0"
              keep="true"
+             onclick="on_intro_click();"
              onresize.mobile="set(layer[intro_guide].width, calc:stagewidth*0.82); set(layer[intro_guide].height, calc:stageheight*0.78);" />
     </layer>
 
