@@ -488,6 +488,21 @@
              zoom="true"
              onclick="show_albay_viejo_panel();" />
 
+    <hotspot name="the_becerra_law"
+             url="skin/info.png"
+             ath="120" 
+             atv="-13"
+             scale="0.3"
+             zoom="true"
+             onclick="show_the_becerra_law_panel();" />
+
+    <hotspot name="two_churches"
+             url="skin/info.png"
+             ath="23" 
+             atv="-13"
+             scale="0.3"
+             zoom="true"
+             onclick="show_two_churches_panel();" />
 
     </scene>
 
@@ -503,6 +518,30 @@
             "images/albay2.png"
         );
     ]]></action>
+
+  <action name="show_the_becerra_law_panel" type="Javascript"><![CDATA[
+        showInfoPanel(
+            "THE BECERRA LAW",
+            "",
+            "Legazpi City experienced a unique and challenging path to cityhood, being established as a city three different times. It first became a city in 1890 through a Spanish Royal Decree that created the Ayuntamiento de Albay, giving local leaders greater authority over governance and appointing influential Albayanos to key government positions. During the American period, Legazpi reverted to a municipality in 1922 and was officially renamed from Albay to Legazpi in 1925. It regained city status in 1948, reverted to a town in 1954, and finally became a city again on June 12, 1959, through Republic Act No. 2234. Despite these political changes and territorial adjustments involving Daraga and the Old Albay District, Legazpi continued to develop into the province's center for commerce, culture, and religion. Notable historical landmarks that symbolize its heritage include the Casa Real (now Legazpi City Hall), the Cathedral of San Gregorio Magno, Peñaranda Park, and the Legazpi Port District.",
+            "",
+            "images/becerra.png",
+            "images/becerra1.png",
+            "images/becerra2.png"   
+        );
+    ]]></action>
+<action name="show_two_churches_panel" type="Javascript"><![CDATA[
+        showInfoPanel(
+            "A TALE OF TWO CHURCHES",
+            "",
+            "Originally known as Baybay or Baybayo, the settlement was established as the parish of San Gregorio de Sawangan in 1616, with its first wooden chapel built by Fray Francisco de Sta. Ana. Over the centuries, the church was rebuilt several times after being damaged by Dutch attacks, Moro raids, fires, earthquakes, storms, and other disasters. Following the devastating 1814 eruption of Mayon Volcano, residents relocated to safer areas, particularly Albay Nuevo, where a new bamboo church was built and later replaced with a stone church in 1836. This church eventually became the St. Gregory the Great Cathedral, the seat of the Diocese of Legazpi, which was officially established in 1951. The cathedral has undergone numerous renovations, survived World War II damage and natural calamities, and was notably visited by Pope John Paul II in 1981. Meanwhile, some residents returned to Albay Viejo and established the Saint Raphael Church in 1834, dedicated to the patron saint of fishermen. Despite its unique orientation, which differed from Spanish colonial planning, the church endured pirate attacks, natural disasters, fires, and wartime destruction before being reconstructed into its present reinforced concrete structure.",
+            "",
+            "images/two_churches.png",
+            "images/two_churches1.png",
+            "images/two_churches2.png"
+        );
+    ]]></action>
+
 
     <!-- SCENE 9 -->
     <scene name="scene_9" title="9" onstart="" thumburl="panos/9.tiles/thumb.webp" lat="" lng="" alt="" heading="">
