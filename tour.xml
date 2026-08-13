@@ -371,14 +371,14 @@
                  zoom="false"
                  onclick="show_3d_obj('models/bust.glb', 'models/bust_texture.png');" />
 
-        <!-- Text Hotspot: Triggers HTML Text-Only Modal (Sister City details) -->
-        <hotspot name="spot_sister_city_text"
-                 url="skin/info.png"
-                 ath="-20"
-                 atv="13"
-                 scale="0.3"
-                 zoom="false"
-                 onclick="show_sister_city_info();" />
+       <!-- Text Hotspot: Triggers HTML Text-Only Modal (Sister City details) -->
+     <hotspot name="spot_sister_city_text"
+         url="skin/info.png"
+         ath="-20"
+         atv="13"
+         scale="0.3"
+         zoom="true"
+         onclick="show_sister_city_info();" />
 
         <!-- Panel Hotspot: Triggers Combined HTML Image & Text Panel (Miguel López de Legazpi) -->
         <hotspot name="spot_miguel_panel"
@@ -390,29 +390,26 @@
                  onclick="show_miguel_legazpi_panel();" />
     </scene>
 
-    <!-- Custom Action: Passes text parameters to JavaScript text modal -->
-    <action name="show_sister_city_info">
-        js(showTextModal(
-            'SISTER CITY RELATIONSHIP BETWEEN THE CITY OF LEGAZPI AND AYUNTAMIENTO ZUMARRAGA',
-            '1999-2000 Legazpi City',
-            'In seeking the roots of the picture from where the city was named, the officials of the City of Legazpi signed a Sister City Relationship Agreement with the Ayuntamiento de Zumarraga, España on October 27, 1978. Zumarraga in Guipuzcoa, a province of the Basque Country of Spain, is the birthplace of Adelantado Miguel Lopez de Legazpi.',
-            'Adelantado was a title used by Spanish conquistadors of the 16th century who served as a governor of a province in Spain or of a Spanish colonial province.'
-        ));
-    </action>
-
-    <!-- Custom Action: Passes image paths & text content to JavaScript gallery panel -->
-    <action name="show_miguel_legazpi_panel">
-        js(showInfoPanel(
-            'THE CITY NAMED AFTER MIGUEL LOPEZ DE LEGAZPI',
-            '1999-2000 Legazpi City',
-            'The naming of the City is credited to Don Ramon Montero of the Gobierno Superior de las Islas Filipinas who, in July 17, 1856, signed a decree creating the visita of Pueblo Viejo out of Binanuahan and the adjacent villages.\n\nLegazpi was actually the name of a place in the municipality of Zumarraga in Gipuzkoa, a province of the Basque Country autonomous community of Spain.',
-            'Miguel Lopez de Legazpi was born in 1502 in Zumarraga, Spain. In 1564, he was commissioned by King Philip II of Spain to lead an expedition to the Pacific Ocean in search of the Spice Islands.',
-            'images/mig.png',
-            'images/scene6(1).png',
-            'images/scene6(2).png',
-            'images/scene6(3).png'
-        ));
-    </action>
+<!-- Custom Action: Passes text parameters to JavaScript text modal -->
+<action name="show_sister_city_info" type="Javascript"><![CDATA[
+    showTextModal(
+        "SISTER-CITY RELATIONSHIP BETWEEN THE CITY OF LEGAZPI AND AYUNTAMIENTO ZUMARRAGA",
+        "Legazpi City established a Sister-City Relationship with Zumarraga, Spain, on October 21, 1975, to honor the birthplace of Adelantado Don Miguel Lopez de Legazpi, the city's namesake. The agreement, signed by Mayor Gregorio Imperial and Alcalde Don Cruz-Maria Uribezalgo Larranaga, promotes cooperation through the exchange of information on history, culture, tourism, literature, governance, and other shared interests. In February 2012, Mayor Geraldine Rosal and City Administrator Noel Rosal visited Zumarraga to strengthen ties and discuss tourism, investments, and business opportunities with local officials. The visit was sponsored by AECID, Spain's development agency, which has provided significant financial and technological assistance to Legazpi, including over PHP 100 million for the city's sanitary landfill project."
+    );
+]]></action>
+  <!-- Custom Action: Passes image paths & text content to JavaScript gallery panel -->
+    <action name="show_miguel_legazpi_panel" type="Javascript"><![CDATA[
+        showInfoPanel(
+            "THE CITY NAMED AFTER MIGUEL LOPEZ DE LEGAZPI",
+            "",
+            "Legazpi City, the capital of Albay, was founded in 1856 and named after the Basque-Spanish navigator Miguel López de Legazpi, despite the fact that he never visited Albay. The city was likely named in his honor because he was the grandfather of Juan de Salcedo, the Spanish conquistador who established the first Spanish garrison in the Bicol Region. The city's creation and naming were authorized by Don Ramon Montero through decrees signed on July 17, 1856, and it was officially inaugurated on October 22, 1856. Miguel López de Legazpi, born in 1502 in Zumarraga, Spain, led the Spanish expedition to the Philippines in 1565, established Spanish rule with Cebu as the first capital, and later made Manila the capital after its capture in 1571. He died in 1572, and his legacy is commemorated in his hometown of Zumarraga, where the Legazpi Tower stands in his honor.",
+            "",
+            "images/mig.png",
+            "images/scene6(1).png",
+            "images/scene6(2).png",
+            "images/scene6(3).png"
+        );
+    ]]></action>
 
     <!-- SCENE 7 -->
     <scene name="scene_7" title="7" onstart="" thumburl="panos/7.tiles/thumb.webp" lat="" lng="" alt="" heading="">
@@ -433,19 +430,43 @@
                  atv="-12"
                  scale="0.3"
                  onclick="show_sawangan_panel();" />
+
+        <!-- Hotspot for Spanish Era -->
+        <hotspot name="spot_spanish_era"
+             url="skin/info.png"
+             ath="60" 
+             atv="-13"
+             scale="0.3"
+             zoom="true"
+             onclick="show_spanish_era_panel();" />
+
     </scene>
 
     <!-- Custom Action: Triggers Sawangan Info Panel -->
-    <action name="show_sawangan_panel">
-        js(showInfoPanel(
-            'THE SETTLEMENT CALLED SAWANGAN',
-            'Museo de Legazpi',
-            'Most of the great cities of the world were born where the rivers meet the sea... The City of Legazpi was born between the Tibu and Makabalo rivers. It grew from a humble fishing village and pockets of settlements on the swamps called Sawangan.\n\nThe area which is now Legazpi City and Albay District had a thriving civilization long before the Spanish explorers came to its shores.',
-            'The name Sawangan had two connotations: anchorage (from the word "sawang") and delta (from the word "sabang").',
-            'images/sawangan_aerial.jpg',
-            'images/sawangan_landscape.jpg'
-        ));
-    </action>
+    <action name="show_sawangan_panel" type="Javascript"><![CDATA[
+        showInfoPanel(
+            "THE SETTLEMENT CALLED SAWANGAN",
+            "",
+            "Legazpi City originated from the fishing village of Sawangan, located between the Tibu and Makabalo Rivers, similar to how many great civilizations developed near rivers. Before the arrival of the Spanish, the area already had a flourishing community of fishermen, farmers, artisans, and traders who exchanged goods with merchants from China and neighboring regions. Archaeological discoveries, including jars, stone tools, shells, burial jars, and pottery dating as far back as 500 B.C. and the Late Neolithic Period, confirm its ancient civilization. The region is also closely tied to the Ibalong epic, featuring legendary heroes such as Baltog, Handiong, and Bantong, along with stories of rulers like Gat Ibal and Datu Dumaraog, reflecting its rich pre-colonial culture despite limited historical documentation. In 1574, Spanish explorers first recorded the settlement as \"baybayo\" or \"baybay,\" which later evolved into the name Albay, encompassing the early settlements of Binanuahan, Lamba, Rawis, and Bigaa, collectively known as Albay Viejo (Old Albay).",
+            "",
+            "images/scene7(1).png",
+            "images/scene7.png",
+            "images/scene7(2).png"
+        );
+    ]]></action>
+
+    <!-- Custom Action: Triggers Spanish Era Info Panel -->
+    <action name="show_spanish_era_panel" type="Javascript"><![CDATA[
+        showInfoPanel(
+            "SPANISH ERA",
+            "",
+            "The arrival of the Spanish in the Bicol Region in 1569 transformed independent coastal fishing villages, including Sawangan, into organized pueblos under Spanish rule. Sawangan became part of Tierra de Ibalong, later the encomienda of Albay, and was officially reorganized as Partido de Albay in 1696. Due to the eruptions of Mayon Volcano, the settlement was divided into Albay Viejo and Albay Nuevo, with Albay Viejo eventually becoming Legazpi City in 1856. During the 19th century, Legazpi became the capital of Albay Province and developed into the region's economic center because of its strategically located port. The Port of Legazpi was declared open to foreign maritime trade in 1872 and officially opened to the world market in 1874, boosting exports of abaca and coconut products. Its growing international importance attracted major foreign trading companies, making the Port of Legazpi the leading commercial hub of the Bicol Region throughout the late Spanish and American periods.",
+            "",
+            "images/spanish1.png",
+            "images/spanish2.png",
+            "images/spanish3.png"
+        );
+    ]]></action>
 
     <!-- SCENE 8 -->
     <scene name="scene_8" title="8" onstart="" thumburl="panos/8.tiles/thumb.webp" lat="" lng="" alt="" heading="">
@@ -457,7 +478,31 @@
         </image>
         <hotspot name="spot2085340728" style="skin_hotspotstyle" ath="-8.524" atv="4.61" depth="1000.0" linkedscene="scene_9" linkedscene_lookat="31.88,1.8,120.0" />
         <hotspot name="spot2085345084" style="skin_hotspotstyle" ath="-86.515" atv="11.006" depth="1000.0" linkedscene="scene_7" linkedscene_lookat="-495.38,0.25,120.0" />
+
+        <!-- Hotspot for Albay Viejo & Albay -->
+    <hotspot name="spot_albay_viejo"
+             url="skin/info.png"
+             ath="-145" 
+             atv="-12.5"
+             scale="0.3"
+             zoom="true"
+             onclick="show_albay_viejo_panel();" />
+
+
     </scene>
+
+
+    <!-- Custom Action: Triggers Albay Viejo Info Panel -->
+    <action name="show_albay_viejo_panel" type="Javascript"><![CDATA[
+        showInfoPanel(
+            "THE LEGEND OF ALBAY VIEJO & ALBAY",
+            "",
+            "The formation of communities in Albay was largely shaped by migration driven by natural disasters, particularly the devastating eruptions of Mayon Volcano. Although Albay was known for its scenic beauty, it was also highly vulnerable to typhoons, floods, and volcanic eruptions. The most catastrophic eruption occurred on February 1, 1814, destroying the towns of Cagsawa and Budiao and severely damaging nearby settlements. As a result, residents were encouraged by Fr. Pedro Licup to relocate to safer inland areas such as Makalaya (now Barangay Taisan) and Tagaytay (now Barangay Bagumbayan), where the parish of San Gregorio de Albay was also transferred, leading to the establishment of Albay Nuevo (New Albay). Later, Jose Maria Peñaranda strengthened the region by organizing coastal defense systems against Moro raids and supporting the construction of the San Gregorio Magno Cathedral. When volcanic activity subsided, some residents returned to the coastal areas and established a new settlement with the Parish of Saint Raphael the Archangel, which eventually became the Legazpi Port District.",
+            "",
+            "images/albay1.png",
+            "images/albay2.png"
+        );
+    ]]></action>
 
     <!-- SCENE 9 -->
     <scene name="scene_9" title="9" onstart="" thumburl="panos/9.tiles/thumb.webp" lat="" lng="" alt="" heading="">
