@@ -355,6 +355,7 @@
 
         <!-- Info Hotspot: Triggers single image pop-up -->
         <hotspot name="info_bust"
+                 style="info_hotspotstyle"
                  url="skin/info.png"
                  ath="19"
                  atv="14"
@@ -364,6 +365,7 @@
 
         <!-- 3D Model Hotspot: Opens Three.js 3D viewer for bust model -->
         <hotspot name="spot_bust_3d"
+                 style="info_hotspotstyle"
                  url="skin/info.png"
                  ath="-35"
                  atv="20"
@@ -373,6 +375,7 @@
 
        <!-- Text Hotspot: Triggers HTML Text-Only Modal (Sister City details) -->
      <hotspot name="spot_sister_city_text"
+         style="info_hotspotstyle"
          url="skin/info.png"
          ath="-20"
          atv="13"
@@ -382,6 +385,7 @@
 
         <!-- Panel Hotspot: Triggers Combined HTML Image & Text Panel (Miguel López de Legazpi) -->
         <hotspot name="spot_miguel_panel"
+                 style="info_hotspotstyle"
                  url="skin/info.png"
                  ath="-120"
                  atv="-20"
@@ -425,17 +429,19 @@
 
         <!-- Sawangan Board Info Hotspot -->
         <hotspot name="spot_sawangan_board"
+                 style="info_hotspotstyle"
                  url="skin/info.png"
                  ath="-37"
-                 atv="-12"
+                 atv="-14"
                  scale="0.3"
                  onclick="show_sawangan_panel();" />
 
         <!-- Hotspot for Spanish Era -->
         <hotspot name="spot_spanish_era"
+             style="info_hotspotstyle"
              url="skin/info.png"
              ath="60" 
-             atv="-13"
+             atv="-15"
              scale="0.3"
              zoom="true"
              onclick="show_spanish_era_panel();" />
@@ -481,25 +487,28 @@
 
         <!-- Hotspot for Albay Viejo & Albay -->
     <hotspot name="spot_albay_viejo"
+             style="info_hotspotstyle"
              url="skin/info.png"
-             ath="-145" 
-             atv="-12.5"
+             ath="-135" 
+             atv="-13.5"
              scale="0.3"
              zoom="true"
              onclick="show_albay_viejo_panel();" />
 
     <hotspot name="the_becerra_law"
+             style="info_hotspotstyle"
              url="skin/info.png"
              ath="120" 
-             atv="-13"
+             atv="-15"
              scale="0.3"
              zoom="true"
              onclick="show_the_becerra_law_panel();" />
 
     <hotspot name="two_churches"
+             style="info_hotspotstyle"
              url="skin/info.png"
              ath="23" 
-             atv="-13"
+             atv="-15"
              scale="0.3"
              zoom="true"
              onclick="show_two_churches_panel();" />
@@ -556,25 +565,28 @@
 
 
         <hotspot name="perils"
+             style="info_hotspotstyle"
              url="skin/info.png"
              ath="144" 
-             atv="-15.5"
+             atv="-17.5"
              scale="0.3"
              zoom="true"
              onclick="show_perils_panel();" />
 
         <hotspot name="the_battle"
+             style="info_hotspotstyle"
              url="skin/info.png"
              ath="-79" 
-             atv="-19.5"
+             atv="-21.5"
              scale="0.3"
              zoom="true"
              onclick="show_the_battle_panel();" />
 
         <hotspot name="economic"
+             style="info_hotspotstyle"
              url="skin/info.png"
              ath="5" 
-             atv="-10"
+             atv="-12"
              scale="0.3"
              zoom="true"
              onclick="show_economic_trans_panel();" />
