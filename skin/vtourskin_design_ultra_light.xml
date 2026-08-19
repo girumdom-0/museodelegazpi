@@ -1,4 +1,9 @@
-﻿<krpano>
+﻿<!-- File: skin/vtourskin_design_ultra_light.xml
+	Purpose: Alternate skin design for the viewer (ultra light). Contains layout and style definitions for UI elements.
+	Notes: Skin definitions affect look-and-feel; update with caution to avoid breaking the UI.
+-->
+
+<krpano>
 
 	<!-- Ultra Light Design -->
 

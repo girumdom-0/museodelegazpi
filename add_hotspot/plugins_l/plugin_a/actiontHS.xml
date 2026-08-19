@@ -1,4 +1,9 @@
-﻿<krpano>
+﻿<!-- File: add_hotspot/plugins_l/plugin_a/actiontHS.xml
+	Purpose: Action definitions for hotspot actions used by add_hotspot plugin.
+	Notes: Defines reusable actions for hotspot behaviors.
+-->
+
+<krpano>
 <!-- startup action - load the first scene -->
 	<action name="actionADHS" autorun="onstart">
 		set(hidden_hs, false);

@@ -1,4 +1,9 @@
-﻿<krpano version="1.24" title="Virtual Tour">
+﻿<!-- File: tour.xml - backup-2026.08.10-14.17.50.xml
+	Purpose: Backup of `tour.xml` created on 2026-08-10. Provides a snapshot of the panorama configuration.
+	Notes: Keep as a backup; do not edit unless restoring the tour configuration.
+-->
+
+<krpano version="1.24" title="Virtual Tour">
 
 	<include url="skin/vtourskin.xml" />
 

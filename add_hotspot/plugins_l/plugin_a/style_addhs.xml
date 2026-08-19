@@ -1,3 +1,8 @@
+<!-- File: add_hotspot/plugins_l/plugin_a/style_addhs.xml
+	Purpose: Style definitions for added hotspots in the editor.
+	Notes: Controls editor-facing hotspot styles and previews.
+-->
+
 <krpano>
 	
 	 <include url="%FIRSTXML%/add_hotspot/plugins_l/plugin_a/poligon.xml"/> 

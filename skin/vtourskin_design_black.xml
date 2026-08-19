@@ -1,4 +1,9 @@
-﻿<krpano>
+﻿<!-- File: skin/vtourskin_design_black.xml
+	Purpose: Black theme skin for the krpano viewer. Defines UI elements, icons, and styles.
+	Notes: Part of multiple skin themes bundled with the project.
+-->
+
+<krpano>
 
 	<!-- Flat Light Design -->
 

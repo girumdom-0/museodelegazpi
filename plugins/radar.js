@@ -1,7 +1,11 @@
+/* File: plugins/radar.js
+   Purpose: Radar overlay plugin for krpano — draws a radar/minimap representation of scenes and hotspots.
+   Notes: Contains runtime drawing logic for the radar UI element.
+*/
 /*
 	krpano 1.24 Radar Plugin (build 2026-06-30)
 	https://krpano.com/plugins/radar/
-*/
+	*/
 var krpanoplugin=function(){function K(f,c){function b(a){return"rgb("+(a>>16&255)+","+(a>>8&255)+","+(a&255)+")"}var a=document.createElementNS("http://www.w3.org/2000/svg","svg");a.setAttribute("width",f);a.setAttribute("height",c);a.style.position="absolute";a.style.left="0px";a.style.top="0px";var g=document.createElementNS("http://www.w3.org/2000/svg","path");a.appendChild(g);var d={};d.svg=a;d.path=g;d.setstyle=function(a,c,f,d,e){g.setAttribute("stroke",b(a));g.setAttribute("stroke-width",
 c);g.setAttribute("stroke-opacity",f);g.setAttribute("fill",b(d));g.setAttribute("fill-opacity",e)};d.drawpie=function(a,c,f,b,d){var k,e;b>d&&(k=d,d=b,b=k);b=b*Math.PI/180;d=d*Math.PI/180;e=d-b;k=(b+d)/2;var h=e>Math.PI?1:0;e>=2*Math.PI&&(e=2*Math.PI-.01);b=k-e/2;d=k+e/2;k=a+f*Math.sin(b);b=c-f*Math.cos(b);e=a+f*Math.sin(d);d=c-f*Math.cos(d);g.setAttribute("d","M "+a+","+c+" L "+k+","+b+" A "+f+","+f+" 0 "+h+" 1 "+e+","+d+" Z")};return d}function C(b){u=!0;p(b);e.mouse&&(window.addEventListener("mousemove",
 p,!0),window.addEventListener("mouseup",m,!0));e.touch&&(window.addEventListener(e.touchmove,p,!0),window.addEventListener(e.touchcancel,m,!0),window.addEventListener(e.touchend,m,!0))}function m(b){e.mouse&&(window.removeEventListener("mousemove",p,!0),window.removeEventListener("mouseup",m,!0));e.touch&&(window.removeEventListener(e.touchmove,p,!0),window.removeEventListener(e.touchcancel,m,!0),window.removeEventListener(e.touchend,m,!0))}function p(f){if(null==g)m(f);else if(null!=h){f&&(f.preventDefault(),
