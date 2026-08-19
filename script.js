@@ -4,15 +4,26 @@ const backgroundMusic = new Audio('music/Ibalong_Festival_Song-Drums-segment-0.0
 backgroundMusic.loop = true;
 backgroundMusic.volume = 0.35;
 backgroundMusic.preload = 'auto';
+backgroundMusic.muted = false;
 
-let musicEnabled = false;
+let musicEnabled = true;
 let musicPausedByTTS = false;
+
+function startBackgroundMusic() {
+    if (!backgroundMusic) return;
+    if (backgroundMusic.paused) {
+        const playPromise = backgroundMusic.play();
+        if (playPromise && typeof playPromise.catch === 'function') {
+            playPromise.catch(() => {});
+        }
+    }
+}
 
 function updateKrpanoMusicIcon() {
     if (window.krpano && window.krpano.set) {
         try {
-            const crop = musicEnabled ? '64|704|64|64' : '0|704|64|64';
-            window.krpano.set('layer[skin_btn_music].crop', crop);
+            const url = musicEnabled ? '%SWFPATH%skin/music_on.png' : '%SWFPATH%skin/music_pause.png';
+            window.krpano.set('layer[skin_btn_music].url', url);
         } catch (error) {
             // ignore if the skin layer is not ready yet
         }
@@ -43,7 +54,7 @@ function toggleBackgroundMusic() {
     musicEnabled = !musicEnabled;
 
     if (musicEnabled) {
-        backgroundMusic.play().catch(() => {});
+        startBackgroundMusic();
         musicPausedByTTS = false;
     } else {
         backgroundMusic.pause();
@@ -57,10 +68,11 @@ function toggleBackgroundMusic() {
 window.toggleBackgroundMusic = toggleBackgroundMusic;
 window.addEventListener('pointerdown', () => {
     if (musicEnabled && !musicPausedByTTS) {
-        backgroundMusic.play().catch(() => {});
+        startBackgroundMusic();
     }
 }, { once: true });
 
+startBackgroundMusic();
 setMusicButtonState();
 
 function initThreeJS() {
