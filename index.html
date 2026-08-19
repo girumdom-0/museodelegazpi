@@ -1,4 +1,11 @@
 <!DOCTYPE html>
+<!--
+    File: index.html
+    Purpose: Main HTML entry for the virtual tour. Contains the Krpano embed call, 3D model modal, image and text modals, and includes project scripts and styles.
+    Notes:
+        - Keep the `embedpano` call which loads `tour.xml`.
+        - Added high-level comments for maintainers; do not remove unless updating structure.
+-->
 <html>
 <head>
     <title>Museo De Legazpi</title>
@@ -21,6 +28,7 @@
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
 <!-- 3D Modal Structure container -->
+<!-- 3D Model Viewer Modal: displays GLB/GLTF models using Three.js in `threejs_container`. -->
 <div id="model3d_backdrop" onclick="clearGLBModel()"></div>
 <div id="model3d_modal">
     <div id="model3d_expand" onclick="toggle3DFullscreen()" title="Toggle Fullscreen">⛶</div>
@@ -32,6 +40,7 @@
 <script src="script.js"></script>
 
 <!-- Krpano panoramic viewer container wrapper -->
+<!-- Krpano embed: loads `tour.xml` and initializes the panorama viewer. -->
 <div style="width:100%;height:100%;">
     <noscript>
         <table style="width:100%;height:100%;">
@@ -46,6 +55,7 @@
 </div>
 
 <!-- SINGLE TEXT-ONLY MODAL CONTAINER -->
+<!-- Text Modal: reusable single-column modal for long-form descriptions and TTS controls. -->
 <div id="text_backdrop" onclick="closeTextModal()"></div>
 <div id="text_modal_card">
     <button id="text_modal_close" onclick="closeTextModal()" title="Close">✕</button>
@@ -59,6 +69,7 @@
 </div>
 
 <!-- COMBINED IMAGE & TEXT MODAL -->
+<!-- Info Panel: combined gallery + text card used for exhibit details with image gallery and TTS. -->
 <div id="info_panel_backdrop" onclick="closeInfoPanel()"></div>
 <div id="info_panel_modal">
     <div id="info_panel_close" onclick="closeInfoPanel()" title="Close">✕</div>
@@ -79,6 +90,7 @@
 </div>
 
 <div id="image_popup_backdrop">
+    <!-- Image Popup: full-screen image viewer with pan/zoom controls. -->
     <div id="image_popup_modal" role="dialog" aria-modal="true" aria-label="Image popup">
         <div id="image_popup_content">
             <img id="image_popup_image" src="" alt="Popup image" draggable="false" />

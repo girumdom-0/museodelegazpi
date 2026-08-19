@@ -1,3 +1,9 @@
+/*
+    File: styles.css
+    Purpose: Global styles for the vtour project. Includes layout, modal styles, 3D viewer container, and UI skin button styling.
+    Notes:
+        - Keep responsive rules and modal z-index ordering when modifying.
+*/
 /* Global Reset and Layout */
 html, body {
     height: 100%;
@@ -440,6 +446,8 @@ html, body {
     scrollbar-color: rgba(255, 255, 255, 0.28) transparent;
 }
 
+/* Info Panel: layout and gallery styling for the combined image + text modal. */
+
 #info_panel_container::-webkit-scrollbar {
     width: 12px;
     background: transparent;
@@ -555,6 +563,8 @@ html, body {
     gap: 8px;
     margin-bottom: 14px;
 }
+
+/* TTS Controls: styles for the Listen / Stop buttons used across modals. */
 
 .tts-controls button {
     background-color: #000000;

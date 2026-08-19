@@ -1,3 +1,8 @@
+<!-- File: plugins/krpanomaps.xml
+	Purpose: krpano maps plugin configuration for map overlays.
+	Notes: Contains mapping integration settings; check API usage if editing.
+-->
+
 <krpano>
 	
 	<!--

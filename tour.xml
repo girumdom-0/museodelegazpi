@@ -1,4 +1,9 @@
-﻿<krpano version="1.24" title="Virtual Tour">
+﻿<!-- File: tour.xml
+    Purpose: Main krpano tour configuration. Defines scenes, layers, hotspots, and includes the skin.
+    Notes: This is the primary configuration loaded by `embedpano`. Be cautious editing; prefer editing source files.
+-->
+
+<krpano version="1.24" title="Virtual Tour">
 
     <!-- 1. GLOBAL INCLUDES -->
     <!-- Imports the default tour skin (controls bar, default hotspot styles, thumbnail list) -->

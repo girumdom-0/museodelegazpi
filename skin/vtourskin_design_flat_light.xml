@@ -1,4 +1,9 @@
-﻿<krpano>
+﻿<!-- File: skin/vtourskin_design_flat_light.xml
+	Purpose: Alternate flat light skin for the viewer; contains styles and layer definitions.
+	Notes: Skin file for UI styling—modify carefully.
+-->
+
+<krpano>
 
 	<!-- Flat Light Design -->
 

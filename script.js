@@ -1,14 +1,32 @@
+/*
+    File: script.js
+    Purpose: Handles UI interactions outside of krpano: background music, text-to-speech (TTS), 3D model loading via Three.js, image popups, modal management, and utility helpers.
+    Summary of responsibilities:
+        - Background audio management and krpano skin integration
+        - Initialize and manage Three.js scene for GLB/GLTF models
+        - Modal open/close helpers for text, image, info and 3D viewers
+        - Image popup panning/zoom controls and keyboard handlers
+        - Text-to-speech control (play/pause/stop) and TTS UI updates
+    Note: Exposes a few functions globally for krpano or UI to call (e.g., `loadGLBModel`, `toggleBackgroundMusic`).
+*/
+
 let scene, camera, renderer, controls, currentModel;
 
+// Create the background audio element for the Ibalong music.
+// It loops continuously and starts at a low volume so it feels like ambient background music.
 const backgroundMusic = new Audio('music/Ibalong_Festival_Song-Drums-segment-0.00-256.65.mp3');
 backgroundMusic.loop = true;
 backgroundMusic.volume = 0.35;
 backgroundMusic.preload = 'auto';
 backgroundMusic.muted = false;
 
+// musicEnabled = true means the background music is currently playing.
+// musicPausedByTTS tracks whether speech playback temporarily paused the music.
 let musicEnabled = true;
 let musicPausedByTTS = false;
 
+// Start the music only if it is currently paused.
+// This avoids restarting the audio unnecessarily when the user clicks around the page.
 function startBackgroundMusic() {
     if (!backgroundMusic) return;
     if (backgroundMusic.paused) {
@@ -19,17 +37,20 @@ function startBackgroundMusic() {
     }
 }
 
+// Update the krpano skin icon so it matches the current music status.
+// The on icon is shown when musicEnabled is true; the pause icon is shown when false.
 function updateKrpanoMusicIcon() {
     if (window.krpano && window.krpano.set) {
         try {
             const url = musicEnabled ? '%SWFPATH%skin/music_on.png' : '%SWFPATH%skin/music_pause.png';
             window.krpano.set('layer[skin_btn_music].url', url);
         } catch (error) {
-            // ignore if the skin layer is not ready yet
+            // Ignore if the skin layer is not ready yet.
         }
     }
 }
 
+// Update the helper button text and styling when the music state changes.
 function setMusicButtonState() {
     updateKrpanoMusicIcon();
     const musicButton = document.getElementById('music_control_button');
@@ -38,18 +59,23 @@ function setMusicButtonState() {
     musicButton.classList.toggle('muted', !musicEnabled);
 }
 
+// Pause the background music when TTS starts reading a hotspot or text panel.
+// This prevents the voice and music from overlapping.
 function pauseBackgroundMusicForTTS() {
     if (!backgroundMusic || backgroundMusic.paused || !musicEnabled) return;
     backgroundMusic.pause();
     musicPausedByTTS = true;
 }
 
+// Resume the background music after TTS finishes or is stopped.
 function resumeBackgroundMusicAfterTTS() {
     if (!musicEnabled || !musicPausedByTTS) return;
     musicPausedByTTS = false;
     backgroundMusic.play().catch(() => {});
 }
 
+// Toggle the playing state of the background music.
+// When turning it on, it starts playback; when turning it off, it pauses the audio.
 function toggleBackgroundMusic() {
     musicEnabled = !musicEnabled;
 
@@ -65,13 +91,18 @@ function toggleBackgroundMusic() {
     setMusicButtonState();
 }
 
+// Expose the toggle globally so krpano can call it from the skin button.
 window.toggleBackgroundMusic = toggleBackgroundMusic;
+
+// Browser autoplay rules require user interaction before audio can start.
+// This fires once on the first pointerdown and restarts the music if it is enabled.
 window.addEventListener('pointerdown', () => {
     if (musicEnabled && !musicPausedByTTS) {
         startBackgroundMusic();
     }
 }, { once: true });
 
+// Start the background Ibalong music on page load and update the icon state immediately.
 startBackgroundMusic();
 setMusicButtonState();
 
@@ -368,11 +399,18 @@ function resetImagePopupTransform() {
     updateImagePopupTransform();
 }
 
+/* Adjust the image popup zoom level by a multiplicative factor.
+   Keeps the state in `imagePopupState.scale` and applies the CSS transform.
+   Called by zoom buttons and mouse wheel handlers.
+*/
 function adjustImagePopupZoom(factor) {
     imagePopupState.scale *= factor;
     updateImagePopupTransform();
 }
 
+/* Begin dragging the image inside the popup.
+   Records pointer start coordinates and current image offset for smooth dragging.
+*/
 function startImageDrag(event) {
     event.preventDefault();
     imagePopupState.dragging = true;
@@ -383,6 +421,9 @@ function startImageDrag(event) {
     imagePopupElements.image.style.cursor = 'grabbing';
 }
 
+/* Handle pointer move while dragging the popup image.
+   Computes delta from the initial pointer position and updates transform.
+*/
 function moveImageDrag(event) {
     if (!imagePopupState.dragging) return;
     event.preventDefault();
@@ -393,6 +434,7 @@ function moveImageDrag(event) {
     updateImagePopupTransform();
 }
 
+/* End dragging the popup image and restore cursor state. */
 function stopImageDrag() {
     if (!imagePopupState.dragging) return;
     imagePopupState.dragging = false;
@@ -401,6 +443,7 @@ function stopImageDrag() {
     }
 }
 
+/* Mouse wheel handler for the image popup: zooms in/out while preventing page scroll. */
 function handleImageWheel(event) {
     if (!imagePopupElements.modal || imagePopupElements.modal.style.display === 'none') return;
     event.preventDefault();
@@ -408,6 +451,7 @@ function handleImageWheel(event) {
     adjustImagePopupZoom(delta);
 }
 
+/* Open the image popup and load the provided image source. Resets transform state. */
 function showImagePopup(imageSrc) {
     closeAllModals();
     if (!imagePopupElements.backdrop || !imagePopupElements.modal || !imagePopupElements.image) return;
@@ -418,6 +462,7 @@ function showImagePopup(imageSrc) {
     imagePopupElements.modal.style.display = 'flex';
 }
 
+/* Close the image popup and hide its backdrop. */
 function hideImagePopup() {
     if (!imagePopupElements.backdrop || !imagePopupElements.modal) return;
     imagePopupElements.backdrop.style.display = 'none';
@@ -432,6 +477,9 @@ window.hide_image_popup = hideImagePopup;
 window.addEventListener('load', initImagePopup);
 window.addEventListener('keydown', handleGlobalKeyDown);
 
+/* Global keyboard handler to close any open modal on Escape or Backspace.
+   Prevents default navigation behavior when a modal is open.
+*/
 function handleGlobalKeyDown(event) {
     const key = event.key;
     if (key !== 'Escape' && key !== 'Backspace') return;
@@ -452,6 +500,9 @@ function handleGlobalKeyDown(event) {
     if (model3dModal && model3dModal.style.display !== 'none') clearGLBModel();
 }
 
+/* Close every modal on the page and stop any active TTS or 3D view.
+   Safe to call before opening a new modal so only one view is visible.
+*/
 function closeAllModals() {
     if (typeof stopTTS === 'function') stopTTS();
     document.getElementById("text_backdrop").style.display = "none";
@@ -466,6 +517,11 @@ let currentUtterance = null;
 let activePlayBtnId = null;
 let activeStopBtnId = null;
 
+/* Toggle Text-To-Speech playback for a modal/card.
+    - If speech is active: pause/resume accordingly.
+    - If not active: build the text from container title/subtitle/body and start speaking.
+    Also manages background music pause/resume to avoid audio overlap.
+*/
 function toggleTTS(containerId, playBtnId, stopBtnId) {
     const synth = window.speechSynthesis;
 
@@ -517,6 +573,7 @@ function toggleTTS(containerId, playBtnId, stopBtnId) {
     synth.speak(currentUtterance);
 }
 
+/* Stop any active TTS and restore UI and background music state. */
 function stopTTS() {
     if (window.speechSynthesis) {
         window.speechSynthesis.cancel();

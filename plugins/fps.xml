@@ -1,3 +1,8 @@
+<!-- File: plugins/fps.xml
+	Purpose: FPS plugin configuration for performance monitoring overlay.
+	Notes: Small plugin XML—header added for clarity.
+-->
+
 <krpano>
 
 	<!--

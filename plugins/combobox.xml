@@ -1,3 +1,8 @@
+<!-- File: plugins/combobox.xml
+	Purpose: Combobox plugin XML used by krpano UI components.
+	Notes: UI helper configuration—do not change without testing.
+-->
+
 <krpano>
 
 	<!--
