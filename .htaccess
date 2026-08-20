@@ -1,0 +1,16 @@
+<IfModule mod_headers.c>
+    <FilesMatch "\.(js|css|xml|json|html|wasm)$">
+        Header set Cache-Control "public, max-age=86400"
+    </FilesMatch>
+    <FilesMatch "\.(webp|jpg|jpeg|png|gif|mp4|glb|mp3|woff2?)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+</IfModule>
+
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/xml text/xml application/json
+</IfModule>
+
+<IfModule mod_mime.c>
+    AddType model/gltf-binary .glb
+</IfModule>

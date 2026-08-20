@@ -17,7 +17,7 @@ let scene, camera, renderer, controls, currentModel;
 const backgroundMusic = new Audio('music/Ibalong_Festival_Song-Drums-segment-0.00-256.65.mp3');
 backgroundMusic.loop = true;
 backgroundMusic.volume = 0.35;
-backgroundMusic.preload = 'auto';
+backgroundMusic.preload = 'none';
 backgroundMusic.muted = false;
 
 // musicEnabled = true means the background music is currently playing.
@@ -290,6 +290,8 @@ function createImageWrapper(imgSrc) {
 
     const img = document.createElement("img");
     img.src = imgSrc;
+    img.loading = "lazy";
+    img.decoding = "async";
 
     wrapper.appendChild(img);
     return wrapper;
@@ -481,6 +483,13 @@ function showBattleVideo() {
     const modal = document.getElementById('battle_video_modal');
     const video = document.getElementById('battle_video');
     if (!backdrop || !modal || !video) return;
+
+    const source = video.querySelector('source[data-src]');
+    if (source) {
+        source.src = source.dataset.src;
+        source.removeAttribute('data-src');
+        video.load();
+    }
 
     if (backgroundMusic && !backgroundMusic.paused && musicEnabled) {
         backgroundMusic.pause();
