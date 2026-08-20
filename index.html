@@ -37,6 +37,17 @@
     <div id="threejs_container"></div>
 </div>
 
+<!-- Final tour video: opened by the Battle of Legazpi hotspot in scene 18. -->
+<div id="battle_video_backdrop" onclick="hideBattleVideo()"></div>
+<div id="battle_video_modal" role="dialog" aria-modal="true" aria-label="Battle of Legazpi video">
+    <button id="battle_video_close" type="button" onclick="hideBattleVideo()" title="Close video">X</button>
+    <h2>Battle of Legazpi</h2>
+    <video id="battle_video" controls playsinline preload="metadata">
+        <source src="vid/Episode%201%20Battle%20of%20Legazpi.mp4" type="video/mp4" />
+        Your browser does not support video playback.
+    </video>
+</div>
+
 <script src="script.js"></script>
 
 <!-- Krpano panoramic viewer container wrapper -->

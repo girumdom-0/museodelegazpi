@@ -50,11 +50,6 @@
            keep="true">
     </layer>
 
-    <!-- Final-scene video hotspot opens the Battle of Legazpi clip. -->
-    <action name="show_battle_video" type="Javascript"><![CDATA[
-        showBattleVideo();
-    ]]></action>
-
     <!-- Fades out and hides the intro layer on first user click -->
     <action name="on_intro_click">
         tween(layer[intro].alpha, 0, 0.5, easeOutQuad, set(layer[intro].visible, false));
@@ -649,7 +644,33 @@
         </image>
         <hotspot name="spot2085341092" style="skin_hotspotstyle" ath="-141.152" atv="12.309" depth="1000.0" linkedscene="scene_11" linkedscene_lookat="132.66,1.05,120.0" />
         <hotspot name="spot2085344546" style="skin_hotspotstyle" ath="150.232" atv="10.222" depth="1000.0" linkedscene="scene_9" linkedscene_lookat="108.2,1.73,120.0" />
+
+        <hotspot name="transport"
+             style="info_hotspotstyle"
+             url="skin/info.png"
+             ath="5" 
+             atv="-12"
+             scale="0.3"
+             zoom="true"
+             onclick="show_transports_panel();" />
+        
     </scene>
+
+    <action name="show_transports_panel" type="Javascript"><![CDATA[
+        showInfoPanel(
+            "TRANSPORT AND ELECTRIC FACILITIES",
+            "",
+            "Two of the most important infrastructures that support the drive for progress and prosperity of any modern city are power and transportation. In ancient times, the settlement by the shores of Albay Gulf depended on waterways for transport and the brawn of its people and domestic animals for power. Electrical power came to the Philippines, in Manila, 1894, almost at the end of the Spanish regime. It was only during the time of the American occupation that electrical power was modernized, with the organization in 1903 of the Manila Electric Company, which ran the Calle San Sebastian power plant and the electric tramways of the Compañía de los Tranvías de Filipinas. ",
+            "",
+            "TRANSPORT AND ELECTRIC FACILITIES",
+            "",
+            "Two of the most important infrastructures that support the drive for progress and prosperity of any modern city are power and transportation. In ancient times, the settlement by the shores of Albay Gulf depended on waterways for transport and the brawn of its people and domestic animals for power. Electrical power came to the Philippines, in Manila, 1894, almost at the end of the Spanish regime. It was only during the time of the American occupation that electrical power was modernized, with the organization in 1903 of the Manila Electric Company, which ran the Calle San Sebastian power plant and the electric tramways of the Compañía de los Tranvías de Filipinas. ",
+            "",
+            "images/eco.png",
+            "images/eco1.png",
+            "images/eco2.png"
+        );
+    ]]></action>
 
     <!-- SCENE 11 -->
     <scene name="scene_11" title="11" onstart="" thumburl="panos/11.tiles/thumb.webp" lat="" lng="" alt="" heading="">
@@ -745,14 +766,6 @@
         <!-- Loop back navigation to Scene 1 -->
         <hotspot name="spot2085342706" style="skin_hotspotstyle" ath="8.127" atv="-0.916" depth="1000.0" linkedscene="scene_1" linkedscene_lookat="1.35,-3.82,120.0" />
         <hotspot name="spot2085342897" style="skin_hotspotstyle" ath="-177.776" atv="20.903" depth="1000.0" linkedscene="scene_16" linkedscene_lookat="-42.43,6.74,120.0" />
-        <hotspot name="battle_of_legazpi_video"
-                 style="info_hotspotstyle"
-                 url="skin/info.png"
-                 ath="15"
-                 atv="-10"
-                 scale="0.3"
-                 zoom="true"
-                 onclick="show_battle_video();" />
     </scene>
 
 </krpano>

@@ -24,6 +24,7 @@ backgroundMusic.muted = false;
 // musicPausedByTTS tracks whether speech playback temporarily paused the music.
 let musicEnabled = true;
 let musicPausedByTTS = false;
+let musicPausedByVideo = false;
 
 // Start the music only if it is currently paused.
 // This avoids restarting the audio unnecessarily when the user clicks around the page.
@@ -474,6 +475,49 @@ window.hideImagePopup = hideImagePopup;
 window.show_image_popup = showImagePopup;
 window.hide_image_popup = hideImagePopup;
 
+function showBattleVideo() {
+    closeAllModals();
+    const backdrop = document.getElementById('battle_video_backdrop');
+    const modal = document.getElementById('battle_video_modal');
+    const video = document.getElementById('battle_video');
+    if (!backdrop || !modal || !video) return;
+
+    if (backgroundMusic && !backgroundMusic.paused && musicEnabled) {
+        backgroundMusic.pause();
+        musicPausedByVideo = true;
+    }
+    backdrop.style.display = 'block';
+    modal.style.display = 'block';
+    video.currentTime = 0;
+    video.play().catch(() => {});
+}
+
+function hideBattleVideo() {
+    const backdrop = document.getElementById('battle_video_backdrop');
+    const modal = document.getElementById('battle_video_modal');
+    const video = document.getElementById('battle_video');
+    if (video) {
+        video.pause();
+        video.currentTime = 0;
+    }
+    if (musicPausedByVideo && musicEnabled) {
+        musicPausedByVideo = false;
+        backgroundMusic.play().catch(() => {});
+    }
+    if (backdrop) backdrop.style.display = 'none';
+    if (modal) modal.style.display = 'none';
+}
+
+function skipBattleVideo(seconds) {
+    const video = document.getElementById('battle_video');
+    if (!video) return;
+    video.currentTime = Math.min(video.duration || Infinity, video.currentTime + seconds);
+}
+
+window.showBattleVideo = showBattleVideo;
+window.hideBattleVideo = hideBattleVideo;
+window.skipBattleVideo = skipBattleVideo;
+
 window.addEventListener('load', initImagePopup);
 window.addEventListener('keydown', handleGlobalKeyDown);
 
@@ -488,8 +532,9 @@ function handleGlobalKeyDown(event) {
     const infoModal = document.getElementById('info_panel_modal');
     const imageModal = document.getElementById('image_popup_modal');
     const model3dModal = document.getElementById('model3d_modal');
+    const battleVideoModal = document.getElementById('battle_video_modal');
 
-    const isAnyOpen = [textModal, infoModal, imageModal, model3dModal].some(el => el && el.style.display !== 'none');
+    const isAnyOpen = [textModal, infoModal, imageModal, model3dModal, battleVideoModal].some(el => el && el.style.display !== 'none');
     if (!isAnyOpen) return;
 
     event.preventDefault();
@@ -498,6 +543,7 @@ function handleGlobalKeyDown(event) {
     if (infoModal && infoModal.style.display !== 'none') closeInfoPanel();
     if (textModal && textModal.style.display !== 'none') closeTextModal();
     if (model3dModal && model3dModal.style.display !== 'none') clearGLBModel();
+    if (battleVideoModal && battleVideoModal.style.display !== 'none') hideBattleVideo();
 }
 
 /* Close every modal on the page and stop any active TTS or 3D view.
@@ -511,6 +557,7 @@ function closeAllModals() {
     document.getElementById("info_panel_modal").style.display = "none";
     if (typeof clearGLBModel === "function") clearGLBModel();
     hideImagePopup();
+    hideBattleVideo();
 }
 
 let currentUtterance = null;
