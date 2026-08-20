@@ -455,7 +455,6 @@
 					<layer name="skin_btn_in"    style="skin_base|skin_glow" crop="0|320|64|64"  align="center"      x="+60"  y="0"  scale="0.5" ondown="set(fov_moveforce,-1);"     onup="set(fov_moveforce,0);" />
 					<layer name="skin_btn_out"   style="skin_base|skin_glow" crop="64|320|64|64" align="center"      x="+100" y="0"  scale="0.5" ondown="set(fov_moveforce,+1);"     onup="set(fov_moveforce,0);" />
 				</layer>
-				<layer name="skin_btn_gyro"      style="skin_base|skin_glow" crop="0|384|64|64"  align="center"      x="+140" y="0"  scale="0.5" onclick="switch(plugin[skin_gyro].enabled); if(plugin[skin_gyro].enabled, skin_showmap(false));" visible="false" />
 				<!-- Music control button: starts in the ON state and switches to PAUSE when clicked. -->
 				<layer name="skin_btn_music" style="skin_base|skin_glow" url="%SWFPATH%skin/music_on.png" align="left" x="100" x.mobile="85" y="0" scale="0.3" scale.mobile="0.3" zorder="5" handcursor="true" onclick="skin_music_toggle();" onover="tween(alpha,1.0);" onout="tween(alpha,0.9);" alpha="0.9" />
 				<layer name="skin_btn_fs"        style="skin_base|skin_glow" crop="0|576|64|64"  align="right"       x="90"   y="0"  scale="0.5" onclick="switch(fullscreen);" devices="fullscreensupport" />
