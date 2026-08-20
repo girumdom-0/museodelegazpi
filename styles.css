@@ -186,8 +186,8 @@ html, body {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 90vw;
-    max-width: 650px;
-    max-height: 140vh;
+    max-width: 600px;
+    max-height: 90vh;
     background-color: #b39917;
     border-radius: 16px;
     padding: 35px 30px;
