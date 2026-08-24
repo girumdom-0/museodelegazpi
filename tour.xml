@@ -382,7 +382,7 @@
                  atv="20"
                  scale="0.3"
                  zoom="false"
-                 onclick="show_3d_obj('https://github.com/girumdom-0/museodelegazpi/releases/download/v1.0.0/general.glb');"" />
+                 onclick="show_3d_obj('https://github.com/girumdom-0/museodelegazpi/releases/download/v1.0.0/bust.glb', 'https://github.com/girumdom-0/museodelegazpi/releases/download/v1.0.0/bust_texture.png');" />
 
        <!-- Text Hotspot: Triggers HTML Text-Only Modal (Sister City details) -->
      <hotspot name="spot_sister_city_text"
