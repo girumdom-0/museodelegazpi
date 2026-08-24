@@ -357,6 +357,8 @@ window.showInfoPanel = showInfoPanel;
 window.closeInfoPanel = closeInfoPanel;
 
 const imagePopupState = {
+    images: [],
+    imageIndex: 0,
     scale: 1,
     x: 0,
     y: 0,
@@ -376,6 +378,9 @@ function initImagePopup() {
     imagePopupElements.zoomIn = document.getElementById('image_popup_zoom_in');
     imagePopupElements.zoomOut = document.getElementById('image_popup_zoom_out');
     imagePopupElements.close = document.getElementById('image_popup_close');
+    imagePopupElements.previous = document.getElementById('image_popup_previous');
+    imagePopupElements.next = document.getElementById('image_popup_next');
+    imagePopupElements.counter = document.getElementById('image_popup_counter');
 
     if (!imagePopupElements.image || !imagePopupElements.backdrop) return;
 
@@ -384,6 +389,8 @@ function initImagePopup() {
     imagePopupElements.close.addEventListener('click', hideImagePopup);
     imagePopupElements.zoomIn.addEventListener('click', () => adjustImagePopupZoom(1.2));
     imagePopupElements.zoomOut.addEventListener('click', () => adjustImagePopupZoom(1 / 1.2));
+    imagePopupElements.previous.addEventListener('click', () => changeImagePopup(-1));
+    imagePopupElements.next.addEventListener('click', () => changeImagePopup(1));
     imagePopupElements.image.addEventListener('pointerdown', startImageDrag);
     window.addEventListener('pointermove', moveImageDrag);
     window.addEventListener('pointerup', stopImageDrag);
@@ -454,13 +461,31 @@ function handleImageWheel(event) {
     adjustImagePopupZoom(delta);
 }
 
-/* Open the image popup and load the provided image source. Resets transform state. */
-function showImagePopup(imageSrc) {
+function updateImagePopupGallery() {
+    const { images, imageIndex } = imagePopupState;
+    imagePopupElements.image.src = images[imageIndex];
+    imagePopupElements.counter.textContent = `${imageIndex + 1} / ${images.length}`;
+    imagePopupElements.previous.hidden = images.length < 2;
+    imagePopupElements.next.hidden = images.length < 2;
+    resetImagePopupTransform();
+}
+
+function changeImagePopup(direction) {
+    if (imagePopupState.images.length < 2) return;
+    imagePopupState.imageIndex = (imagePopupState.imageIndex + direction + imagePopupState.images.length) % imagePopupState.images.length;
+    updateImagePopupGallery();
+}
+
+/* Open the image popup and load the provided image source or gallery. */
+function showImagePopup(imageSrc, imageSources) {
     closeAllModals();
     if (!imagePopupElements.backdrop || !imagePopupElements.modal || !imagePopupElements.image) return;
 
-    imagePopupElements.image.src = imageSrc;
-    resetImagePopupTransform();
+    imagePopupState.images = Array.isArray(imageSources) && imageSources.length
+        ? imageSources
+        : [imageSrc];
+    imagePopupState.imageIndex = Math.max(0, imagePopupState.images.indexOf(imageSrc));
+    updateImagePopupGallery();
     imagePopupElements.backdrop.style.display = 'block';
     imagePopupElements.modal.style.display = 'flex';
 }
@@ -535,7 +560,7 @@ window.addEventListener('keydown', handleGlobalKeyDown);
 */
 function handleGlobalKeyDown(event) {
     const key = event.key;
-    if (key !== 'Escape' && key !== 'Backspace') return;
+    if (key !== 'Escape' && key !== 'Backspace' && key !== 'ArrowLeft' && key !== 'ArrowRight') return;
 
     const textModal = document.getElementById('text_modal_card');
     const infoModal = document.getElementById('info_panel_modal');
@@ -545,6 +570,12 @@ function handleGlobalKeyDown(event) {
 
     const isAnyOpen = [textModal, infoModal, imageModal, model3dModal, battleVideoModal].some(el => el && el.style.display !== 'none');
     if (!isAnyOpen) return;
+
+    if (key === 'ArrowLeft' || key === 'ArrowRight') {
+        event.preventDefault();
+        changeImagePopup(key === 'ArrowRight' ? 1 : -1);
+        return;
+    }
 
     event.preventDefault();
 

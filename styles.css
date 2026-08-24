@@ -384,6 +384,38 @@ html, body {
     background: rgba(0, 0, 0, 0.12);
 }
 
+#image_popup_previous,
+#image_popup_next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 46px;
+    height: 64px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.14);
+    color: #ffffff;
+    font-size: 32px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 2;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+#image_popup_previous {
+    left: 16px;
+}
+
+#image_popup_next {
+    right: 16px;
+}
+
+#image_popup_previous:hover,
+#image_popup_next:hover {
+    background: rgba(255, 255, 255, 0.28);
+    transform: translateY(-50%) scale(1.04);
+}
+
 #image_popup_image {
     max-width: none;
     max-height: none;
@@ -456,6 +488,12 @@ html, body {
 #image_popup_zoom_buttons {
     display: flex;
     gap: 10px;
+}
+
+#image_popup_counter {
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
 }
 
 #info_panel_close {

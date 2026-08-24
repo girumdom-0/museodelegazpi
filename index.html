@@ -105,6 +105,8 @@
     <div id="image_popup_modal" role="dialog" aria-modal="true" aria-label="Image popup">
         <div id="image_popup_content">
             <img id="image_popup_image" src="" alt="Popup image" draggable="false" />
+            <button id="image_popup_previous" type="button" title="Previous image" aria-label="Previous image">&#10094;</button>
+            <button id="image_popup_next" type="button" title="Next image" aria-label="Next image">&#10095;</button>
         </div>
         <button id="image_popup_close" type="button" title="Close popup">✕</button>
         <div id="image_popup_controls">
@@ -112,6 +114,7 @@
                 <button id="image_popup_zoom_in" type="button" title="Zoom in">+</button>
                 <button id="image_popup_zoom_out" type="button" title="Zoom out">−</button>
             </div>
+            <span id="image_popup_counter" aria-live="polite"></span>
         </div>
     </div>
 </div>

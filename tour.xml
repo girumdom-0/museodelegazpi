@@ -160,6 +160,7 @@
 
     <!-- 2B. IMAGE POPUP ACTIONS -->
 
+
     <!-- Opens image modal, resets position/scale, and fades in -->
     <action name="show_image_popup">
         js(showImagePopup(%1));
@@ -649,7 +650,71 @@
         </image>
         <hotspot name="spot2085341092" style="skin_hotspotstyle" ath="-141.152" atv="12.309" depth="1000.0" linkedscene="scene_11" linkedscene_lookat="132.66,1.05,120.0" />
         <hotspot name="spot2085344546" style="skin_hotspotstyle" ath="150.232" atv="10.222" depth="1000.0" linkedscene="scene_9" linkedscene_lookat="108.2,1.73,120.0" />
+   
+     <hotspot name="transport"
+             style="info_hotspotstyle"
+             url="skin/info.png"
+             ath="20" 
+             atv="-17"
+             scale="0.3"
+             zoom="true"
+             onclick="show_transport_panel();" />
+
+     <hotspot name="japanese"
+             style="info_hotspotstyle"
+             url="skin/info.png"
+             ath="-99" 
+             atv="-12"
+             scale="0.3"
+             zoom="true"
+             onclick="show_japanese_panel();" />
+     
+     <hotspot name="regime"
+             style="info_hotspotstyle"
+             url="skin/info.png"
+             ath="110" 
+             atv="-13"
+             scale="0.3"
+             zoom="true"
+             onclick="show_regime_panel();" />
     </scene>
+
+    <action name="show_transport_panel" type="Javascript"><![CDATA[
+        showInfoPanel(
+            "ECONOMIC TRANSFORMATIONS UNDER THE AMERICAN REGIME",
+            "",
+            "Following the 1898 Treaty of Paris, the United States took control of the Philippines and established the First Philippine Commission under Jacob Schurman to assess the country's future. The Philippine-American War began on February 4, 1899, and American occupation of Albay started with the Battle of Legazpi on January 23, 1900, with resistance continuing until Simeon Ola's surrender in 1903. The Second Philippine Commission, led by William Howard Taft, introduced democratic governance by creating the judicial system, civil service, legal code, and public education. On April 25, 1900, Taft met with Albay officials to discuss the Municipal Code. Although there were proposals to move the provincial capital to Tabaco, Albay remained the provincial seat, and a new capitol building was later designed by American architect William E. Parsons. In 1907, Act No. 1731 merged the municipalities of Albay, Legazpi, and Daraga into one municipality called Albay, which was officially renamed Legazpi in 1925 through Legislative Act No. 3253.",
+            "",
+            "images/transport.png",
+            "images/transport1.png",
+            "images/transport2.png"
+        );
+    ]]></action>
+    
+    <action name="show_japanese_panel" type="Javascript"><![CDATA[
+        showInfoPanel(
+            "JAPANESE OCCUPATION",
+            "",
+            "Following the 1898 Treaty of Paris, the United States took control of the Philippines and established the First Philippine Commission under Jacob Schurman to assess the country's future. The Philippine-American War began on February 4, 1899, and American occupation of Albay started with the Battle of Legazpi on January 23, 1900, with resistance continuing until Simeon Ola's surrender in 1903. The Second Philippine Commission, led by William Howard Taft, introduced democratic governance by creating the judicial system, civil service, legal code, and public education. On April 25, 1900, Taft met with Albay officials to discuss the Municipal Code. Although there were proposals to move the provincial capital to Tabaco, Albay remained the provincial seat, and a new capitol building was later designed by American architect William E. Parsons. In 1907, Act No. 1731 merged the municipalities of Albay, Legazpi, and Daraga into one municipality called Albay, which was officially renamed Legazpi in 1925 through Legislative Act No. 3253.",
+            "",
+            "images/japanese.png",
+            "images/japanese1.png",
+            "images/japanese2.png"
+        );
+    ]]></action>
+    
+    <action name="show_regime_panel" type="Javascript"><![CDATA[
+        showInfoPanel(
+            "ECONOMIC TRANSFORMATIONS UNDER THE AMERICAN REGIME",
+            "",
+            "Following the 1898 Treaty of Paris, the United States took control of the Philippines and established the First Philippine Commission under Jacob Schurman to assess the country's future. The Philippine-American War began on February 4, 1899, and American occupation of Albay started with the Battle of Legazpi on January 23, 1900, with resistance continuing until Simeon Ola's surrender in 1903. The Second Philippine Commission, led by William Howard Taft, introduced democratic governance by creating the judicial system, civil service, legal code, and public education. On April 25, 1900, Taft met with Albay officials to discuss the Municipal Code. Although there were proposals to move the provincial capital to Tabaco, Albay remained the provincial seat, and a new capitol building was later designed by American architect William E. Parsons. In 1907, Act No. 1731 merged the municipalities of Albay, Legazpi, and Daraga into one municipality called Albay, which was officially renamed Legazpi in 1925 through Legislative Act No. 3253.",
+            "",
+            "images/regime.png",
+            "images/regime1.png",
+            "images/regime2.png"
+        );
+    ]]></action>
+
 
     <!-- SCENE 11 -->
     <scene name="scene_11" title="11" onstart="" thumburl="panos/11.tiles/thumb.webp" lat="" lng="" alt="" heading="">
@@ -661,7 +726,122 @@
         </image>
         <hotspot name="spot2085341273" style="skin_hotspotstyle" ath="143.487" atv="12.99" depth="1000.0" linkedscene="scene_12" linkedscene_lookat="-124.28,6.14,120.0" />
         <hotspot name="spot2085344135" style="skin_hotspotstyle" ath="-156.486" atv="10.677" depth="1000.0" linkedscene="scene_10" linkedscene_lookat="-205.85,1.06,120.0" />
+     
+      <hotspot name="progress"
+             style="info_hotspotstyle"
+             url="skin/info.png"
+             ath="-116" 
+             atv="-18"
+             scale="0.3"
+             zoom="true"
+             onclick="show_progress_panel();" />
+    
+    <hotspot name="republic"
+             style="info_hotspotstyle"
+             url="skin/info.png"
+             ath="39" 
+             atv="-18"
+             scale="0.3"
+             zoom="true"
+             onclick="show_republic_panel();" />
+
+    <hotspot name="spot_papel_gallery"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="70"
+                 atv="4"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_papel_gallery();" />
+
+    <hotspot name="spot_bust_3d"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="112"
+                 atv="-8"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_3d_obj('models/general.glb');" />
+
+    <hotspot name="info_bust"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="70"
+                 atv="-12"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene11(3).png');" />
+
+    <hotspot name="info_bust1"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="80"
+                 atv="-12"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene11.png');" />
+    
+    <hotspot name="info_bust2"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="90"
+                 atv="-12"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene11(2).png');" />
+
+    <hotspot name="info_bust3"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="100"
+                 atv="-12"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene11(1).png');" />
+
     </scene>
+
+     <action name="show_progress_panel" type="Javascript"><![CDATA[
+        showInfoPanel(
+            "LEGAZPI CITY TOWARDS PROGRESS AND DEVELOPMENT",
+            "",
+            "Following the 1898 Treaty of Paris, the United States took control of the Philippines and established the First Philippine Commission under Jacob Schurman to assess the country's future. The Philippine-American War began on February 4, 1899, and American occupation of Albay started with the Battle of Legazpi on January 23, 1900, with resistance continuing until Simeon Ola's surrender in 1903. The Second Philippine Commission, led by William Howard Taft, introduced democratic governance by creating the judicial system, civil service, legal code, and public education. On April 25, 1900, Taft met with Albay officials to discuss the Municipal Code. Although there were proposals to move the provincial capital to Tabaco, Albay remained the provincial seat, and a new capitol building was later designed by American architect William E. Parsons. In 1907, Act No. 1731 merged the municipalities of Albay, Legazpi, and Daraga into one municipality called Albay, which was officially renamed Legazpi in 1925 through Legislative Act No. 3253.",
+            "",
+            "images/progress.png",
+            "images/progress1.png",
+            "images/progress2.png"
+        );
+    ]]></action>
+
+    <action name="show_republic_panel" type="Javascript"><![CDATA[
+        showInfoPanel(
+            "REPUBLIC PERIOD FROM VILLAGE CITY",
+            "",
+            "Following the 1898 Treaty of Paris, the United States took control of the Philippines and established the First Philippine Commission under Jacob Schurman to assess the country's future. The Philippine-American War began on February 4, 1899, and American occupation of Albay started with the Battle of Legazpi on January 23, 1900, with resistance continuing until Simeon Ola's surrender in 1903. The Second Philippine Commission, led by William Howard Taft, introduced democratic governance by creating the judicial system, civil service, legal code, and public education. On April 25, 1900, Taft met with Albay officials to discuss the Municipal Code. Although there were proposals to move the provincial capital to Tabaco, Albay remained the provincial seat, and a new capitol building was later designed by American architect William E. Parsons. In 1907, Act No. 1731 merged the municipalities of Albay, Legazpi, and Daraga into one municipality called Albay, which was officially renamed Legazpi in 1925 through Legislative Act No. 3253.",
+            "",
+            "images/republic.png",
+            "images/republic1.png",
+            "images/republic2.png"  
+        );
+    ]]></action>
+
+    <action name="show_papel_gallery" type="Javascript"><![CDATA[
+        showImagePopup(
+            "images/papel.png",
+            [
+                "images/papel.png",
+                "images/papel1.png",
+                "images/papel2.png",
+                "images/papel3.png",
+                "images/papel4.png",
+                "images/papel5.png",
+                "images/papel6.png",
+                "images/papel7.png",
+                "images/papel8.png",
+                "images/papel9.png"
+            ]
+        );
+    ]]></action>
 
     <!-- SCENE 12 -->
     <scene name="scene_12" title="12" onstart="" thumburl="panos/12.tiles/thumb.webp" lat="" lng="" alt="" heading="">
