@@ -382,7 +382,7 @@
                  atv="20"
                  scale="0.3"
                  zoom="false"
-                 onclick="show_3d_obj('https://pub-7a757e487e63483e93517fad31a30a4c.r2.dev/bust.glb', 'https://pub-7a757e487e63483e93517fad31a30a4c.r2.dev/bust_texture.png');" />
+                 onclick="show_3d_obj('https://museodelegazpi-assets.07304476.workers.dev/bust.glb', 'https://museodelegazpi-assets.07304476.workers.dev/bust_texture.png');" />
 
        <!-- Text Hotspot: Triggers HTML Text-Only Modal (Sister City details) -->
      <hotspot name="spot_sister_city_text"
@@ -393,7 +393,6 @@
          scale="0.3"
          zoom="true"
          onclick="show_sister_city_info();" />
-
         <!-- Panel Hotspot: Triggers Combined HTML Image & Text Panel (Miguel López de Legazpi) -->
         <hotspot name="spot_miguel_panel"
                  style="info_hotspotstyle"
@@ -761,7 +760,8 @@
                  atv="-8"
                  scale="0.3"
                  zoom="false"
-                onclick="show_3d_obj('https://pub-7a757e487e63483e93517fad31a30a4c.r2.dev/general.glb');" />
+                onclick="show_3d_obj('https://museodelegazpi-assets.07304476.workers.dev/general.glb');" />
+
 
     <hotspot name="info_bust"
                  style="info_hotspotstyle"
