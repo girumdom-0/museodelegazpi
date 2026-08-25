@@ -753,7 +753,7 @@
                  zoom="false"
                  onclick="show_papel_gallery();" />
 
-    <hotspot name="spot_bust_3d"
+    <hotspot name="spot_bust"
                  style="info_hotspotstyle"
                  url="skin/info.png"
                  ath="112"
