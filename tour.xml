@@ -877,6 +877,62 @@
         </image>
         <hotspot name="spot2085342031" style="skin_hotspotstyle" ath="44.097" atv="2.662" depth="1000.0" linkedscene="scene_15" linkedscene_lookat="-67.97,-3.37,120.0" />
         <hotspot name="spot2085343580" style="skin_hotspotstyle" ath="-76.981" atv="3.631" depth="1000.0" linkedscene="scene_13" linkedscene_lookat="-182.81,-0.31,120.0" />
+   
+ <!-- Info Hotspot: Triggers single image pop-up -->
+        <hotspot name="info_first"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="168"
+                 atv="1"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene14.png');" />
+   
+    <hotspot name="info_second"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="110"
+                 atv="1"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene14(1).png');" />
+
+     <hotspot name="info_third"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="130"
+                 atv="1"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene14(2).png');" />
+
+     <hotspot name="info_fourth"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="65"
+                 atv="0"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene14(3).png');" />
+
+     <hotspot name="info_fifth"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="80"
+                 atv="0"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene14(4).png');" />
+
+     <hotspot name="info_sixth"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="90"
+                 atv="0"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene14(5).png');" />
+   
     </scene>
 
     <!-- SCENE 15 -->
@@ -889,6 +945,26 @@
         </image>
         <hotspot name="spot2085342375" style="skin_hotspotstyle" ath="-73.659" atv="7.969" depth="1000.0" linkedscene="scene_16" linkedscene_lookat="-87.94,-1.95,120.0" />
         <hotspot name="spot2085343401" style="skin_hotspotstyle" ath="54.083" atv="10.001" depth="1000.0" linkedscene="scene_14" linkedscene_lookat="-93.59,7.49,120.0" />
+    
+    <!-- Info Hotspot: Triggers single image pop-up -->
+    <hotspot name="info"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-18  "
+                 atv="-10"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene15.png');" />
+   
+    <hotspot name="info_second"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="41"
+                 atv="-10"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene15(1).png');" />
+   
     </scene>
 
     <!-- SCENE 16 -->
@@ -901,7 +977,36 @@
         </image>
         <hotspot name="spot2085342476" style="skin_hotspotstyle" ath="-90.198" atv="2.977" depth="1000.0" linkedscene="scene_17" linkedscene_lookat="-39.06,-4.27,120.0" />
         <hotspot name="spot2085343232" style="skin_hotspotstyle" ath="-3.935" atv="15.328" depth="1000.0" linkedscene="scene_15" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+     <hotspot name="spot_papel_gallery"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-50"
+                 atv="8"
+                 scale="0.4"
+                 zoom="false"
+                 onclick="show_papel_gallery();" />
+   
+
+   
     </scene>
+
+    <action name="show_papel_gallery" type="Javascript"><![CDATA[
+        showImagePopup(
+            "images/scene16.jpg",
+            [
+                "images/scene16.jpg",
+                "images/scene16(1).jpg",
+                "images/scene16(2).jpg",
+                "images/scene16(3).jpg",
+                "images/scene16(4).jpg",   
+                "images/scene16(5).jpg",
+                "images/scene16(6).jpg",
+                "images/scene16(7).jpg",
+            ]
+        );
+    ]]></action>
+
 
     <!-- SCENE 17 -->
     <scene name="scene_17" title="17" onstart="" thumburl="panos/17.tiles/thumb.webp" lat="" lng="" alt="" heading="">
@@ -912,6 +1017,98 @@
             <sphere url="panos/17.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
         </image>
         <hotspot name="spot2085342586" style="skin_hotspotstyle" ath="-41.938" atv="-1.593" depth="1000.0" linkedscene="scene_18" linkedscene_lookat="-11.23,3.14,120.0" />
+   
+    <hotspot name="info_boat"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-120"
+                 atv="-10"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene17.jpg');" /> 
+
+    <hotspot name="info_dahon"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-148"
+                 atv="-13"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene17(1).jpg');" />   
+  
+   <hotspot name="info_simbahan"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="180"
+                 atv="-10"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene17(2).jpg');" />
+
+    <hotspot name="info_abot"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="160"
+                 atv="-12"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene17(3).jpg');" />
+
+    <hotspot name="info_tanim"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="140"
+                 atv="-11"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene17(4).jpg');" />
+    
+    <hotspot name="info_karabaw"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="120"
+                 atv="-12"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene17(5).jpg');" />
+
+    <hotspot name="info_dikomaintindihan"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="90"
+                 atv="-20"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene17(6).jpg');" />
+    
+    <hotspot name="info_mayon"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="60"
+                 atv="-15"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene17(7).jpg');" />
+
+    <hotspot name="info_farm"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-1"
+                 atv="-16"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene17(8).jpg');" />
+
+    <hotspot name="info_mayon2"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-25"
+                 atv="-11"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene17(9).jpg');" />
+
+
     </scene>
 
     <!-- SCENE 18 -->
