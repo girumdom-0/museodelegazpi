@@ -978,14 +978,14 @@
         <hotspot name="spot2085342476" style="skin_hotspotstyle" ath="-90.198" atv="2.977" depth="1000.0" linkedscene="scene_17" linkedscene_lookat="-39.06,-4.27,120.0" />
         <hotspot name="spot2085343232" style="skin_hotspotstyle" ath="-3.935" atv="15.328" depth="1000.0" linkedscene="scene_15" linkedscene_hoffset="0.0" use3dtransition="true" />
 
-     <hotspot name="spot_papel_gallery"
+     <hotspot name="spot_clay_gallery"
                  style="info_hotspotstyle"
                  url="skin/info.png"
                  ath="-50.0"
                  atv="8.0"
                  scale="0.4"
                  zoom="false"
-                 onclick="show_papel_gallery();" />
+                 onclick="show_clay_gallery();" />
 		<hotspot name="spot2099921542" style="skin_hotspotstyle" ath="176.693" atv="8.295" depth="1000.0" linkedscene="scene_18" linkedscene_lookat="17.1,-2.75,120.0" />
    
 
