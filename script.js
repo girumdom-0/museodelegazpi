@@ -11,6 +11,10 @@
 */
 
 let scene, camera, renderer, controls, currentModel;
+let currentTexture = null;
+let modelRequest = null;
+
+THREE.Cache.enabled = true;
 
 // Create the background audio element for the Ibalong music.
 // It loops continuously and starts at a low volume so it feels like ambient background music.
@@ -116,7 +120,7 @@ function initThreeJS() {
 
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 
     if ('outputColorSpace' in renderer) {
         renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -162,6 +166,29 @@ function updateViewportDimensions() {
     }
 }
 
+function disposeModel(model) {
+    model.traverse((child) => {
+        if (!child.isMesh) return;
+
+        child.geometry.dispose();
+        const materials = Array.isArray(child.material) ? child.material : [child.material];
+        materials.forEach((material) => material.dispose());
+    });
+}
+
+function removeCurrentModel() {
+    if (currentModel) {
+        scene.remove(currentModel);
+        disposeModel(currentModel);
+        currentModel = null;
+    }
+
+    if (currentTexture) {
+        currentTexture.dispose();
+        currentTexture = null;
+    }
+}
+
 function loadGLBModel(glbPath, texturePath) {
     closeAllModals();
     if (!renderer) initThreeJS();
@@ -171,12 +198,20 @@ function loadGLBModel(glbPath, texturePath) {
 
     setTimeout(updateViewportDimensions, 50);
 
-    if (currentModel) scene.remove(currentModel);
+    if (modelRequest) modelRequest.cancelled = true;
+    removeCurrentModel();
 
+    const request = { cancelled: false };
+    modelRequest = request;
     let pngTexture = null;
     if (texturePath) {
         const textureLoader = new THREE.TextureLoader();
         pngTexture = textureLoader.load(texturePath, (tex) => {
+            if (request.cancelled) {
+                tex.dispose();
+                return;
+            }
+            currentTexture = tex;
             tex.flipY = false;
             if ('colorSpace' in tex) {
                 tex.colorSpace = THREE.SRGBColorSpace;
@@ -187,10 +222,19 @@ function loadGLBModel(glbPath, texturePath) {
     }
 
     const loader = new THREE.GLTFLoader();
+    const dracoLoader = new THREE.DRACOLoader();
+    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
+    loader.setDRACOLoader(dracoLoader);
 
     loader.load(
         glbPath,
         (gltf) => {
+            if (request.cancelled) {
+                disposeModel(gltf.scene);
+                return;
+            }
+
+            modelRequest = null;
             currentModel = gltf.scene;
 
             currentModel.traverse((child) => {
@@ -238,6 +282,9 @@ function toggle3DFullscreen() {
 }
 
 function clearGLBModel() {
+    if (modelRequest) modelRequest.cancelled = true;
+    modelRequest = null;
+    removeCurrentModel();
     document.getElementById("model3d_backdrop").style.display = "none";
     const modal = document.getElementById("model3d_modal");
     modal.style.display = "none";

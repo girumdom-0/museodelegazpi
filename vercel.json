@@ -1,0 +1,46 @@
+{
+  "rewrites": [
+    {
+      "source": "/models/:file",
+      "destination": "https://museodelegazpi-assets.07304476.workers.dev/:file"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)\\.(js|css|xml|json|html|wasm)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)\\.(webp|jpg|jpeg|png|gif|mp4|glb|mp3|woff2?)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/models/(.*)\\.glb",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "model/gltf-binary"
+        }
+      ]
+    },
+    {
+      "source": "/models/(.*)\\.(glb|png)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
+}
