@@ -981,12 +981,11 @@
      <hotspot name="spot_papel_gallery"
                  style="info_hotspotstyle"
                  url="skin/info.png"
-                 ath="-50.0"
-                 atv="8.0"
+                 ath="-50"
+                 atv="8"
                  scale="0.4"
                  zoom="false"
                  onclick="show_papel_gallery();" />
-		<hotspot name="spot2099921542" style="skin_hotspotstyle" ath="176.693" atv="8.295" depth="1000.0" linkedscene="scene_18" linkedscene_lookat="17.1,-2.75,120.0" />
    
 
    
@@ -1022,8 +1021,8 @@
     <hotspot name="info_boat"
                  style="info_hotspotstyle"
                  url="skin/info.png"
-                 ath="-120.0"
-                 atv="-10.0"
+                 ath="-120"
+                 atv="-10"
                  scale="0.3"
                  zoom="false"
                  onclick="show_image_popup('images/scene17.jpg');" /> 
@@ -1031,8 +1030,8 @@
     <hotspot name="info_dahon"
                  style="info_hotspotstyle"
                  url="skin/info.png"
-                 ath="-148.0"
-                 atv="-13.0"
+                 ath="-148"
+                 atv="-13"
                  scale="0.3"
                  zoom="false"
                  onclick="show_image_popup('images/scene17(1).jpg');" />   
@@ -1040,8 +1039,8 @@
    <hotspot name="info_simbahan"
                  style="info_hotspotstyle"
                  url="skin/info.png"
-                 ath="180.0"
-                 atv="-10.0"
+                 ath="180"
+                 atv="-10"
                  scale="0.3"
                  zoom="false"
                  onclick="show_image_popup('images/scene17(2).jpg');" />
@@ -1049,8 +1048,8 @@
     <hotspot name="info_abot"
                  style="info_hotspotstyle"
                  url="skin/info.png"
-                 ath="160.0"
-                 atv="-12.0"
+                 ath="160"
+                 atv="-12"
                  scale="0.3"
                  zoom="false"
                  onclick="show_image_popup('images/scene17(3).jpg');" />
@@ -1058,8 +1057,8 @@
     <hotspot name="info_tanim"
                  style="info_hotspotstyle"
                  url="skin/info.png"
-                 ath="140.0"
-                 atv="-11.0"
+                 ath="140"
+                 atv="-11"
                  scale="0.3"
                  zoom="false"
                  onclick="show_image_popup('images/scene17(4).jpg');" />
@@ -1067,8 +1066,8 @@
     <hotspot name="info_karabaw"
                  style="info_hotspotstyle"
                  url="skin/info.png"
-                 ath="120.0"
-                 atv="-12.0"
+                 ath="120"
+                 atv="-12"
                  scale="0.3"
                  zoom="false"
                  onclick="show_image_popup('images/scene17(5).jpg');" />
@@ -1076,8 +1075,8 @@
     <hotspot name="info_dikomaintindihan"
                  style="info_hotspotstyle"
                  url="skin/info.png"
-                 ath="90.0"
-                 atv="-20.0"
+                 ath="90"
+                 atv="-20"
                  scale="0.3"
                  zoom="false"
                  onclick="show_image_popup('images/scene17(6).jpg');" />
@@ -1085,8 +1084,8 @@
     <hotspot name="info_mayon"
                  style="info_hotspotstyle"
                  url="skin/info.png"
-                 ath="60.0"
-                 atv="-15.0"
+                 ath="60"
+                 atv="-15"
                  scale="0.3"
                  zoom="false"
                  onclick="show_image_popup('images/scene17(7).jpg');" />
@@ -1094,8 +1093,8 @@
     <hotspot name="info_farm"
                  style="info_hotspotstyle"
                  url="skin/info.png"
-                 ath="-1.0"
-                 atv="-16.0"
+                 ath="-1"
+                 atv="-16"
                  scale="0.3"
                  zoom="false"
                  onclick="show_image_popup('images/scene17(8).jpg');" />
@@ -1103,12 +1102,11 @@
     <hotspot name="info_mayon2"
                  style="info_hotspotstyle"
                  url="skin/info.png"
-                 ath="-25.0"
-                 atv="-11.0"
+                 ath="-25"
+                 atv="-11"
                  scale="0.3"
                  zoom="false"
                  onclick="show_image_popup('images/scene17(9).jpg');" />
-		<hotspot name="spot2099921251" style="skin_hotspotstyle" ath="-89.884" atv="-0.099" depth="1000.0" linkedscene="scene_16" linkedscene_lookat="0.0,0.0,120.0" />
 
 
     </scene>
