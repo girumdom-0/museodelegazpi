@@ -206,6 +206,7 @@ function loadGLBModel(glbPath, texturePath) {
     let pngTexture = null;
     if (texturePath) {
         const textureLoader = new THREE.TextureLoader();
+        textureLoader.setCrossOrigin('anonymous');
         pngTexture = textureLoader.load(texturePath, (tex) => {
             if (request.cancelled) {
                 tex.dispose();

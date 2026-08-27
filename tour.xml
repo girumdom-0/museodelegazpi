@@ -382,7 +382,7 @@
                  atv="20"
                  scale="0.3"
                  zoom="false"
-                 onclick="show_3d_obj('models/bust.glb', 'image/bust_texture.jpg');" />
+                 onclick="show_3d_obj('models/bust.glb', 'https://pub-8f8a979ef57a4a63a5b908caa335fa66.r2.dev/bust_texture.jpg');" />
 
        <!-- Text Hotspot: Triggers HTML Text-Only Modal (Sister City details) -->
      <hotspot name="spot_sister_city_text"
