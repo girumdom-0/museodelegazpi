@@ -1127,12 +1127,11 @@
         <hotspot name="battle_of_legazpi_video"
                  style="info_hotspotstyle"
                  url="skin/info.png"
-                 ath="15.0"
-                 atv="-10.0"
+                 ath="15"
+                 atv="-10"
                  scale="0.3"
                  zoom="true"
                  onclick="show_battle_video();" />
-		<hotspot name="spot2100045964" style="skin_hotspotstyle" ath="123.553" atv="-0.276" depth="1000.0" linkedscene="scene_17" linkedscene_lookat="-67.83,-2.8,120.0" />
     </scene>
 
 </krpano>
