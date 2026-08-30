@@ -981,14 +981,30 @@
      <hotspot name="spot_clay_gallery"
                  style="info_hotspotstyle"
                  url="skin/info.png"
-                 ath="-50.0"
+                 ath="-100"
                  atv="8.0"
                  scale="0.4"
                  zoom="false"
                  onclick="show_clay_gallery();" />
 		<hotspot name="spot2099921542" style="skin_hotspotstyle" ath="176.693" atv="8.295" depth="1000.0" linkedscene="scene_18" linkedscene_lookat="17.1,-2.75,120.0" />
    
+    <hotspot name="pangluto"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="55"
+                 atv="20"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_3d_obj('models/bust.glb');" />
 
+    <hotspot name="ironman"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="100"
+                 atv="20"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_3d_obj('models/bust.glb');" />
    
     </scene>
 
@@ -1077,7 +1093,7 @@
                  style="info_hotspotstyle"
                  url="skin/info.png"
                  ath="90.0"
-                 atv="-20.0"
+                 atv="-17"
                  scale="0.3"
                  zoom="false"
                  onclick="show_image_popup('images/scene17(6).jpg');" />
@@ -1086,7 +1102,7 @@
                  style="info_hotspotstyle"
                  url="skin/info.png"
                  ath="60.0"
-                 atv="-15.0"
+                 atv="-7.0"
                  scale="0.3"
                  zoom="false"
                  onclick="show_image_popup('images/scene17(7).jpg');" />
@@ -1095,7 +1111,7 @@
                  style="info_hotspotstyle"
                  url="skin/info.png"
                  ath="-1.0"
-                 atv="-16.0"
+                 atv="-10.0"
                  scale="0.3"
                  zoom="false"
                  onclick="show_image_popup('images/scene17(8).jpg');" />
@@ -1104,14 +1120,66 @@
                  style="info_hotspotstyle"
                  url="skin/info.png"
                  ath="-25.0"
-                 atv="-11.0"
+                 atv="-5.0"
                  scale="0.3"
                  zoom="false"
                  onclick="show_image_popup('images/scene17(9).jpg');" />
-		<hotspot name="spot2099921251" style="skin_hotspotstyle" ath="-89.884" atv="-0.099" depth="1000.0" linkedscene="scene_16" linkedscene_lookat="0.0,0.0,120.0" />
+
+     <hotspot name="spot_clay_gallery1"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-75"
+                 atv="15"
+                 scale="0.4"
+                 zoom="false"
+                 onclick="show_clay_gallery1();" />
+    
+    <hotspot name="spot_clay_gallery2"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="100"
+                 atv="15"
+                 scale="0.4"
+                 zoom="false"
+                 onclick="show_clay_gallery2();" />
+	
+		
+        <hotspot name="spot2099921251" style="skin_hotspotstyle" ath="-89.884" atv="-0.099" depth="1000.0" linkedscene="scene_16" linkedscene_lookat="0.0,0.0,120.0" />
 
 
     </scene>
+
+     <action name="show_clay_gallery1" type="Javascript"><![CDATA[
+        showImagePopup(
+            "images/scene16.jpg",
+            [
+                "images/scene16.jpg",
+                "images/scene16(1).jpg",
+                "images/scene16(2).jpg",
+                "images/scene16(3).jpg",
+                "images/scene16(4).jpg",   
+                "images/scene16(5).jpg",
+                "images/scene16(6).jpg",
+                "images/scene16(7).jpg",
+            ]
+        );
+    ]]></action>
+
+    <action name="show_clay_gallery2" type="Javascript"><![CDATA[
+        showImagePopup(
+            "images/scene16.jpg",
+            [
+                "images/scene16.jpg",
+                "images/scene16(1).jpg",
+                "images/scene16(2).jpg",
+                "images/scene16(3).jpg",
+                "images/scene16(4).jpg",   
+                "images/scene16(5).jpg",
+                "images/scene16(6).jpg",
+                "images/scene16(7).jpg",
+            ]
+        );
+    ]]></action>
 
     <!-- SCENE 18 -->
     <scene name="scene_18" title="18" onstart="" thumburl="panos/18.tiles/thumb.webp" lat="" lng="" alt="" heading="">
@@ -1133,6 +1201,35 @@
                  zoom="true"
                  onclick="show_battle_video();" />
 		<hotspot name="spot2100045964" style="skin_hotspotstyle" ath="123.553" atv="-0.276" depth="1000.0" linkedscene="scene_17" linkedscene_lookat="-67.83,-2.8,120.0" />
+   
+    <!-- 3D Model Hotspot: Opens Three.js 3D viewer for bust model -->
+        <hotspot name="spot_bust_3d(2)"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-105"
+                 atv="20"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_3d_obj('models/bust.glb');" />
+
+         <hotspot name="obi"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-35"
+                 atv="13.5"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene17(9).jpg');" />
+
+        <hotspot name="microphone"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-7"
+                 atv="9"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_3d_obj('models/bust.glb');" />
+   
     </scene>
 
 </krpano>
