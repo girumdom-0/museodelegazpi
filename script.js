@@ -13,6 +13,38 @@
 let scene, camera, renderer, controls, currentModel;
 let currentTexture = null;
 let modelRequest = null;
+let activeTourTextAction = '';
+const tourTexts = new Map();
+
+const supabaseTourTextsUrl = 'https://nktoozkerqwrtkzujtdh.supabase.co/rest/v1/tour_texts?select=action_name,title,text';
+const supabaseTourTextsKey = 'sb_publishable_2GnZlRn85BMxrT_5-08-aw_z5DYIV5p';
+
+function cacheTourTexts(entries) {
+    entries.forEach((entry) => tourTexts.set(entry.action_name, entry));
+}
+
+function fetchTourTexts() {
+    return fetch('/api/tour-texts', { cache: 'no-store' })
+        .then((response) => response.ok ? response.json() : Promise.reject(new Error('Local API unavailable')))
+        .catch(() => fetch(supabaseTourTextsUrl, {
+            cache: 'no-store',
+            headers: { apikey: supabaseTourTextsKey, Authorization: `Bearer ${supabaseTourTextsKey}` },
+        }))
+        .then((response) => response && response.ok ? response.json() : [])
+        .then((entries) => {
+            cacheTourTexts(entries || []);
+            return entries || [];
+        });
+}
+
+fetchTourTexts().catch(() => {});
+window.setInterval(() => fetchTourTexts().catch(() => {}), 3000);
+
+function setActiveTourTextAction(actionName) {
+    activeTourTextAction = actionName;
+}
+
+window.setActiveTourTextAction = setActiveTourTextAction;
 
 THREE.Cache.enabled = true;
 
@@ -300,6 +332,13 @@ window.show_3d_obj = loadGLBModel;
 function showTextModal(title, subtitle, bodyText, introItalicText) {
     closeAllModals();
 
+    const savedText = tourTexts.get(activeTourTextAction);
+    if (savedText) {
+        title = savedText.title || title;
+        bodyText = savedText.text || bodyText;
+    }
+    activeTourTextAction = '';
+
     document.getElementById("text_modal_title").innerText = title || "";
     document.getElementById("text_modal_subtitle").innerText = subtitle || "";
 
@@ -347,6 +386,13 @@ function createImageWrapper(imgSrc) {
 
 function showInfoPanel(title, subtitle, bodyText, introItalic, imgMain, imgMid, imgBottom1, imgBottom2) {
     closeAllModals();
+
+    const savedText = tourTexts.get(activeTourTextAction);
+    if (savedText) {
+        title = savedText.title || title;
+        bodyText = savedText.text || bodyText;
+    }
+    activeTourTextAction = '';
 
     document.getElementById("info_panel_title").innerText = title || "";
     document.getElementById("info_panel_subtitle").innerText = subtitle || "";

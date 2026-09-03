@@ -406,13 +406,16 @@
 
 <!-- Custom Action: Passes text parameters to JavaScript text modal -->
 <action name="show_sister_city_info" type="Javascript"><![CDATA[
+    setActiveTourTextAction("show_sister_city_info");
     showTextModal(
         "SISTER-CITY RELATIONSHIP BETWEEN THE CITY OF LEGAZPI AND AYUNTAMIENTO ZUMARRAGA",
+        "",
         "Legazpi City established a Sister-City Relationship with Zumarraga, Spain, on October 21, 1975, to honor the birthplace of Adelantado Don Miguel Lopez de Legazpi, the city's namesake. The agreement, signed by Mayor Gregorio Imperial and Alcalde Don Cruz-Maria Uribezalgo Larranaga, promotes cooperation through the exchange of information on history, culture, tourism, literature, governance, and other shared interests. In February 2012, Mayor Geraldine Rosal and City Administrator Noel Rosal visited Zumarraga to strengthen ties and discuss tourism, investments, and business opportunities with local officials. The visit was sponsored by AECID, Spain's development agency, which has provided significant financial and technological assistance to Legazpi, including over PHP 100 million for the city's sanitary landfill project."
     );
 ]]></action>
   <!-- Custom Action: Passes image paths & text content to JavaScript gallery panel -->
     <action name="show_miguel_legazpi_panel" type="Javascript"><![CDATA[
+        setActiveTourTextAction("show_miguel_legazpi_panel");
         showInfoPanel(
             "THE CITY NAMED AFTER MIGUEL LOPEZ DE LEGAZPI",
             "",
@@ -460,6 +463,7 @@
 
     <!-- Custom Action: Triggers Sawangan Info Panel -->
     <action name="show_sawangan_panel" type="Javascript"><![CDATA[
+        setActiveTourTextAction("show_sawangan_panel");
         showInfoPanel(
             "THE SETTLEMENT CALLED SAWANGAN",
             "",
@@ -473,6 +477,7 @@
 
     <!-- Custom Action: Triggers Spanish Era Info Panel -->
     <action name="show_spanish_era_panel" type="Javascript"><![CDATA[
+        setActiveTourTextAction("show_spanish_era_panel");
         showInfoPanel(
             "SPANISH ERA",
             "",
@@ -528,6 +533,7 @@
 
     <!-- Custom Action: Triggers Albay Viejo Info Panel -->
     <action name="show_albay_viejo_panel" type="Javascript"><![CDATA[
+        setActiveTourTextAction("show_albay_viejo_panel");
         showInfoPanel(
             "THE LEGEND OF ALBAY VIEJO & ALBAY",
             "",
@@ -539,6 +545,7 @@
     ]]></action>
 
   <action name="show_the_becerra_law_panel" type="Javascript"><![CDATA[
+      setActiveTourTextAction("show_the_becerra_law_panel");
         showInfoPanel(
             "THE BECERRA LAW",
             "",
@@ -550,6 +557,7 @@
         );
     ]]></action>
 <action name="show_two_churches_panel" type="Javascript"><![CDATA[
+    setActiveTourTextAction("show_two_churches_panel");
         showInfoPanel(
             "A TALE OF TWO CHURCHES",
             "",
@@ -604,6 +612,7 @@
     </scene>
 
     <action name="show_perils_panel" type="Javascript"><![CDATA[
+        setActiveTourTextAction("show_perils_panel");
         showInfoPanel(
             "PERILS FROM THE SEA",
             "",
@@ -616,6 +625,7 @@
     ]]></action>
 
     <action name="show_the_battle_panel" type="Javascript"><![CDATA[
+        setActiveTourTextAction("show_the_battle_panel");
         showInfoPanel(
             "THE BATTLE OF LEGAZPI USHERED IN THE  AMERICAN REGIME",
             "",
@@ -628,6 +638,7 @@
     ]]></action>
 
     <action name="show_economic_trans_panel" type="Javascript"><![CDATA[
+        setActiveTourTextAction("show_economic_trans_panel");
         showInfoPanel(
             "ECONOMIC TRANSFORMATIONS UNDER THE AMERICAN REGIME",
             "",
@@ -679,6 +690,7 @@
     </scene>
 
     <action name="show_transport_panel" type="Javascript"><![CDATA[
+        setActiveTourTextAction("show_transport_panel");
         showInfoPanel(
             "ECONOMIC TRANSFORMATIONS UNDER THE AMERICAN REGIME",
             "",
@@ -691,6 +703,7 @@
     ]]></action>
     
     <action name="show_japanese_panel" type="Javascript"><![CDATA[
+        setActiveTourTextAction("show_japanese_panel");
         showInfoPanel(
             "JAPANESE OCCUPATION",
             "",
@@ -703,6 +716,7 @@
     ]]></action>
     
     <action name="show_regime_panel" type="Javascript"><![CDATA[
+        setActiveTourTextAction("show_regime_panel");
         showInfoPanel(
             "ECONOMIC TRANSFORMATIONS UNDER THE AMERICAN REGIME",
             "",
@@ -802,6 +816,7 @@
     </scene>
 
      <action name="show_republic_panel" type="Javascript"><![CDATA[
+          setActiveTourTextAction("show_republic_panel");
         showInfoPanel(
             "REPUBLIC PERIOD FROM VILLAGE CITY",
             "",
@@ -813,6 +828,7 @@
     ]]></action>
 
     <action name="show_progress_panel" type="Javascript"><![CDATA[
+        setActiveTourTextAction("show_progress_panel");
         showInfoPanel(
             " LEGAZPI CITY TOWARDS PROGRESS AND DEVELOPMENT",
             "",
