@@ -14,7 +14,14 @@ export default function LoginPage() {
     if (!isSupabaseConfigured()) { setError('Supabase is not configured. Add the values from your project API settings to .env.local and restart Next.js.'); return; }
     setLoading(true);
     const { error: signInError } = await createClient().auth.signInWithPassword({ email, password });
-    if (signInError) { setError('We could not sign you in. Check your details and try again.'); setLoading(false); return; }
+    if (signInError) {
+      const message = signInError.message.toLowerCase().includes('email not confirmed')
+        ? 'Confirm this email address in Supabase Authentication, then try again.'
+        : signInError.message.toLowerCase().includes('invalid login credentials')
+          ? 'The email or password is incorrect. Reset the password in Supabase Authentication and try again.'
+          : `Supabase login error: ${signInError.message}`;
+      setError(message); setLoading(false); return;
+    }
     window.location.href = '/admin';
   }
   return <main className="login"><section className="login-card" aria-labelledby="login-title">
