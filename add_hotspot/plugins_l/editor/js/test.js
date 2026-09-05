@@ -1,5 +1,0 @@
-/* File: add_hotspot/plugins_l/editor/js/test.js
-	Purpose: Small test/utility script for the add_hotspot editor — encoded content.
-	Notes: Header added for maintainers; file contains compressed/encoded data used by the editor.
-*/
-"[[KENCPUPR%*ctXR^tTw,id_`AVa$^-ogUfrd^d.T.*]'Nw(doQ=c@t<,nI3R;/5Q8S$.SJYw<#JTnJRoOHCNOYNpTAd*IgcN>ol7BO#Da:0Nl^pS$<z@CR1n#&PF:;O?4FAIqJqo#wwak5h;ilXT@CLipG86u4RVA4WcC*?>?dSY.'7Lou1EDHQEe>uRsdsfvvV+$2Ih?MB8sFh8LPA>IW%&4L2]+mW)a&XTgDKvta*TAe$Q<pbWj$49UE39%:TZTESek)XrXhS$ispk3/;b[`Ik`N[sA#olT/5_Q&;qs%2W6I7:n<?+-&'M]QM9Pb,Zjg-[QQb:1=]]";
