@@ -1,0 +1,1251 @@
+﻿<!-- File: tour.xml
+    Purpose: Main krpano tour configuration. Defines scenes, layers, hotspots, and includes the skin.
+    Notes: This is the primary configuration loaded by `embedpano`. Be cautious editing; prefer editing source files.
+-->
+
+<krpano version="1.24" title="Virtual Tour">
+
+    <!-- 1. GLOBAL INCLUDES -->
+    <!-- Imports the default tour skin (controls bar, default hotspot styles, thumbnail list) -->
+    <include url="skin/vtourskin.xml" />
+
+
+    <!-- 2. OVERLAY LAYERS (UI & POPUPS) -->
+
+    <!-- Intro Instructions Screen Overlay -->
+    <layer name="intro"
+           type="container"
+           keep="true"
+           width="100%"
+           height="100%"
+           bgcolor="0x000000"
+           bgalpha="0.2"
+           zorder="9999"
+           enabled="true"
+           bgcapture="true"
+           onclick="on_intro_click();">
+
+        <!-- Image graphic inside the intro layer detailing navigation instructions -->
+         <layer name="intro_guide"
+             enabled="true"
+             visible="true"
+             url="skin/intro.png"
+             align="center"
+             width="90%"
+             height="prop"
+             scale="0.6"
+             width.mobile="calc:stagewidth*0.82"
+             height.mobile="calc:stageheight*0.78"
+             scale.mobile="1.0"
+             keep="true"
+             onclick="on_intro_click();"
+             onresize.mobile="set(layer[intro_guide].width, calc:stagewidth*0.82); set(layer[intro_guide].height, calc:stageheight*0.78);" />
+    </layer>
+
+    <!-- Watermark / Branding Logo fixed at top-left corner -->
+    <layer name ="logo"
+           url="skin/logo.png"
+           align="topleft"
+           scale="0.5"
+           keep="true">
+    </layer>
+
+    <!-- Final-scene video hotspot opens the Battle of Legazpi clip. -->
+    <action name="show_battle_video" type="Javascript"><![CDATA[
+        showBattleVideo();
+    ]]></action>
+
+    <!-- Fades out and hides the intro layer on first user click -->
+    <action name="on_intro_click">
+        tween(layer[intro].alpha, 0, 0.5, easeOutQuad, set(layer[intro].visible, false));
+    </action>
+
+
+    <!-- 2A. IMAGE POPUP LAYERS (Legacy / Fallback Overlays) -->
+
+    <!-- Basic Image Popup Background Container -->
+    <layer name="img_popup_bg_fallback"
+           type="container"
+           keep="true"
+           width="100%"
+           height="100%"
+           bgcolor="0x000000"
+           bgalpha="0.7"
+           zorder="9999"
+           visible="false"
+           alpha="0.0"
+           bgcapture="true"
+           onclick="hide_image_popup();">
+
+        <!-- Displayed Photo Element inside the modal -->
+        <layer name="img_popup_photo_fallback"
+               url=""
+               align="center"
+               width="prop"
+               height="80%"
+               enabled="false" />
+
+        <!-- Bottom Text Hint -->
+        <layer name="img_popup_close_text_fallback"
+               type="text"
+               html="[ Click anywhere to close ]"
+               align="bottom"
+               y="30"
+               css="color:#FFFFFF; font-size:14px; font-family:Arial;"
+               bg="false"
+               enabled="false" />
+    </layer>
+
+    <!-- Advanced Interactive Image Popup Overlay (Draggable & Zoomable) -->
+    <layer name="img_popup_bg"
+           type="container"
+           keep="true"
+           width="100%"
+           height="100%"
+           bgcolor="0x000000"
+           bgalpha="0.8"
+           zorder="9999"
+           visible="false"
+           alpha="0.0"
+           bgcapture="true">
+
+        <!-- Draggable Photo Element -->
+        <layer name="img_popup_photo"
+               url=""
+               align="center"
+               x="0" y="0"
+               width="prop"
+               height="75%"
+               scale="1.0"
+               enabled="true"
+               ondown="draglayer();" />
+
+        <!-- Zoom-In Button (+): Increases photo scale by 20% -->
+        <layer name="img_popup_zoomin"
+               type="text"
+               html="+"
+               align="right" x="30" y="-30"
+               css="color:#FFFFFF; font-size:24px; font-weight:bold; text-align:center; background-color:rgba(255,255,255,0.2); width:40px; height:40px; line-height:38px; border-radius:20px; cursor:pointer;"
+               bg="false"
+               onclick="mul(layer[img_popup_photo].scale, 1.2); set(layer[img_popup_photo].x, layer[img_popup_photo].x);" />
+
+        <!-- Zoom-Out Button (-): Decreases photo scale by 20% -->
+        <layer name="img_popup_zoomout"
+               type="text"
+               html="&amp;minus;"
+               align="right" x="30" y="30"
+               css="color:#FFFFFF; font-size:24px; font-weight:bold; text-align:center; background-color:rgba(255,255,255,0.2); width:40px; height:40px; line-height:38px; border-radius:20px; cursor:pointer;"
+               bg="false"
+               onclick="div(layer[img_popup_photo].scale, 1.2); set(layer[img_popup_photo].x, layer[img_popup_photo].x);" />
+
+        <!-- Close Button (Top-Right) -->
+        <layer name="img_popup_close"
+               type="text"
+               html="✕ Close"
+               align="topright" x="20" y="20"
+               css="color:#FFFFFF; font-size:14px; background-color:rgba(0,0,0,0.5); padding:6px 12px; border-radius:4px; cursor:pointer;"
+               bg="false"
+               onclick="hide_image_popup();" />
+
+        <!-- Footer Instructions Hint -->
+        <layer name="img_popup_close_text"
+               type="text"
+               html="[ Drag to move • Click outside or hit Close to exit ]"
+               align="bottom" y="20"
+               css="color:#CCCCCC; font-size:13px; font-family:Arial;"
+               bg="false"
+               onclick="hide_image_popup();" />
+    </layer>
+
+
+    <!-- 2B. IMAGE POPUP ACTIONS -->
+
+
+    <!-- Opens image modal, resets position/scale, and fades in -->
+    <action name="show_image_popup">
+        js(showImagePopup(%1));
+    </action>
+
+    <!-- Smoothly fades out and hides image modal -->
+    <action name="hide_image_popup">
+        js(hideImagePopup());
+    </action>
+
+    <!-- Asynchronous loop handling dynamic mouse-dragging for layers -->
+    <action name="draglayer">
+        copy(drag_x, mouse.stagex);
+        copy(drag_y, mouse.stagey);
+        copy(drag_layerx, layer[img_popup_photo].x);
+        copy(drag_layery, layer[img_popup_photo].y);
+        asyncloop(pressed,
+            sub(dx, mouse.stagex, drag_x);
+            sub(dy, mouse.stagey, drag_y);
+            set(layer[img_popup_photo].x, add(drag_layerx, dx));
+            set(layer[img_popup_photo].y, add(drag_layery, dy));
+        );
+    </action>
+
+
+    <!-- 2C. 3D MODEL OVERLAY CONTAINER & ACTIONS -->
+
+    <!-- Fullscreen dimming backdrop layer for 3D views -->
+    <layer name="model3d_container"
+           type="container"
+           keep="true"
+           width="100%"
+           height="100%"
+           bgcolor="0x000000"
+           bgalpha="0.85"
+           zorder="9999"
+           visible="false"
+           alpha="0.0"
+           bgcapture="true">
+
+        <layer name="model3d_close"
+               type="text"
+               html="✕ Close 3D View"
+               align="topright" x="20" y="20"
+               css="color:#FFFFFF; font-size:14px; background-color:rgba(0,0,0,0.6); padding:8px 16px; border-radius:4px; cursor:pointer;"
+               bg="false"
+               onclick="hide_3d_obj();" />
+
+        <layer name="model3d_hint"
+               type="text"
+               html="[ Left Click + Drag to Rotate • Scroll to Zoom ]"
+               align="bottom" y="20"
+               css="color:#CCCCCC; font-size:13px; font-family:Arial;"
+               bg="false"
+               enabled="false" />
+    </layer>
+
+    <!-- Displays 3D modal and communicates with Three.js via JS interface -->
+    <action name="show_3d_obj">
+        js(loadGLBModel(%1, %2));
+    </action>
+
+    <!-- Closes 3D modal and disposes active 3D geometries in JavaScript -->
+    <action name="hide_3d_obj">
+        js(clearGLBModel());
+    </action>
+
+
+    <!-- 3. GLOBAL TOUR SKIN SETTINGS -->
+    <skin_settings maps="false"
+                   maps_type="openstreetmaps"
+                   maps_bing_api_key=""
+                   maps_google_api_key=""
+                   maps_zoombuttons="false"
+                   maps_loadonfirstuse="true"
+                   gyro="true"
+                   gyro_keeplookingdirection="false"
+                   webvr="true"
+                   webvr_keeplookingdirection="true"
+                   webvr_prev_next_hotspots="true"
+                   autotour="false"
+                   littleplanetintro="true"
+                   followmousecontrol="false"
+                   title="true"
+                   thumbs="true"
+                   thumbs_width="120" thumbs_height="80" thumbs_padding="10" thumbs_crop="0|40|240|160"
+                   thumbs_opened="false"
+                   thumbs_text="false"
+                   thumbs_dragging="true"
+                   thumbs_onhoverscrolling="false"
+                   thumbs_scrollbuttons="false"
+                   thumbs_scrollindicator="false"
+                   thumbs_loop="false"
+                   tooltips_buttons="false"
+                   tooltips_thumbs="false"
+                   tooltips_hotspots="false"
+                   tooltips_mapspots="false"
+                   deeplinking="false"
+                   loadscene_flags="MERGE"
+                   loadscene_blend="OPENBLEND(0.5, 0.0, 0.75, 0.05, linear)"
+                   loadscene_blend_prev="SLIDEBLEND(0.5, 180, 0.75, linear)"
+                   loadscene_blend_next="SLIDEBLEND(0.5, 0, 0.75, linear)"
+                   loadingtext=""
+                   layout_width="100%"
+                   layout_maxwidth="814"
+                   controlbar_width="-24"
+                   controlbar_height="40"
+                   controlbar_offset="20"
+                   controlbar_offset_closed="-40"
+                   controlbar_overlap.no-fractionalscaling="10"
+                   controlbar_overlap.fractionalscaling="0"
+                   design_skin_images="vtourskin.png"
+                   design_bgcolor="0x2D3E50"
+                   design_bgalpha="0.8"
+                   design_bgborder="0"
+                   design_bgroundedge="1"
+                   design_bgshadow="0 4 10 0x000000 0.3"
+                   design_thumbborder_bgborder="3 0xFFFFFF 1.0"
+                   design_thumbborder_padding="2"
+                   design_thumbborder_bgroundedge="0"
+                   design_text_css="color:#FFFFFF; font-family:Arial;"
+                   design_text_shadow="1"
+    />
+
+    <!-- Selected visual theme style stylesheet -->
+    <include url="skin/vtourskin_design_glass.xml" />
+
+
+    <!-- 4. PANORAMA SCENES -->
+
+    <!-- SCENE 1 -->
+    <scene name="scene_1" title="1" onstart="" thumburl="panos/1.tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+        <control bouncinglimits="calc:image.cube ? true : false" />
+        <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+        <preview url="panos/1.tiles/preview.jpg" />
+        <image>
+            <sphere url="panos/1.tiles/l%l/%0v/l%l_%0v_%0h.jpg" multires="512,2048x1024,4096x2048,7936x3968" />
+        </image>
+        <!-- Navigation hotspot pointing forward to Scene 2 -->
+        <hotspot name="spot2085339555" style="skin_hotspotstyle" ath="-12.103" atv="4.788" depth="1000.0" linkedscene="scene_2" linkedscene_lookat="19.08,1.35,120.0" />
+    </scene>
+
+    <!-- SCENE 2 -->
+    <scene name="scene_2" title="2" onstart="" thumburl="panos/2.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+        <control bouncinglimits="calc:image.cube ? true : false" />
+        <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+        <preview url="panos/2.tiles/preview.webp" />
+        <image>
+            <sphere url="panos/2.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+        </image>
+        <hotspot name="spot2085339706" style="skin_hotspotstyle" ath="59.768" atv="-5.189" depth="1000.0" linkedscene="scene_3" linkedscene_lookat="-17.74,1.12,120.0" />
+        <hotspot name="spot2085346480" style="skin_hotspotstyle" ath="167.165" atv="32.759" depth="1000.0" linkedscene="scene_1" linkedscene_lookat="-2.25,-5.16,120.0" />
+    </scene>
+
+    <!-- SCENE 3 -->
+    <scene name="scene_3" title="3" onstart="" thumburl="panos/3.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+        <control bouncinglimits="calc:image.cube ? true : false" />
+        <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+        <preview url="panos/3.tiles/preview.webp" />
+        <image>
+            <sphere url="panos/3.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+        </image>
+        <hotspot name="spot2085339894" style="skin_hotspotstyle" ath="-43.326" atv="5.46" depth="1000.0" linkedscene="scene_4" linkedscene_lookat="19.53,-4.49,120.0" />
+        <hotspot name="spot2085346232" style="skin_hotspotstyle" ath="104.161" atv="17.351" depth="1000.0" linkedscene="scene_2" linkedscene_lookat="161.41,0.14,120.0" />
+    </scene>
+
+    <!-- SCENE 4 -->
+    <scene name="scene_4" title="4" onstart="" thumburl="panos/4.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+        <control bouncinglimits="calc:image.cube ? true : false" />
+        <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+        <preview url="panos/4.tiles/preview.webp" />
+        <image>
+            <sphere url="panos/4.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+        </image>
+        <hotspot name="spot2085340045" style="skin_hotspotstyle" ath="23.486" atv="-11.429" depth="1000.0" linkedscene="scene_5" linkedscene_lookat="82.4,5.16,120.0" />
+        <hotspot name="spot2085346092" style="skin_hotspotstyle" ath="173.115" atv="32.87" depth="1000.0" linkedscene="scene_3" linkedscene_lookat="107.28,2.1,120.0" />
+    </scene>
+
+    <!-- SCENE 5 -->
+    <scene name="scene_5" title="5" onstart="" thumburl="panos/5.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+        <control bouncinglimits="calc:image.cube ? true : false" />
+        <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+        <preview url="panos/5.tiles/preview.webp" />
+        <image>
+            <sphere url="panos/5.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+        </image>
+        <hotspot name="spot2085340207" style="skin_hotspotstyle" ath="90.884" atv="-4.774" depth="1000.0" linkedscene="scene_6" linkedscene_lookat="-176.3,2.53,120.0" />
+        <hotspot name="spot2085345652" style="skin_hotspotstyle" ath="14.119" atv="17.232" depth="1000.0" linkedscene="scene_4" linkedscene_lookat="177.32,4.65,120.0" />
+    </scene>
+
+    <!-- SCENE 6 (Contains Interactive Information Hotspots) -->
+    <scene name="scene_6" title="6" onstart="" thumburl="panos/6.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+        <control bouncinglimits="calc:image.cube ? true : false" />
+        <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+        <preview url="panos/6.tiles/preview.webp" />
+        <image>
+            <sphere url="panos/6.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+        </image>
+
+        <!-- Navigation Hotspots -->
+        <hotspot name="spot2085340357" style="skin_hotspotstyle" ath="-156.32" atv="3.346" depth="1000.0" linkedscene="scene_7" linkedscene_lookat="152.96,4.2,120.0" />
+        <hotspot name="spot2085345507" style="skin_hotspotstyle" ath="82.076" atv="16.81" depth="1000.0" linkedscene="scene_5" linkedscene_lookat="0.0,0.0,120.0" />
+
+        <!-- Info Hotspot: Triggers single image pop-up -->
+        <hotspot name="info_bust"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="19"
+                 atv="14"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene6.png');" />
+
+        <!-- 3D Model Hotspot: Opens Three.js 3D viewer for bust model -->
+        <hotspot name="spot_bust_3d"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-35"
+                 atv="20"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_3d_obj('models/bust.glb');" />
+
+       <!-- Text Hotspot: Triggers HTML Text-Only Modal (Sister City details) -->
+     <hotspot name="spot_sister_city_text"
+         style="info_hotspotstyle"
+         url="skin/info.png"
+         ath="-20"
+         atv="13"
+         scale="0.3"
+         zoom="true"
+         onclick="show_sister_city_info();" />
+        <!-- Panel Hotspot: Triggers Combined HTML Image & Text Panel (Miguel López de Legazpi) -->
+        <hotspot name="spot_miguel_panel"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-120"
+                 atv="-20"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_miguel_legazpi_panel();" />
+    </scene>
+
+<!-- Custom Action: Passes text parameters to JavaScript text modal -->
+<action name="show_sister_city_info" type="Javascript"><![CDATA[
+    setActiveTourTextAction("show_sister_city_info");
+    showTextModal(
+        "SISTER-CITY RELATIONSHIP BETWEEN THE CITY OF LEGAZPI AND AYUNTAMIENTO ZUMARRAGA",
+        "",
+        "Legazpi City established a Sister-City Relationship with Zumarraga, Spain, on October 21, 1975, to honor the birthplace of Adelantado Don Miguel Lopez de Legazpi, the city's namesake. The agreement, signed by Mayor Gregorio Imperial and Alcalde Don Cruz-Maria Uribezalgo Larranaga, promotes cooperation through the exchange of information on history, culture, tourism, literature, governance, and other shared interests. In February 2012, Mayor Geraldine Rosal and City Administrator Noel Rosal visited Zumarraga to strengthen ties and discuss tourism, investments, and business opportunities with local officials. The visit was sponsored by AECID, Spain's development agency, which has provided significant financial and technological assistance to Legazpi, including over PHP 100 million for the city's sanitary landfill project."
+    );
+]]></action>
+  <!-- Custom Action: Passes image paths & text content to JavaScript gallery panel -->
+    <action name="show_miguel_legazpi_panel" type="Javascript"><![CDATA[
+        setActiveTourTextAction("show_miguel_legazpi_panel");
+        showInfoPanel(
+            "THE CITY NAMED AFTER MIGUEL LOPEZ DE LEGAZPI",
+            "",
+            "Legazpi City, the capital of Albay, was founded in 1856 and named after the Basque-Spanish navigator Miguel López de Legazpi, despite the fact that he never visited Albay. The city was likely named in his honor because he was the grandfather of Juan de Salcedo, the Spanish conquistador who established the first Spanish garrison in the Bicol Region. The city's creation and naming were authorized by Don Ramon Montero through decrees signed on July 17, 1856, and it was officially inaugurated on October 22, 1856. Miguel López de Legazpi, born in 1502 in Zumarraga, Spain, led the Spanish expedition to the Philippines in 1565, established Spanish rule with Cebu as the first capital, and later made Manila the capital after its capture in 1571. He died in 1572, and his legacy is commemorated in his hometown of Zumarraga, where the Legazpi Tower stands in his honor.",
+            "",
+            "images/mig.png",
+            "images/scene6(1).png",
+            "images/scene6(2).png",
+            "images/scene6(3).png"
+        );
+    ]]></action>
+
+    <!-- SCENE 7 -->
+    <scene name="scene_7" title="7" onstart="" thumburl="panos/7.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+        <control bouncinglimits="calc:image.cube ? true : false" />
+        <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+        <preview url="panos/7.tiles/preview.webp" />
+        <image>
+            <sphere url="panos/7.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+        </image>
+
+        <hotspot name="spot2085340577" style="skin_hotspotstyle" ath="144.025" atv="15.202" depth="1000.0" linkedscene="scene_8" linkedscene_lookat="-13.24,-1.12,120.0" />
+        <hotspot name="spot2085345356" style="skin_hotspotstyle" ath="-155.527" atv="11.493" depth="1000.0" linkedscene="scene_6" linkedscene_lookat="69.72,3.26,120.0" />
+
+        <!-- Sawangan Board Info Hotspot -->
+        <hotspot name="spot_sawangan_board"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-37"
+                 atv="-14"
+                 scale="0.3"
+                 onclick="show_sawangan_panel();" />
+
+        <!-- Hotspot for Spanish Era -->
+        <hotspot name="spot_spanish_era"
+             style="info_hotspotstyle"
+             url="skin/info.png"
+             ath="60" 
+             atv="-15"
+             scale="0.3"
+             zoom="true"
+             onclick="show_spanish_era_panel();" />
+
+    </scene>
+
+    <!-- Custom Action: Triggers Sawangan Info Panel -->
+    <action name="show_sawangan_panel" type="Javascript"><![CDATA[
+        setActiveTourTextAction("show_sawangan_panel");
+        showInfoPanel(
+            "THE SETTLEMENT CALLED SAWANGAN",
+            "",
+            "Legazpi City originated from the fishing village of Sawangan, located between the Tibu and Makabalo Rivers, similar to how many great civilizations developed near rivers. Before the arrival of the Spanish, the area already had a flourishing community of fishermen, farmers, artisans, and traders who exchanged goods with merchants from China and neighboring regions. Archaeological discoveries, including jars, stone tools, shells, burial jars, and pottery dating as far back as 500 B.C. and the Late Neolithic Period, confirm its ancient civilization. The region is also closely tied to the Ibalong epic, featuring legendary heroes such as Baltog, Handiong, and Bantong, along with stories of rulers like Gat Ibal and Datu Dumaraog, reflecting its rich pre-colonial culture despite limited historical documentation. In 1574, Spanish explorers first recorded the settlement as \"baybayo\" or \"baybay,\" which later evolved into the name Albay, encompassing the early settlements of Binanuahan, Lamba, Rawis, and Bigaa, collectively known as Albay Viejo (Old Albay).",
+            "",
+            "images/scene7(1).png",
+            "images/scene7.png",
+            "images/scene7(2).png"
+        );
+    ]]></action>
+
+    <!-- Custom Action: Triggers Spanish Era Info Panel -->
+    <action name="show_spanish_era_panel" type="Javascript"><![CDATA[
+        setActiveTourTextAction("show_spanish_era_panel");
+        showInfoPanel(
+            "SPANISH ERA",
+            "",
+            "The arrival of the Spanish in the Bicol Region in 1569 transformed independent coastal fishing villages, including Sawangan, into organized pueblos under Spanish rule. Sawangan became part of Tierra de Ibalong, later the encomienda of Albay, and was officially reorganized as Partido de Albay in 1696. Due to the eruptions of Mayon Volcano, the settlement was divided into Albay Viejo and Albay Nuevo, with Albay Viejo eventually becoming Legazpi City in 1856. During the 19th century, Legazpi became the capital of Albay Province and developed into the region's economic center because of its strategically located port. The Port of Legazpi was declared open to foreign maritime trade in 1872 and officially opened to the world market in 1874, boosting exports of abaca and coconut products. Its growing international importance attracted major foreign trading companies, making the Port of Legazpi the leading commercial hub of the Bicol Region throughout the late Spanish and American periods.",
+            "",
+            "images/spanish1.png",
+            "images/spanish2.png",
+            "images/spanish3.png"
+        );
+    ]]></action>
+
+    <!-- SCENE 8 -->
+    <scene name="scene_8" title="8" onstart="" thumburl="panos/8.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+        <control bouncinglimits="calc:image.cube ? true : false" />
+        <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+        <preview url="panos/8.tiles/preview.webp" />
+        <image>
+            <sphere url="panos/8.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+        </image>
+        <hotspot name="spot2085340728" style="skin_hotspotstyle" ath="-8.524" atv="4.61" depth="1000.0" linkedscene="scene_9" linkedscene_lookat="31.88,1.8,120.0" />
+        <hotspot name="spot2085345084" style="skin_hotspotstyle" ath="-86.515" atv="11.006" depth="1000.0" linkedscene="scene_7" linkedscene_lookat="-495.38,0.25,120.0" />
+
+        <!-- Hotspot for Albay Viejo & Albay -->
+    <hotspot name="spot_albay_viejo"
+             style="info_hotspotstyle"
+             url="skin/info.png"
+             ath="-135" 
+             atv="-13.5"
+             scale="0.3"
+             zoom="true"
+             onclick="show_albay_viejo_panel();" />
+
+    <hotspot name="the_becerra_law"
+             style="info_hotspotstyle"
+             url="skin/info.png"
+             ath="120" 
+             atv="-15"
+             scale="0.3"
+             zoom="true"
+             onclick="show_the_becerra_law_panel();" />
+
+    <hotspot name="two_churches"
+             style="info_hotspotstyle"
+             url="skin/info.png"
+             ath="23" 
+             atv="-15"
+             scale="0.3"
+             zoom="true"
+             onclick="show_two_churches_panel();" />
+
+    </scene>
+
+
+    <!-- Custom Action: Triggers Albay Viejo Info Panel -->
+    <action name="show_albay_viejo_panel" type="Javascript"><![CDATA[
+        setActiveTourTextAction("show_albay_viejo_panel");
+        showInfoPanel(
+            "THE LEGEND OF ALBAY VIEJO & ALBAY",
+            "",
+            "The formation of communities in Albay was largely shaped by migration driven by natural disasters, particularly the devastating eruptions of Mayon Volcano. Although Albay was known for its scenic beauty, it was also highly vulnerable to typhoons, floods, and volcanic eruptions. The most catastrophic eruption occurred on February 1, 1814, destroying the towns of Cagsawa and Budiao and severely damaging nearby settlements. As a result, residents were encouraged by Fr. Pedro Licup to relocate to safer inland areas such as Makalaya (now Barangay Taisan) and Tagaytay (now Barangay Bagumbayan), where the parish of San Gregorio de Albay was also transferred, leading to the establishment of Albay Nuevo (New Albay). Later, Jose Maria Peñaranda strengthened the region by organizing coastal defense systems against Moro raids and supporting the construction of the San Gregorio Magno Cathedral. When volcanic activity subsided, some residents returned to the coastal areas and established a new settlement with the Parish of Saint Raphael the Archangel, which eventually became the Legazpi Port District.",
+            "",
+            "images/albay1.png",
+            "images/albay2.png"
+        );
+    ]]></action>
+
+  <action name="show_the_becerra_law_panel" type="Javascript"><![CDATA[
+      setActiveTourTextAction("show_the_becerra_law_panel");
+        showInfoPanel(
+            "THE BECERRA LAW",
+            "",
+            "Legazpi City experienced a unique and challenging path to cityhood, being established as a city three different times. It first became a city in 1890 through a Spanish Royal Decree that created the Ayuntamiento de Albay, giving local leaders greater authority over governance and appointing influential Albayanos to key government positions. During the American period, Legazpi reverted to a municipality in 1922 and was officially renamed from Albay to Legazpi in 1925. It regained city status in 1948, reverted to a town in 1954, and finally became a city again on June 12, 1959, through Republic Act No. 2234. Despite these political changes and territorial adjustments involving Daraga and the Old Albay District, Legazpi continued to develop into the province's center for commerce, culture, and religion. Notable historical landmarks that symbolize its heritage include the Casa Real (now Legazpi City Hall), the Cathedral of San Gregorio Magno, Peñaranda Park, and the Legazpi Port District.",
+            "",
+            "images/becerra.png",
+            "images/becerra1.png",
+            "images/becerra2.png"   
+        );
+    ]]></action>
+<action name="show_two_churches_panel" type="Javascript"><![CDATA[
+    setActiveTourTextAction("show_two_churches_panel");
+        showInfoPanel(
+            "A TALE OF TWO CHURCHES",
+            "",
+            "Originally known as Baybay or Baybayo, the settlement was established as the parish of San Gregorio de Sawangan in 1616, with its first wooden chapel built by Fray Francisco de Sta. Ana. Over the centuries, the church was rebuilt several times after being damaged by Dutch attacks, Moro raids, fires, earthquakes, storms, and other disasters. Following the devastating 1814 eruption of Mayon Volcano, residents relocated to safer areas, particularly Albay Nuevo, where a new bamboo church was built and later replaced with a stone church in 1836. This church eventually became the St. Gregory the Great Cathedral, the seat of the Diocese of Legazpi, which was officially established in 1951. The cathedral has undergone numerous renovations, survived World War II damage and natural calamities, and was notably visited by Pope John Paul II in 1981. Meanwhile, some residents returned to Albay Viejo and established the Saint Raphael Church in 1834, dedicated to the patron saint of fishermen. Despite its unique orientation, which differed from Spanish colonial planning, the church endured pirate attacks, natural disasters, fires, and wartime destruction before being reconstructed into its present reinforced concrete structure.",
+            "",
+            "images/two_churches.png",
+            "images/two_churches1.png",
+            "images/two_churches2.png"
+        );
+    ]]></action>
+
+
+    <!-- SCENE 9 -->
+    <scene name="scene_9" title="9" onstart="" thumburl="panos/9.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+        <control bouncinglimits="calc:image.cube ? true : false" />
+        <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+        <preview url="panos/9.tiles/preview.webp" />
+        <image>
+            <sphere url="panos/9.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+        </image>
+        <hotspot name="spot2085340932" style="skin_hotspotstyle" ath="38.061" atv="9.119" depth="1000.0" linkedscene="scene_10" linkedscene_lookat="219.9,9.02,120.0" />
+        <hotspot name="spot2085344786" style="skin_hotspotstyle" ath="111.014" atv="8.096" depth="1000.0" linkedscene="scene_8" linkedscene_lookat="-83.22,0.44,120.0" />
+
+
+        <hotspot name="perils"
+             style="info_hotspotstyle"
+             url="skin/info.png"
+             ath="144" 
+             atv="-17.5"
+             scale="0.3"
+             zoom="true"
+             onclick="show_perils_panel();" />
+
+        <hotspot name="the_battle"
+             style="info_hotspotstyle"
+             url="skin/info.png"
+             ath="-79" 
+             atv="-21.5"
+             scale="0.3"
+             zoom="true"
+             onclick="show_the_battle_panel();" />
+
+        <hotspot name="economic"
+             style="info_hotspotstyle"
+             url="skin/info.png"
+             ath="5" 
+             atv="-12"
+             scale="0.3"
+             zoom="true"
+             onclick="show_economic_trans_panel();" />
+
+    </scene>
+
+    <action name="show_perils_panel" type="Javascript"><![CDATA[
+        setActiveTourTextAction("show_perils_panel");
+        showInfoPanel(
+            "PERILS FROM THE SEA",
+            "",
+            "Legazpi experienced not only destruction from natural disasters but also repeated attacks caused by war, particularly by Moro raids and Dutch invasions during the Spanish colonial period. The Dutch War of Independence (1568–1648) between Spain and the Netherlands extended to the Philippines, affecting the Bicol region. In 1600, Dutch Admiral Oliver van Noort attempted to attack Albay but retreated after encountering resistance from Spanish forces and local warriors. In 1636, the Dutch returned and successfully destroyed Albay during a town fiesta, extending their attacks to Cagsawa and nearby villages. Although the war officially ended with the Treaty of Westphalia in 1648, Dutch incursions in the Philippines continued until 1735.",
+            "",
+            "images/perils.png",
+            "images/perils1.png",
+            "images/perils2.png"
+        );
+    ]]></action>
+
+    <action name="show_the_battle_panel" type="Javascript"><![CDATA[
+        setActiveTourTextAction("show_the_battle_panel");
+        showInfoPanel(
+            "THE BATTLE OF LEGAZPI USHERED IN THE  AMERICAN REGIME",
+            "",
+            "The American invasion of Bikol in 1900 was largely driven by the region’s highly profitable abaca industry, particularly in Albay, which was then the wealthiest province in the Philippines. Following the Treaty of Paris in 1898, the Philippine Revolutionary Government (PRG) raised over ₱600,000 in Albay through war bonds to finance resistance against the Americans and blockaded the Port of Legazpi in 1899 to stop abaca exports. In response, American forces under General William Kobbe attacked Legazpi on January 23, 1900 using the warships Castellano, Venus, and Nashville. Despite the determined defense of more than 800 Filipino fighters, many of whom were poorly armed, the Americans' superior naval artillery and Krag rifles quickly overwhelmed the defenders. After hours of intense bombardment and ground assaults, the Filipinos were forced to retreat, resulting in the death of 172 Filipino soldiers, the capture of many others, and only 7 American wounded. The Battle of Legazpi ended in an American victory, leaving the city devastated and largely deserted, and it is remembered today through the monument marking the historic battle.",
+            "",
+            "images/the_battle.png",
+            "images/the_battle1.png",
+            "images/the_battle2.png"
+        );
+    ]]></action>
+
+    <action name="show_economic_trans_panel" type="Javascript"><![CDATA[
+        setActiveTourTextAction("show_economic_trans_panel");
+        showInfoPanel(
+            "ECONOMIC TRANSFORMATIONS UNDER THE AMERICAN REGIME",
+            "",
+            "Following the 1898 Treaty of Paris, the United States took control of the Philippines and established the First Philippine Commission under Jacob Schurman to assess the country's future. The Philippine-American War began on February 4, 1899, and American occupation of Albay started with the Battle of Legazpi on January 23, 1900, with resistance continuing until Simeon Ola's surrender in 1903. The Second Philippine Commission, led by William Howard Taft, introduced democratic governance by creating the judicial system, civil service, legal code, and public education. On April 25, 1900, Taft met with Albay officials to discuss the Municipal Code. Although there were proposals to move the provincial capital to Tabaco, Albay remained the provincial seat, and a new capitol building was later designed by American architect William E. Parsons. In 1907, Act No. 1731 merged the municipalities of Albay, Legazpi, and Daraga into one municipality called Albay, which was officially renamed Legazpi in 1925 through Legislative Act No. 3253.",
+            "",
+            "images/eco.png",
+            "images/eco1.png",
+            "images/eco2.png"
+        );
+    ]]></action>
+
+    <!-- SCENE 10 -->
+    <scene name="scene_10" title="10" onstart="" thumburl="panos/10.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+        <control bouncinglimits="calc:image.cube ? true : false" />
+        <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+        <preview url="panos/10.tiles/preview.webp" />
+        <image>
+            <sphere url="panos/10.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+        </image>
+        <hotspot name="spot2085341092" style="skin_hotspotstyle" ath="-141.152" atv="12.309" depth="1000.0" linkedscene="scene_11" linkedscene_lookat="132.66,1.05,120.0" />
+        <hotspot name="spot2085344546" style="skin_hotspotstyle" ath="150.232" atv="10.222" depth="1000.0" linkedscene="scene_9" linkedscene_lookat="108.2,1.73,120.0" />
+   
+     <hotspot name="transport"
+             style="info_hotspotstyle"
+             url="skin/info.png"
+             ath="20" 
+             atv="-17"
+             scale="0.3"
+             zoom="true"
+             onclick="show_transport_panel();" />
+
+     <hotspot name="japanese"
+             style="info_hotspotstyle"
+             url="skin/info.png"
+             ath="-99" 
+             atv="-12"
+             scale="0.3"
+             zoom="true"
+             onclick="show_japanese_panel();" />
+     
+     <hotspot name="regime"
+             style="info_hotspotstyle"
+             url="skin/info.png"
+             ath="110" 
+             atv="-13"
+             scale="0.3"
+             zoom="true"
+             onclick="show_regime_panel();" />
+    </scene>
+
+    <action name="show_transport_panel" type="Javascript"><![CDATA[
+        setActiveTourTextAction("show_transport_panel");
+        showInfoPanel(
+            "ECONOMIC TRANSFORMATIONS UNDER THE AMERICAN REGIME",
+            "",
+            "Following the 1898 Treaty of Paris, the United States took control of the Philippines and established the First Philippine Commission under Jacob Schurman to assess the country's future. The Philippine-American War began on February 4, 1899, and American occupation of Albay started with the Battle of Legazpi on January 23, 1900, with resistance continuing until Simeon Ola's surrender in 1903. The Second Philippine Commission, led by William Howard Taft, introduced democratic governance by creating the judicial system, civil service, legal code, and public education. On April 25, 1900, Taft met with Albay officials to discuss the Municipal Code. Although there were proposals to move the provincial capital to Tabaco, Albay remained the provincial seat, and a new capitol building was later designed by American architect William E. Parsons. In 1907, Act No. 1731 merged the municipalities of Albay, Legazpi, and Daraga into one municipality called Albay, which was officially renamed Legazpi in 1925 through Legislative Act No. 3253.",
+            "",
+            "images/transport.png",
+            "images/transport1.png",
+            "images/transport2.png"
+        );
+    ]]></action>
+    
+    <action name="show_japanese_panel" type="Javascript"><![CDATA[
+        setActiveTourTextAction("show_japanese_panel");
+        showInfoPanel(
+            "JAPANESE OCCUPATION",
+            "",
+            "Following the 1898 Treaty of Paris, the United States took control of the Philippines and established the First Philippine Commission under Jacob Schurman to assess the country's future. The Philippine-American War began on February 4, 1899, and American occupation of Albay started with the Battle of Legazpi on January 23, 1900, with resistance continuing until Simeon Ola's surrender in 1903. The Second Philippine Commission, led by William Howard Taft, introduced democratic governance by creating the judicial system, civil service, legal code, and public education. On April 25, 1900, Taft met with Albay officials to discuss the Municipal Code. Although there were proposals to move the provincial capital to Tabaco, Albay remained the provincial seat, and a new capitol building was later designed by American architect William E. Parsons. In 1907, Act No. 1731 merged the municipalities of Albay, Legazpi, and Daraga into one municipality called Albay, which was officially renamed Legazpi in 1925 through Legislative Act No. 3253.",
+            "",
+            "images/japanese.png",
+            "images/japanese1.png",
+            "images/japanese2.png"
+        );
+    ]]></action>
+    
+    <action name="show_regime_panel" type="Javascript"><![CDATA[
+        setActiveTourTextAction("show_regime_panel");
+        showInfoPanel(
+            "ECONOMIC TRANSFORMATIONS UNDER THE AMERICAN REGIME",
+            "",
+            "Following the 1898 Treaty of Paris, the United States took control of the Philippines and established the First Philippine Commission under Jacob Schurman to assess the country's future. The Philippine-American War began on February 4, 1899, and American occupation of Albay started with the Battle of Legazpi on January 23, 1900, with resistance continuing until Simeon Ola's surrender in 1903. The Second Philippine Commission, led by William Howard Taft, introduced democratic governance by creating the judicial system, civil service, legal code, and public education. On April 25, 1900, Taft met with Albay officials to discuss the Municipal Code. Although there were proposals to move the provincial capital to Tabaco, Albay remained the provincial seat, and a new capitol building was later designed by American architect William E. Parsons. In 1907, Act No. 1731 merged the municipalities of Albay, Legazpi, and Daraga into one municipality called Albay, which was officially renamed Legazpi in 1925 through Legislative Act No. 3253.",
+            "",
+            "images/regime.png",
+            "images/regime1.png",
+            "images/regime2.png"
+        );
+    ]]></action>
+
+
+    <!-- SCENE 11 -->
+    <scene name="scene_11" title="11" onstart="" thumburl="panos/11.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+        <control bouncinglimits="calc:image.cube ? true : false" />
+        <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+        <preview url="panos/11.tiles/preview.webp" />
+        <image>
+            <sphere url="panos/11.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+        </image>
+        <hotspot name="spot2085341273" style="skin_hotspotstyle" ath="143.487" atv="12.99" depth="1000.0" linkedscene="scene_12" linkedscene_lookat="-124.28,6.14,120.0" />
+        <hotspot name="spot2085344135" style="skin_hotspotstyle" ath="-156.486" atv="10.677" depth="1000.0" linkedscene="scene_10" linkedscene_lookat="-205.85,1.06,120.0" />
+     
+      <hotspot name="republic"
+             style="info_hotspotstyle"
+             url="skin/info.png"
+             ath="-116" 
+             atv="-18"
+             scale="0.3"
+             zoom="true"
+             onclick="show_republic_panel();" />
+    
+    <hotspot name="progress"
+             style="info_hotspotstyle"
+             url="skin/info.png"
+             ath="39" 
+             atv="-18"
+             scale="0.3"
+             zoom="true"
+             onclick="show_progress_panel();" />
+
+    <hotspot name="spot_papel_gallery"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="70"
+                 atv="4"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_papel_gallery();" />
+
+    <hotspot name="spot_bust"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="112"
+                 atv="-8"
+                 scale="0.3"
+                 zoom="false"
+                onclick="show_3d_obj('models/general.glb');" />
+
+
+    <hotspot name="info_bust"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="70"
+                 atv="-12"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene11(3).png');" />
+
+    <hotspot name="info_bust1"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="80"
+                 atv="-12"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene11.png');" />
+    
+    <hotspot name="info_bust2"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="90"
+                 atv="-12"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene11(2).png');" />
+
+    <hotspot name="info_bust3"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="100"
+                 atv="-12"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene11(1).png');" />
+
+    </scene>
+
+     <action name="show_republic_panel" type="Javascript"><![CDATA[
+          setActiveTourTextAction("show_republic_panel");
+        showInfoPanel(
+            "REPUBLIC PERIOD FROM VILLAGE CITY",
+            "",
+            "Following the 1898 Treaty of Paris, the United States took control of the Philippines and established the First Philippine Commission under Jacob Schurman to assess the country's future. The Philippine-American War began on February 4, 1899, and American occupation of Albay started with the Battle of Legazpi on January 23, 1900, with resistance continuing until Simeon Ola's surrender in 1903. The Second Philippine Commission, led by William Howard Taft, introduced democratic governance by creating the judicial system, civil service, legal code, and public education. On April 25, 1900, Taft met with Albay officials to discuss the Municipal Code. Although there were proposals to move the provincial capital to Tabaco, Albay remained the provincial seat, and a new capitol building was later designed by American architect William E. Parsons. In 1907, Act No. 1731 merged the municipalities of Albay, Legazpi, and Daraga into one municipality called Albay, which was officially renamed Legazpi in 1925 through Legislative Act No. 3253.",
+            "",
+            "images/republic.png",
+            "images/republic1.png"
+        );
+    ]]></action>
+
+    <action name="show_progress_panel" type="Javascript"><![CDATA[
+        setActiveTourTextAction("show_progress_panel");
+        showInfoPanel(
+            " LEGAZPI CITY TOWARDS PROGRESS AND DEVELOPMENT",
+            "",
+            "Following the 1898 Treaty of Paris, the United States took control of the Philippines and established the First Philippine Commission under Jacob Schurman to assess the country's future. The Philippine-American War began on February 4, 1899, and American occupation of Albay started with the Battle of Legazpi on January 23, 1900, with resistance continuing until Simeon Ola's surrender in 1903. The Second Philippine Commission, led by William Howard Taft, introduced democratic governance by creating the judicial system, civil service, legal code, and public education. On April 25, 1900, Taft met with Albay officials to discuss the Municipal Code. Although there were proposals to move the provincial capital to Tabaco, Albay remained the provincial seat, and a new capitol building was later designed by American architect William E. Parsons. In 1907, Act No. 1731 merged the municipalities of Albay, Legazpi, and Daraga into one municipality called Albay, which was officially renamed Legazpi in 1925 through Legislative Act No. 3253.",
+            "",
+            "images/progress.png",
+            "images/progress1.png",
+            "images/progress2.png",
+            "images/progress3.png"
+        );
+    ]]></action>
+
+    <action name="show_papel_gallery" type="Javascript"><![CDATA[
+        showImagePopup(
+            "images/papel.png",
+            [
+                "images/papel.png",
+                "images/papel1.png",
+                "images/papel2.png",
+                "images/papel3.png",
+                "images/papel4.png",
+                "images/papel5.png",
+                "images/papel6.png",
+                "images/papel7.png",
+                "images/papel8.png",
+                "images/papel9.png"
+            ]
+        );
+    ]]></action>
+
+    <!-- SCENE 12 -->
+    <scene name="scene_12" title="12" onstart="" thumburl="panos/12.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+        <control bouncinglimits="calc:image.cube ? true : false" />
+        <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+        <preview url="panos/12.tiles/preview.webp" />
+        <image>
+            <sphere url="panos/12.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+        </image>
+        <hotspot name="spot2085341720" style="skin_hotspotstyle" ath="-112.342" atv="10.435" depth="1000.0" linkedscene="scene_13" linkedscene_lookat="5.61,15.27,120.0" />
+        <hotspot name="spot2085343972" style="skin_hotspotstyle" ath="65.459" atv="6.542" depth="1000.0" linkedscene="scene_11" linkedscene_lookat="-164.35,-3.73,120.0" />
+    </scene>
+
+    <!-- SCENE 13 -->
+    <scene name="scene_13" title="13" onstart="" thumburl="panos/13.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+        <control bouncinglimits="calc:image.cube ? true : false" />
+        <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+        <preview url="panos/13.tiles/preview.webp" />
+        <image>
+            <sphere url="panos/13.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+        </image>
+        <hotspot name="spot2085341842" style="skin_hotspotstyle" ath="-0.486" atv="33.968" depth="1000.0" linkedscene="scene_14" linkedscene_lookat="22.89,-0.23,120.0" />
+        <hotspot name="spot2085343781" style="skin_hotspotstyle" ath="-176.447" atv="-11.421" depth="1000.0" linkedscene="scene_12" linkedscene_lookat="66.08,4.69,120.0" />
+    </scene>
+
+    <!-- SCENE 14 -->
+    <scene name="scene_14" title="14" onstart="" thumburl="panos/14.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+        <control bouncinglimits="calc:image.cube ? true : false" />
+        <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+        <preview url="panos/14.tiles/preview.webp" />
+        <image>
+            <sphere url="panos/14.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+        </image>
+        <hotspot name="spot2085342031" style="skin_hotspotstyle" ath="44.097" atv="2.662" depth="1000.0" linkedscene="scene_15" linkedscene_lookat="-67.97,-3.37,120.0" />
+        <hotspot name="spot2085343580" style="skin_hotspotstyle" ath="-76.981" atv="3.631" depth="1000.0" linkedscene="scene_13" linkedscene_lookat="-182.81,-0.31,120.0" />
+   
+ <!-- Info Hotspot: Triggers single image pop-up -->
+        <hotspot name="info_first"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="168"
+                 atv="1"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene14.png');" />
+   
+    <hotspot name="info_second"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="110"
+                 atv="1"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene14(1).png');" />
+
+     <hotspot name="info_third"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="130"
+                 atv="1"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene14(2).png');" />
+
+     <hotspot name="info_fourth"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="65"
+                 atv="0"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene14(3).png');" />
+
+     <hotspot name="info_fifth"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="80"
+                 atv="0"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene14(4).png');" />
+
+     <hotspot name="info_sixth"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="90"
+                 atv="0"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene14(5).png');" />
+   
+    </scene>
+
+    <!-- SCENE 15 -->
+    <scene name="scene_15" title="15" onstart="" thumburl="panos/15.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+        <control bouncinglimits="calc:image.cube ? true : false" />
+        <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+        <preview url="panos/15.tiles/preview.webp" />
+        <image>
+            <sphere url="panos/15.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+        </image>
+        <hotspot name="spot2085342375" style="skin_hotspotstyle" ath="-73.659" atv="7.969" depth="1000.0" linkedscene="scene_16" linkedscene_lookat="-87.94,-1.95,120.0" />
+        <hotspot name="spot2085343401" style="skin_hotspotstyle" ath="54.083" atv="10.001" depth="1000.0" linkedscene="scene_14" linkedscene_lookat="-93.59,7.49,120.0" />
+    
+    <!-- Info Hotspot: Triggers single image pop-up -->
+    <hotspot name="info"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-18  "
+                 atv="-10"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene15.png');" />
+   
+    <hotspot name="info_second"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="41"
+                 atv="-10"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene15(1).png');" />
+   
+    </scene>
+
+    <!-- SCENE 16 -->
+    <scene name="scene_16" title="16" onstart="" thumburl="panos/16.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+        <control bouncinglimits="calc:image.cube ? true : false" />
+        <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+        <preview url="panos/16.tiles/preview.webp" />
+        <image>
+            <sphere url="panos/16.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+        </image>
+        <hotspot name="spot2085342476" style="skin_hotspotstyle" ath="-90.198" atv="2.977" depth="1000.0" linkedscene="scene_17" linkedscene_lookat="-39.06,-4.27,120.0" />
+        <hotspot name="spot2085343232" style="skin_hotspotstyle" ath="-3.935" atv="15.328" depth="1000.0" linkedscene="scene_15" linkedscene_hoffset="0.0" use3dtransition="true" />
+
+     <hotspot name="spot_clay_gallery"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-100"
+                 atv="8.0"
+                 scale="0.4"
+                 zoom="false"
+                 onclick="show_clay_gallery();" />
+		<hotspot name="spot2099921542" style="skin_hotspotstyle" ath="176.693" atv="8.295" depth="1000.0" linkedscene="scene_18" linkedscene_lookat="17.1,-2.75,120.0" />
+   
+    <hotspot name="pangluto"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="55"
+                 atv="20"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_3d_obj('models/bust.glb');" />
+
+    <hotspot name="ironman"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="100"
+                 atv="20"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_3d_obj('models/bust.glb');" />
+   
+    </scene>
+
+    <action name="show_clay_gallery" type="Javascript"><![CDATA[
+        showImagePopup(
+            "images/scene16.jpg",
+            [
+                "images/scene16.jpg",
+                "images/scene16(1).jpg",
+                "images/scene16(2).jpg",
+                "images/scene16(3).jpg",
+                "images/scene16(4).jpg",   
+                "images/scene16(5).jpg",
+                "images/scene16(6).jpg",
+                "images/scene16(7).jpg",
+            ]
+        );
+    ]]></action>
+
+
+    <!-- SCENE 17 -->
+    <scene name="scene_17" title="17" onstart="" thumburl="panos/17.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+        <control bouncinglimits="calc:image.cube ? true : false" />
+        <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+        <preview url="panos/17.tiles/preview.webp" />
+        <image>
+            <sphere url="panos/17.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+        </image>
+        <hotspot name="spot2085342586" style="skin_hotspotstyle" ath="-41.938" atv="-1.593" depth="1000.0" linkedscene="scene_18" linkedscene_lookat="-11.23,3.14,120.0" />
+   
+    <hotspot name="info_boat"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-120.0"
+                 atv="-10.0"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene17.jpg');" /> 
+
+    <hotspot name="info_dahon"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-148.0"
+                 atv="-13.0"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene17(1).jpg');" />   
+  
+   <hotspot name="info_simbahan"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="180.0"
+                 atv="-10.0"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene17(2).jpg');" />
+
+    <hotspot name="info_abot"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="160.0"
+                 atv="-12.0"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene17(3).jpg');" />
+
+    <hotspot name="info_tanim"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="140.0"
+                 atv="-11.0"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene17(4).jpg');" />
+    
+    <hotspot name="info_karabaw"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="120.0"
+                 atv="-12.0"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene17(5).jpg');" />
+
+    <hotspot name="info_dikomaintindihan"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="90.0"
+                 atv="-17"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene17(6).jpg');" />
+    
+    <hotspot name="info_mayon"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="60.0"
+                 atv="-7.0"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene17(7).jpg');" />
+
+    <hotspot name="info_farm"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-1.0"
+                 atv="-10.0"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene17(8).jpg');" />
+
+    <hotspot name="info_mayon2"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-25.0"
+                 atv="-5.0"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene17(9).jpg');" />
+
+     <hotspot name="spot_clay_gallery1"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-75"
+                 atv="15"
+                 scale="0.4"
+                 zoom="false"
+                 onclick="show_clay_gallery1();" />
+    
+    <hotspot name="spot_clay_gallery2"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="100"
+                 atv="15"
+                 scale="0.4"
+                 zoom="false"
+                 onclick="show_clay_gallery2();" />
+	
+		
+        <hotspot name="spot2099921251" style="skin_hotspotstyle" ath="-89.884" atv="-0.099" depth="1000.0" linkedscene="scene_16" linkedscene_lookat="0.0,0.0,120.0" />
+
+
+    </scene>
+
+     <action name="show_clay_gallery1" type="Javascript"><![CDATA[
+        showImagePopup(
+            "images/scene16.jpg",
+            [
+                "images/scene16.jpg",
+                "images/scene16(1).jpg",
+                "images/scene16(2).jpg",
+                "images/scene16(3).jpg",
+                "images/scene16(4).jpg",   
+                "images/scene16(5).jpg",
+                "images/scene16(6).jpg",
+                "images/scene16(7).jpg",
+            ]
+        );
+    ]]></action>
+
+    <action name="show_clay_gallery2" type="Javascript"><![CDATA[
+        showImagePopup(
+            "images/scene16.jpg",
+            [
+                "images/scene16.jpg",
+                "images/scene16(1).jpg",
+                "images/scene16(2).jpg",
+                "images/scene16(3).jpg",
+                "images/scene16(4).jpg",   
+                "images/scene16(5).jpg",
+                "images/scene16(6).jpg",
+                "images/scene16(7).jpg",
+            ]
+        );
+    ]]></action>
+
+    <!-- SCENE 18 -->
+    <scene name="scene_18" title="18" onstart="" thumburl="panos/18.tiles/thumb.webp" lat="" lng="" alt="" heading="">
+        <control bouncinglimits="calc:image.cube ? true : false" />
+        <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+        <preview url="panos/18.tiles/preview.webp" />
+        <image>
+            <sphere url="panos/18.tiles/l%l/%0v/l%l_%0v_%0h.webp" multires="512,2048x1024,4096x2048,7936x3968" />
+        </image>
+        <!-- Loop back navigation to Scene 1 -->
+        <hotspot name="spot2085342706" style="skin_hotspotstyle" ath="8.127" atv="-0.916" depth="1000.0" linkedscene="scene_1" linkedscene_lookat="1.35,-3.82,120.0" />
+        <hotspot name="spot2085342897" style="skin_hotspotstyle" ath="-177.776" atv="20.903" depth="1000.0" linkedscene="scene_16" linkedscene_lookat="-42.43,6.74,120.0" />
+        <hotspot name="battle_of_legazpi_video"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="15.0"
+                 atv="-10.0"
+                 scale="0.3"
+                 zoom="true"
+                 onclick="show_battle_video();" />
+		<hotspot name="spot2100045964" style="skin_hotspotstyle" ath="123.553" atv="-0.276" depth="1000.0" linkedscene="scene_17" linkedscene_lookat="-67.83,-2.8,120.0" />
+   
+    <!-- 3D Model Hotspot: Opens Three.js 3D viewer for bust model -->
+        <hotspot name="spot_bust_3d(2)"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-105"
+                 atv="20"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_3d_obj('models/bust.glb');" />
+
+         <hotspot name="obi"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-35"
+                 atv="13.5"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene17(9).jpg');" />
+
+        <hotspot name="microphone"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-7"
+                 atv="9"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_3d_obj('models/bust.glb');" />
+   
+    </scene>
+
+</krpano>
