@@ -372,7 +372,7 @@
                  atv="14"
                  scale="0.3"
                  zoom="false"
-                 onclick="show_image_popup('images/scene6.png');" />
+                 onclick="show_image_popup('images/scene6.jpg');" />
 
         <!-- 3D Model Hotspot: Opens Three.js 3D viewer for bust model -->
         <hotspot name="spot_bust_3d"
@@ -421,10 +421,10 @@
             "",
             "Legazpi City, the capital of Albay, was founded in 1856 and named after the Basque-Spanish navigator Miguel López de Legazpi, despite the fact that he never visited Albay. The city was likely named in his honor because he was the grandfather of Juan de Salcedo, the Spanish conquistador who established the first Spanish garrison in the Bicol Region. The city's creation and naming were authorized by Don Ramon Montero through decrees signed on July 17, 1856, and it was officially inaugurated on October 22, 1856. Miguel López de Legazpi, born in 1502 in Zumarraga, Spain, led the Spanish expedition to the Philippines in 1565, established Spanish rule with Cebu as the first capital, and later made Manila the capital after its capture in 1571. He died in 1572, and his legacy is commemorated in his hometown of Zumarraga, where the Legazpi Tower stands in his honor.",
             "",
-            "images/mig.png",
-            "images/scene6(1).png",
-            "images/scene6(2).png",
-            "images/scene6(3).png"
+            "images/mig.jpg",
+            "images/scene6(1).jpg",
+            "images/scene6(2).jpg",
+            "images/scene6(3).jpg"
         );
     ]]></action>
 
@@ -469,9 +469,9 @@
             "",
             "Legazpi City originated from the fishing village of Sawangan, located between the Tibu and Makabalo Rivers, similar to how many great civilizations developed near rivers. Before the arrival of the Spanish, the area already had a flourishing community of fishermen, farmers, artisans, and traders who exchanged goods with merchants from China and neighboring regions. Archaeological discoveries, including jars, stone tools, shells, burial jars, and pottery dating as far back as 500 B.C. and the Late Neolithic Period, confirm its ancient civilization. The region is also closely tied to the Ibalong epic, featuring legendary heroes such as Baltog, Handiong, and Bantong, along with stories of rulers like Gat Ibal and Datu Dumaraog, reflecting its rich pre-colonial culture despite limited historical documentation. In 1574, Spanish explorers first recorded the settlement as \"baybayo\" or \"baybay,\" which later evolved into the name Albay, encompassing the early settlements of Binanuahan, Lamba, Rawis, and Bigaa, collectively known as Albay Viejo (Old Albay).",
             "",
-            "images/scene7(1).png",
-            "images/scene7.png",
-            "images/scene7(2).png"
+            "images/scene7(1).jpg",
+            "images/scene7.jpg",
+            "images/scene7(2).jpg"
         );
     ]]></action>
 
@@ -483,9 +483,9 @@
             "",
             "The arrival of the Spanish in the Bicol Region in 1569 transformed independent coastal fishing villages, including Sawangan, into organized pueblos under Spanish rule. Sawangan became part of Tierra de Ibalong, later the encomienda of Albay, and was officially reorganized as Partido de Albay in 1696. Due to the eruptions of Mayon Volcano, the settlement was divided into Albay Viejo and Albay Nuevo, with Albay Viejo eventually becoming Legazpi City in 1856. During the 19th century, Legazpi became the capital of Albay Province and developed into the region's economic center because of its strategically located port. The Port of Legazpi was declared open to foreign maritime trade in 1872 and officially opened to the world market in 1874, boosting exports of abaca and coconut products. Its growing international importance attracted major foreign trading companies, making the Port of Legazpi the leading commercial hub of the Bicol Region throughout the late Spanish and American periods.",
             "",
-            "images/spanish1.png",
-            "images/spanish2.png",
-            "images/spanish3.png"
+            "images/spanish1.jpg",
+            "images/spanish2.jpg",
+            "images/spanish3.jpg"
         );
     ]]></action>
 
@@ -539,8 +539,8 @@
             "",
             "The formation of communities in Albay was largely shaped by migration driven by natural disasters, particularly the devastating eruptions of Mayon Volcano. Although Albay was known for its scenic beauty, it was also highly vulnerable to typhoons, floods, and volcanic eruptions. The most catastrophic eruption occurred on February 1, 1814, destroying the towns of Cagsawa and Budiao and severely damaging nearby settlements. As a result, residents were encouraged by Fr. Pedro Licup to relocate to safer inland areas such as Makalaya (now Barangay Taisan) and Tagaytay (now Barangay Bagumbayan), where the parish of San Gregorio de Albay was also transferred, leading to the establishment of Albay Nuevo (New Albay). Later, Jose Maria Peñaranda strengthened the region by organizing coastal defense systems against Moro raids and supporting the construction of the San Gregorio Magno Cathedral. When volcanic activity subsided, some residents returned to the coastal areas and established a new settlement with the Parish of Saint Raphael the Archangel, which eventually became the Legazpi Port District.",
             "",
-            "images/albay1.png",
-            "images/albay2.png"
+            "images/albay1.jpg",
+            "images/albay2.jpg"
         );
     ]]></action>
 
@@ -551,9 +551,9 @@
             "",
             "Legazpi City experienced a unique and challenging path to cityhood, being established as a city three different times. It first became a city in 1890 through a Spanish Royal Decree that created the Ayuntamiento de Albay, giving local leaders greater authority over governance and appointing influential Albayanos to key government positions. During the American period, Legazpi reverted to a municipality in 1922 and was officially renamed from Albay to Legazpi in 1925. It regained city status in 1948, reverted to a town in 1954, and finally became a city again on June 12, 1959, through Republic Act No. 2234. Despite these political changes and territorial adjustments involving Daraga and the Old Albay District, Legazpi continued to develop into the province's center for commerce, culture, and religion. Notable historical landmarks that symbolize its heritage include the Casa Real (now Legazpi City Hall), the Cathedral of San Gregorio Magno, Peñaranda Park, and the Legazpi Port District.",
             "",
-            "images/becerra.png",
-            "images/becerra1.png",
-            "images/becerra2.png"   
+            "images/becerra.jpg",
+            "images/becerra1.jpg",
+            "images/becerra2.jpg"   
         );
     ]]></action>
 <action name="show_two_churches_panel" type="Javascript"><![CDATA[
@@ -563,9 +563,9 @@
             "",
             "Originally known as Baybay or Baybayo, the settlement was established as the parish of San Gregorio de Sawangan in 1616, with its first wooden chapel built by Fray Francisco de Sta. Ana. Over the centuries, the church was rebuilt several times after being damaged by Dutch attacks, Moro raids, fires, earthquakes, storms, and other disasters. Following the devastating 1814 eruption of Mayon Volcano, residents relocated to safer areas, particularly Albay Nuevo, where a new bamboo church was built and later replaced with a stone church in 1836. This church eventually became the St. Gregory the Great Cathedral, the seat of the Diocese of Legazpi, which was officially established in 1951. The cathedral has undergone numerous renovations, survived World War II damage and natural calamities, and was notably visited by Pope John Paul II in 1981. Meanwhile, some residents returned to Albay Viejo and established the Saint Raphael Church in 1834, dedicated to the patron saint of fishermen. Despite its unique orientation, which differed from Spanish colonial planning, the church endured pirate attacks, natural disasters, fires, and wartime destruction before being reconstructed into its present reinforced concrete structure.",
             "",
-            "images/two_churches.png",
-            "images/two_churches1.png",
-            "images/two_churches2.png"
+            "images/two_churches.jpg",
+            "images/two_churches1.jpg",
+            "images/two_churches2.jpg"
         );
     ]]></action>
 
@@ -618,9 +618,9 @@
             "",
             "Legazpi experienced not only destruction from natural disasters but also repeated attacks caused by war, particularly by Moro raids and Dutch invasions during the Spanish colonial period. The Dutch War of Independence (1568–1648) between Spain and the Netherlands extended to the Philippines, affecting the Bicol region. In 1600, Dutch Admiral Oliver van Noort attempted to attack Albay but retreated after encountering resistance from Spanish forces and local warriors. In 1636, the Dutch returned and successfully destroyed Albay during a town fiesta, extending their attacks to Cagsawa and nearby villages. Although the war officially ended with the Treaty of Westphalia in 1648, Dutch incursions in the Philippines continued until 1735.",
             "",
-            "images/perils.png",
-            "images/perils1.png",
-            "images/perils2.png"
+            "images/perils.jpg",
+            "images/perils1.jpg",
+            "images/perils2.jpg"
         );
     ]]></action>
 
@@ -631,9 +631,9 @@
             "",
             "The American invasion of Bikol in 1900 was largely driven by the region’s highly profitable abaca industry, particularly in Albay, which was then the wealthiest province in the Philippines. Following the Treaty of Paris in 1898, the Philippine Revolutionary Government (PRG) raised over ₱600,000 in Albay through war bonds to finance resistance against the Americans and blockaded the Port of Legazpi in 1899 to stop abaca exports. In response, American forces under General William Kobbe attacked Legazpi on January 23, 1900 using the warships Castellano, Venus, and Nashville. Despite the determined defense of more than 800 Filipino fighters, many of whom were poorly armed, the Americans' superior naval artillery and Krag rifles quickly overwhelmed the defenders. After hours of intense bombardment and ground assaults, the Filipinos were forced to retreat, resulting in the death of 172 Filipino soldiers, the capture of many others, and only 7 American wounded. The Battle of Legazpi ended in an American victory, leaving the city devastated and largely deserted, and it is remembered today through the monument marking the historic battle.",
             "",
-            "images/the_battle.png",
-            "images/the_battle1.png",
-            "images/the_battle2.png"
+            "images/the_battle.jpg",
+            "images/the_battle1.jpg",
+            "images/the_battle2.jpg"
         );
     ]]></action>
 
@@ -644,9 +644,9 @@
             "",
             "Following the 1898 Treaty of Paris, the United States took control of the Philippines and established the First Philippine Commission under Jacob Schurman to assess the country's future. The Philippine-American War began on February 4, 1899, and American occupation of Albay started with the Battle of Legazpi on January 23, 1900, with resistance continuing until Simeon Ola's surrender in 1903. The Second Philippine Commission, led by William Howard Taft, introduced democratic governance by creating the judicial system, civil service, legal code, and public education. On April 25, 1900, Taft met with Albay officials to discuss the Municipal Code. Although there were proposals to move the provincial capital to Tabaco, Albay remained the provincial seat, and a new capitol building was later designed by American architect William E. Parsons. In 1907, Act No. 1731 merged the municipalities of Albay, Legazpi, and Daraga into one municipality called Albay, which was officially renamed Legazpi in 1925 through Legislative Act No. 3253.",
             "",
-            "images/eco.png",
-            "images/eco1.png",
-            "images/eco2.png"
+            "images/eco.jpg",
+            "images/eco1.jpg",
+            "images/eco2.jpg"
         );
     ]]></action>
 
@@ -696,9 +696,9 @@
             "",
             "Following the 1898 Treaty of Paris, the United States took control of the Philippines and established the First Philippine Commission under Jacob Schurman to assess the country's future. The Philippine-American War began on February 4, 1899, and American occupation of Albay started with the Battle of Legazpi on January 23, 1900, with resistance continuing until Simeon Ola's surrender in 1903. The Second Philippine Commission, led by William Howard Taft, introduced democratic governance by creating the judicial system, civil service, legal code, and public education. On April 25, 1900, Taft met with Albay officials to discuss the Municipal Code. Although there were proposals to move the provincial capital to Tabaco, Albay remained the provincial seat, and a new capitol building was later designed by American architect William E. Parsons. In 1907, Act No. 1731 merged the municipalities of Albay, Legazpi, and Daraga into one municipality called Albay, which was officially renamed Legazpi in 1925 through Legislative Act No. 3253.",
             "",
-            "images/transport.png",
-            "images/transport1.png",
-            "images/transport2.png"
+            "images/transport.jpg",
+            "images/transport1.jpg",
+            "images/transport2.jpg"
         );
     ]]></action>
     
@@ -709,9 +709,9 @@
             "",
             "Following the 1898 Treaty of Paris, the United States took control of the Philippines and established the First Philippine Commission under Jacob Schurman to assess the country's future. The Philippine-American War began on February 4, 1899, and American occupation of Albay started with the Battle of Legazpi on January 23, 1900, with resistance continuing until Simeon Ola's surrender in 1903. The Second Philippine Commission, led by William Howard Taft, introduced democratic governance by creating the judicial system, civil service, legal code, and public education. On April 25, 1900, Taft met with Albay officials to discuss the Municipal Code. Although there were proposals to move the provincial capital to Tabaco, Albay remained the provincial seat, and a new capitol building was later designed by American architect William E. Parsons. In 1907, Act No. 1731 merged the municipalities of Albay, Legazpi, and Daraga into one municipality called Albay, which was officially renamed Legazpi in 1925 through Legislative Act No. 3253.",
             "",
-            "images/japanese.png",
-            "images/japanese1.png",
-            "images/japanese2.png"
+            "images/japanese.jpg",
+            "images/japanese1.jpg",
+            "images/japanese2.jpg"
         );
     ]]></action>
     
@@ -722,9 +722,9 @@
             "",
             "Following the 1898 Treaty of Paris, the United States took control of the Philippines and established the First Philippine Commission under Jacob Schurman to assess the country's future. The Philippine-American War began on February 4, 1899, and American occupation of Albay started with the Battle of Legazpi on January 23, 1900, with resistance continuing until Simeon Ola's surrender in 1903. The Second Philippine Commission, led by William Howard Taft, introduced democratic governance by creating the judicial system, civil service, legal code, and public education. On April 25, 1900, Taft met with Albay officials to discuss the Municipal Code. Although there were proposals to move the provincial capital to Tabaco, Albay remained the provincial seat, and a new capitol building was later designed by American architect William E. Parsons. In 1907, Act No. 1731 merged the municipalities of Albay, Legazpi, and Daraga into one municipality called Albay, which was officially renamed Legazpi in 1925 through Legislative Act No. 3253.",
             "",
-            "images/regime.png",
-            "images/regime1.png",
-            "images/regime2.png"
+            "images/regime.jpg",
+            "images/regime1.jpg",
+            "images/regime2.jpg"
         );
     ]]></action>
 
@@ -784,7 +784,7 @@
                  atv="-12"
                  scale="0.3"
                  zoom="false"
-                 onclick="show_image_popup('images/scene11(3).png');" />
+                 onclick="show_image_popup('images/scene11(3).jpg');" />
 
     <hotspot name="info_bust1"
                  style="info_hotspotstyle"
@@ -793,7 +793,7 @@
                  atv="-12"
                  scale="0.3"
                  zoom="false"
-                 onclick="show_image_popup('images/scene11.png');" />
+                 onclick="show_image_popup('images/scene11.jpg');" />
     
     <hotspot name="info_bust2"
                  style="info_hotspotstyle"
@@ -802,7 +802,7 @@
                  atv="-12"
                  scale="0.3"
                  zoom="false"
-                 onclick="show_image_popup('images/scene11(2).png');" />
+                 onclick="show_image_popup('images/scene11(2).jpg');" />
 
     <hotspot name="info_bust3"
                  style="info_hotspotstyle"
@@ -811,7 +811,7 @@
                  atv="-12"
                  scale="0.3"
                  zoom="false"
-                 onclick="show_image_popup('images/scene11(1).png');" />
+                 onclick="show_image_popup('images/scene11(1).jpg');" />
 
     </scene>
 
@@ -822,8 +822,8 @@
             "",
             "Following the 1898 Treaty of Paris, the United States took control of the Philippines and established the First Philippine Commission under Jacob Schurman to assess the country's future. The Philippine-American War began on February 4, 1899, and American occupation of Albay started with the Battle of Legazpi on January 23, 1900, with resistance continuing until Simeon Ola's surrender in 1903. The Second Philippine Commission, led by William Howard Taft, introduced democratic governance by creating the judicial system, civil service, legal code, and public education. On April 25, 1900, Taft met with Albay officials to discuss the Municipal Code. Although there were proposals to move the provincial capital to Tabaco, Albay remained the provincial seat, and a new capitol building was later designed by American architect William E. Parsons. In 1907, Act No. 1731 merged the municipalities of Albay, Legazpi, and Daraga into one municipality called Albay, which was officially renamed Legazpi in 1925 through Legislative Act No. 3253.",
             "",
-            "images/republic.png",
-            "images/republic1.png"
+            "images/republic.jpg",
+            "images/republic1.jpg"
         );
     ]]></action>
 
@@ -834,27 +834,27 @@
             "",
             "Following the 1898 Treaty of Paris, the United States took control of the Philippines and established the First Philippine Commission under Jacob Schurman to assess the country's future. The Philippine-American War began on February 4, 1899, and American occupation of Albay started with the Battle of Legazpi on January 23, 1900, with resistance continuing until Simeon Ola's surrender in 1903. The Second Philippine Commission, led by William Howard Taft, introduced democratic governance by creating the judicial system, civil service, legal code, and public education. On April 25, 1900, Taft met with Albay officials to discuss the Municipal Code. Although there were proposals to move the provincial capital to Tabaco, Albay remained the provincial seat, and a new capitol building was later designed by American architect William E. Parsons. In 1907, Act No. 1731 merged the municipalities of Albay, Legazpi, and Daraga into one municipality called Albay, which was officially renamed Legazpi in 1925 through Legislative Act No. 3253.",
             "",
-            "images/progress.png",
-            "images/progress1.png",
-            "images/progress2.png",
-            "images/progress3.png"
+            "images/progress.jpg",
+            "images/progress1.jpg",
+            "images/progress2.jpg",
+            "images/progress3.jpg"
         );
     ]]></action>
 
     <action name="show_papel_gallery" type="Javascript"><![CDATA[
         showImagePopup(
-            "images/papel.png",
+            "images/papel.jpg",
             [
-                "images/papel.png",
-                "images/papel1.png",
-                "images/papel2.png",
-                "images/papel3.png",
-                "images/papel4.png",
-                "images/papel5.png",
-                "images/papel6.png",
-                "images/papel7.png",
-                "images/papel8.png",
-                "images/papel9.png"
+                "images/papel.jpg",
+                "images/papel1.jpg",
+                "images/papel2.jpg",
+                "images/papel3.jpg",
+                "images/papel4.jpg",
+                "images/papel5.jpg",
+                "images/papel6.jpg",
+                "images/papel7.jpg",
+                "images/papel8.jpg",
+                "images/papel9.jpg"
             ]
         );
     ]]></action>
@@ -902,7 +902,7 @@
                  atv="1"
                  scale="0.3"
                  zoom="false"
-                 onclick="show_image_popup('images/scene14.png');" />
+                 onclick="show_image_popup('images/scene14.jpg');" />
    
     <hotspot name="info_second"
                  style="info_hotspotstyle"
@@ -911,7 +911,7 @@
                  atv="1"
                  scale="0.3"
                  zoom="false"
-                 onclick="show_image_popup('images/scene14(1).png');" />
+                 onclick="show_image_popup('images/scene14(1).jpg');" />
 
      <hotspot name="info_third"
                  style="info_hotspotstyle"
@@ -920,7 +920,7 @@
                  atv="1"
                  scale="0.3"
                  zoom="false"
-                 onclick="show_image_popup('images/scene14(2).png');" />
+                 onclick="show_image_popup('images/scene14(2).jpg');" />
 
      <hotspot name="info_fourth"
                  style="info_hotspotstyle"
@@ -929,7 +929,7 @@
                  atv="0"
                  scale="0.3"
                  zoom="false"
-                 onclick="show_image_popup('images/scene14(3).png');" />
+                 onclick="show_image_popup('images/scene14(3).jpg');" />
 
      <hotspot name="info_fifth"
                  style="info_hotspotstyle"
@@ -938,7 +938,7 @@
                  atv="0"
                  scale="0.3"
                  zoom="false"
-                 onclick="show_image_popup('images/scene14(4).png');" />
+                 onclick="show_image_popup('images/scene14(4).jpg');" />
 
      <hotspot name="info_sixth"
                  style="info_hotspotstyle"
@@ -947,9 +947,56 @@
                  atv="0"
                  scale="0.3"
                  zoom="false"
-                 onclick="show_image_popup('images/scene14(5).png');" />
+                 onclick="show_image_popup('images/scene14(5).jpg');" />
+
+     <hotspot name="spot_mayor_gallery"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-10"
+                 atv="-5"
+                 scale="0.6"
+                 zoom="false"
+                 onclick="show_mayor_gallery();" />
    
     </scene>
+
+ <action name="show_mayor_gallery" type="Javascript"><![CDATA[
+        showImagePopup(
+            "images/mayor1.jpg",
+            [
+                "images/mayor2.jpg",
+                "images/mayor3.jpg",
+                "images/mayor4.jpg",
+                "images/mayor5.jpg",
+                "images/mayor6.jpg",
+                "images/mayor7.jpg",
+                "images/mayor8.jpg",
+                "images/mayor9.jpg",
+                "images/mayor10.jpg",  
+                "images/mayor11.jpg",
+                "images/mayor12.jpg",
+                "images/mayor13.jpg",
+                "images/mayor14.jpg",
+                "images/mayor15.jpg",
+                "images/mayor16.jpg",
+                "images/mayor17.jpg",
+                "images/mayor18.jpg",
+                "images/mayor19.jpg",
+                "images/mayor20.jpg",
+                "images/mayor21.jpg",
+                "images/mayor22.jpg",
+                "images/mayor23.jpg",
+                "images/mayor24.jpg",
+                "images/mayor25.jpg",
+                "images/mayor26.jpg",
+                "images/mayor27.jpg",
+                "images/mayor28.jpg",
+                "images/mayor29.jpg",
+                "images/mayor30.jpg",
+            ]
+        );
+    ]]></action>
+
 
     <!-- SCENE 15 -->
     <scene name="scene_15" title="15" onstart="" thumburl="panos/15.tiles/thumb.webp" lat="" lng="" alt="" heading="">
@@ -970,7 +1017,7 @@
                  atv="-10"
                  scale="0.3"
                  zoom="false"
-                 onclick="show_image_popup('images/scene15.png');" />
+                 onclick="show_image_popup('images/scene15.jpg');" />
    
     <hotspot name="info_second"
                  style="info_hotspotstyle"
@@ -979,7 +1026,7 @@
                  atv="-10"
                  scale="0.3"
                  zoom="false"
-                 onclick="show_image_popup('images/scene15(1).png');" />
+                 onclick="show_image_popup('images/scene15(1).jpg');" />
    
     </scene>
 
@@ -1167,32 +1214,24 @@
 
      <action name="show_clay_gallery1" type="Javascript"><![CDATA[
         showImagePopup(
-            "images/scene16.jpg",
+             "images/clay.jpg",
             [
-                "images/scene16.jpg",
-                "images/scene16(1).jpg",
-                "images/scene16(2).jpg",
-                "images/scene16(3).jpg",
-                "images/scene16(4).jpg",   
-                "images/scene16(5).jpg",
-                "images/scene16(6).jpg",
-                "images/scene16(7).jpg",
+                "images/clay(1).jpg",
+                "images/clay(2).jpg",
+                "images/clay(3).jpg",
+                "images/clay(4).jpg",
             ]
         );
     ]]></action>
 
     <action name="show_clay_gallery2" type="Javascript"><![CDATA[
         showImagePopup(
-            "images/scene16.jpg",
+             "images/clay(5).jpg",
             [
-                "images/scene16.jpg",
-                "images/scene16(1).jpg",
-                "images/scene16(2).jpg",
-                "images/scene16(3).jpg",
-                "images/scene16(4).jpg",   
-                "images/scene16(5).jpg",
-                "images/scene16(6).jpg",
-                "images/scene16(7).jpg",
+                "images/clay(6).jpg",
+                "images/clay(7).jpg",
+                "images/clay(8).jpg",
+                "images/clay(9).jpg",
             ]
         );
     ]]></action>
@@ -1249,3 +1288,4 @@
     </scene>
 
 </krpano>
+
