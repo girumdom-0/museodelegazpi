@@ -18,6 +18,26 @@ const tourTexts = new Map();
 
 const supabaseTourTextsUrl = 'https://nktoozkerqwrtkzujtdh.supabase.co/rest/v1/tour_texts?select=action_name,title,text';
 const supabaseTourTextsKey = 'sb_publishable_2GnZlRn85BMxrT_5-08-aw_z5DYIV5p';
+const supabaseAssetsUrl = 'https://qysyaobzgltbxrpqjssv.supabase.co/rest/v1/assets';
+const supabaseAssetsKey = 'sb_publishable_NW9pedzYcVN0nIbzusJELQ_G9KsMwrU';
+
+function fetchAssetPublicUrl(assetType, storageProvider, storageKey, fallbackUrl) {
+    const params = new URLSearchParams({
+        select: 'public_url',
+        asset_type: `eq.${assetType}`,
+        storage_provider: `eq.${storageProvider}`,
+        storage_key: `eq.${storageKey}`,
+        limit: '1',
+    });
+
+    return fetch(`${supabaseAssetsUrl}?${params}`, {
+        cache: 'no-store',
+        headers: { apikey: supabaseAssetsKey, Authorization: `Bearer ${supabaseAssetsKey}` },
+    })
+        .then((response) => response.ok ? response.json() : [])
+        .then((entries) => entries[0]?.public_url || fallbackUrl)
+        .catch(() => fallbackUrl);
+}
 
 function cacheTourTexts(entries) {
     entries.forEach((entry) => tourTexts.set(entry.action_name, entry));
@@ -605,9 +625,20 @@ function showBattleVideo() {
 
     const source = video.querySelector('source[data-src]');
     if (source) {
-        source.src = source.dataset.src;
-        source.removeAttribute('data-src');
-        video.load();
+        const fallbackUrl = source.dataset.src;
+        const assetUrl = fetchAssetPublicUrl(
+            source.dataset.assetType,
+            source.dataset.storageProvider,
+            source.dataset.storageKey,
+            fallbackUrl
+        );
+
+        assetUrl.then((url) => {
+            source.src = url;
+            source.removeAttribute('data-src');
+            video.load();
+            video.play().catch(() => {});
+        });
     }
 
     if (backgroundMusic && !backgroundMusic.paused && musicEnabled) {
@@ -617,7 +648,6 @@ function showBattleVideo() {
     backdrop.style.display = 'block';
     modal.style.display = 'block';
     video.currentTime = 0;
-    video.play().catch(() => {});
 }
 
 function hideBattleVideo() {
