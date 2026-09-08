@@ -253,6 +253,44 @@ html, body {
     z-index: 99999;
 }
 
+#text_modal_card {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.28) transparent;
+}
+
+#text_modal_card::-webkit-scrollbar {
+    width: 9px;
+}
+
+#text_modal_card::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#text_modal_card::-webkit-scrollbar-thumb {
+    min-height: 44px;
+    border: 3px solid transparent;
+    border-radius: 999px;
+    background-clip: padding-box;
+    background-color: rgba(255, 255, 255, 0.28);
+}
+
+#text_modal_card::-webkit-scrollbar-button:single-button {
+    height: 14px;
+    background-color: transparent;
+}
+
+#text_modal_card::-webkit-scrollbar-button:single-button:vertical:decrement {
+    border-width: 0 4px 5px;
+    border-style: solid;
+    border-color: transparent transparent rgba(255, 255, 255, 0.28);
+}
+
+#text_modal_card::-webkit-scrollbar-button:single-button:vertical:increment {
+    border-width: 5px 4px 0;
+    border-style: solid;
+    border-color: rgba(255, 255, 255, 0.28) transparent transparent;
+}
+
 #text_modal_close {
     position: absolute;
     top: 18px;
@@ -302,6 +340,23 @@ html, body {
     color: #000000;
     white-space: pre-line;
     text-align: justify;
+}
+
+#text_modal_full_text {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+#text_modal_more {
+    margin-top: 22px;
+    padding: 10px 18px;
+    border: 1px solid #000000;
+    border-radius: 6px;
+    background: #000000;
+    color: #ffffff;
+    font: inherit;
+    cursor: pointer;
 }
 
 .text-italic-intro {
@@ -643,6 +698,23 @@ html, body {
     color: #111111;
     white-space: pre-line;
     text-align: justify;
+}
+
+#info_panel_full_text {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+#info_panel_more {
+    margin-top: 22px;
+    padding: 10px 18px;
+    border: 1px solid #000000;
+    border-radius: 6px;
+    background: #000000;
+    color: #ffffff;
+    font: inherit;
+    cursor: pointer;
 }
 
 .panel-italic-intro {

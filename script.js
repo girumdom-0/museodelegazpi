@@ -16,12 +16,37 @@ let modelRequest = null;
 let activeTourTextAction = '';
 const tourTexts = new Map();
 
-const supabaseTourTextsUrl = 'https://nktoozkerqwrtkzujtdh.supabase.co/rest/v1/tour_texts?select=action_name,title,text';
-const supabaseTourTextsKey = 'sb_publishable_2GnZlRn85BMxrT_5-08-aw_z5DYIV5p';
+const supabaseTourTextsUrl = 'https://qysyaobzgltbxrpqjssv.supabase.co/rest/v1/tour_texts?select=action_name,title,summary_text,full_text';
+const supabaseTourTextsKey = 'sb_publishable_NW9pedzYcVN0nIbzusJELQ_G9KsMwrU';
 const supabaseAssetsUrl = 'https://qysyaobzgltbxrpqjssv.supabase.co/rest/v1/assets';
 const supabaseAssetsKey = 'sb_publishable_NW9pedzYcVN0nIbzusJELQ_G9KsMwrU';
 const assetUrlCache = new Map();
 let assetCatalogPromise;
+
+const localFullTexts = new Map([
+    ['show_sister_city_info', `SISTER CITY-RELATIONSHIP
+BETWEEN THE CITY OF
+LEGAZPI AND AYUNTAMIENTO ZUMMARAGA
+
+In seeking the roots of the person from whom the city was named, the officials of the City of Legazpi signed Sister-city Relationship Agreement with the Ayuntamiento de Zumarraga, España on October 21, 1975. Zumarraga in Gipuzkoa, a province of the Basque Country autonomous community of Spain is the birthplace of Adelantado Don Miguel Lopez de Legazpi. "Adelantado" was a title used by some Spanish conquistadores of the 16th century who served as a governor of a province in Spain or of a Spanish colonial province. The sister-city Agreement was signed by Legazpi City Mayor Gregorio Imperial and Zumarraga Alcalde Don Cruz-Maria Uribezalgo Larrañaga.
+
+The Agreement states in part: "The City Government of Legazpi and the Ayuntamiento de Zumarraga...commit and bind themselves to have and encourage exchange of information regarding their local history, traditions and culture, tourism, literature, current problems and progress in local government administration and such other subjects of mutual interests..."
+
+Pursuant to the objectives of the above Agreement, Legazpi City Mayor Geraldine Rosal and her husband, City Administrator Noel Rosal visited Zumarraga on February 19-20, 2012. They met with Zumarraga Mayor Mikel Serrano, his legislative council and a group of local businessmen. According to Mayor Rosal, they were able to discuss tourism, investments and other business opportunities that would redound to the mutual benefits of Legazpi and Zumarraga. The trip was sponsored by Agencia de Espanola Cooperacion Internacional para el Desarollo (AECID), Spain's aid agency, which had been extending financial and technological assistance to Legazpi in its development projects. One of the largest of these projects is the sanitary landfill where AECID extended over P100 million assistance.
+
+The naming of the City is credited to Don Ramon Montero of the Gobierno Superior de las Islas Filipinas who, in July 17, 1856, signed a decree creating the visita of Pueblo Viejo, out of Binanuahan and the adjacent villages of Lamba, Rawis and Bigaa. In another decree, he named the town Legazpi, which was inaugurated on October 22, 1856.
+
+Miguel Lopez de Legazpi, was born in 1502 in Zumárraga, Spain; he was a Basque by birth. In 1528, he moved to Mexico (then called New Spain) and worked there in the financial council until he was appointed civil governor of Mexico City. In 1564, he was commissioned by King Philip II of Spain to lead an expedition to the Pacific Ocean in search of the Spice Island, along the routes taken by Ferdinand Magellan and Ruy Lopez de Villalobos. He arrived in the Visayas in September 1565 and initially made Cebu his seat of government. His grandson, Juan de Salcedo, captured Manila in 1571, made it his new seat of government and declared it the capital of the Philippines. He died of a stroke on August 20, 1572, after having scolded an aide. His remains were interred in a vault in San Agustin Church, Intramuros, Manila. The Spanish rule of the Philippines would last until September 1898.
+
+Legazpi was actually the name of a place in the municipality of Zumarraga in Gipuzkoa, a province of the Basque Country autonomous community of Spain. In the birthplace of Miguel Lopez now stands a Legazpi Tower to commemorate his great contributions to Spain.
+
+THE CITY NAMED AFTER
+MIGUEL LOPEZ DE LEGAZPI
+
+LEGAZPI CITY is the capital of the Province of Albay. Its prominence indicates that many events which happened here affected many other places in the province. The city was founded in 1856 and was named after the Basque Spanish navigator, Miguel Lopez de Legazpi-who never set foot in Albay. The most plausible reason for naming the place after Legazpi was because he was the grandfather of Captain Juan de Salcedo, the intrepid conquistador who in 1572 raided the region for gold and built the first Spanish garrison in Bikol named Santiago de Libong, now in the town of Libon, Albay. In fact, in 1772 Governor General Simon de Anda named the settlement adjacent to the City Salcedo (later renamed Daraga).`],
+]);
+
+let textDetailsExpanded = false;
 THREE.Cache.enabled = true;
 
 function assetCacheKey(assetType, storageProvider, storageKey) {
@@ -423,9 +448,10 @@ function showTextModal(title, subtitle, bodyText, introItalicText) {
     closeAllModals();
 
     const savedText = tourTexts.get(activeTourTextAction);
+    const fullText = savedText?.full_text || localFullTexts.get(activeTourTextAction) || '';
     if (savedText) {
         title = savedText.title || title;
-        bodyText = savedText.text || bodyText;
+        bodyText = savedText.summary_text || bodyText;
     }
     activeTourTextAction = '';
 
@@ -433,7 +459,9 @@ function showTextModal(title, subtitle, bodyText, introItalicText) {
     document.getElementById("text_modal_subtitle").innerText = subtitle || "";
 
     const bodyContainer = document.getElementById("text_modal_body");
+    const moreButton = document.getElementById("text_modal_more");
     bodyContainer.innerHTML = "";
+    textDetailsExpanded = false;
 
     if (introItalicText) {
         const italicP = document.createElement("p");
@@ -444,12 +472,37 @@ function showTextModal(title, subtitle, bodyText, introItalicText) {
 
     if (bodyText) {
         const mainP = document.createElement("div");
+        mainP.id = "text_modal_summary";
         mainP.innerText = bodyText;
         bodyContainer.appendChild(mainP);
     }
 
+    if (fullText) {
+        const fullTextContainer = document.createElement("div");
+        fullTextContainer.id = "text_modal_full_text";
+        fullTextContainer.innerText = fullText;
+        fullTextContainer.hidden = true;
+        bodyContainer.appendChild(fullTextContainer);
+        moreButton.hidden = false;
+        moreButton.textContent = "See more";
+    } else {
+        moreButton.hidden = true;
+    }
+
     document.getElementById("text_backdrop").style.display = "block";
     document.getElementById("text_modal_card").style.display = "block";
+}
+
+function toggleTextDetails() {
+    const summaryContainer = document.getElementById("text_modal_summary");
+    const fullTextContainer = document.getElementById("text_modal_full_text");
+    const moreButton = document.getElementById("text_modal_more");
+    if (!summaryContainer || !fullTextContainer || !moreButton) return;
+
+    textDetailsExpanded = !textDetailsExpanded;
+    summaryContainer.hidden = textDetailsExpanded;
+    fullTextContainer.hidden = !textDetailsExpanded;
+    moreButton.textContent = textDetailsExpanded ? "Show less" : "See more";
 }
 
 function closeTextModal() {
@@ -460,6 +513,7 @@ function closeTextModal() {
 
 window.showTextModal = showTextModal;
 window.closeTextModal = closeTextModal;
+window.toggleTextDetails = toggleTextDetails;
 
 function createImageWrapper(imgSrc) {
     const wrapper = document.createElement("div");
@@ -487,9 +541,10 @@ function showInfoPanel(title, subtitle, bodyText, introItalic, imgMain, imgMid, 
     closeAllModals();
 
     const savedText = tourTexts.get(activeTourTextAction);
+    const fullText = savedText?.full_text || '';
     if (savedText) {
         title = savedText.title || title;
-        bodyText = savedText.text || bodyText;
+        bodyText = savedText.summary_text || bodyText;
     }
     activeTourTextAction = '';
 
@@ -497,7 +552,11 @@ function showInfoPanel(title, subtitle, bodyText, introItalic, imgMain, imgMid, 
     document.getElementById("info_panel_subtitle").innerText = subtitle || "";
 
     const bodyContainer = document.getElementById("info_panel_body");
+    const moreButton = document.getElementById("info_panel_more");
     bodyContainer.innerHTML = "";
+    moreButton.hidden = !fullText;
+    moreButton.textContent = "See more";
+    bodyContainer.dataset.expanded = "false";
 
     if (introItalic) {
         const italicP = document.createElement("p");
@@ -508,8 +567,17 @@ function showInfoPanel(title, subtitle, bodyText, introItalic, imgMain, imgMid, 
 
     if (bodyText) {
         const textDiv = document.createElement("div");
+        textDiv.id = "info_panel_summary";
         textDiv.innerText = bodyText;
         bodyContainer.appendChild(textDiv);
+    }
+
+    if (fullText) {
+        const fullTextDiv = document.createElement("div");
+        fullTextDiv.id = "info_panel_full_text";
+        fullTextDiv.innerText = fullText;
+        fullTextDiv.hidden = true;
+        bodyContainer.appendChild(fullTextDiv);
     }
 
     const gallery = document.getElementById("info_panel_gallery");
@@ -540,6 +608,18 @@ function showInfoPanel(title, subtitle, bodyText, introItalic, imgMain, imgMid, 
     document.getElementById("info_panel_modal").style.display = "block";
 }
 
+function toggleInfoTextDetails() {
+    const summary = document.getElementById("info_panel_summary");
+    const fullText = document.getElementById("info_panel_full_text");
+    const moreButton = document.getElementById("info_panel_more");
+    if (!summary || !fullText || !moreButton) return;
+
+    const expanded = moreButton.textContent === "See more";
+    summary.hidden = expanded;
+    fullText.hidden = !expanded;
+    moreButton.textContent = expanded ? "Show less" : "See more";
+}
+
 function closeInfoPanel() {
     stopTTS();
     document.getElementById("info_panel_backdrop").style.display = "none";
@@ -548,6 +628,7 @@ function closeInfoPanel() {
 
 window.showInfoPanel = showInfoPanel;
 window.closeInfoPanel = closeInfoPanel;
+window.toggleInfoTextDetails = toggleInfoTextDetails;
 
 const imagePopupState = {
     images: [],
