@@ -396,9 +396,18 @@ function createImageWrapper(imgSrc) {
     wrapper.className = "gallery-img-wrapper";
 
     const img = document.createElement("img");
-    img.src = imgSrc;
     img.loading = "lazy";
     img.decoding = "async";
+
+    if (imgSrc && !/^https?:\/\//i.test(imgSrc)) {
+        const storageKey = imgSrc.replace(/^images\//, '');
+        fetchAssetPublicUrl('image', 'cloudflare', storageKey, imgSrc)
+            .then((assetUrl) => {
+                img.src = assetUrl;
+            });
+    } else {
+        img.src = imgSrc;
+    }
 
     wrapper.appendChild(img);
     return wrapper;
@@ -577,7 +586,20 @@ function handleImageWheel(event) {
 
 function updateImagePopupGallery() {
     const { images, imageIndex } = imagePopupState;
-    imagePopupElements.image.src = images[imageIndex];
+    const imageSrc = images[imageIndex];
+
+    if (imageSrc && !/^https?:\/\//i.test(imageSrc)) {
+        const storageKey = imageSrc.replace(/^images\//, '');
+        fetchAssetPublicUrl('image', 'cloudflare', storageKey, imageSrc)
+            .then((assetUrl) => {
+                if (imagePopupState.images[imagePopupState.imageIndex] === imageSrc) {
+                    imagePopupElements.image.src = assetUrl;
+                }
+            });
+    } else {
+        imagePopupElements.image.src = imageSrc;
+    }
+
     imagePopupElements.counter.textContent = `${imageIndex + 1} / ${images.length}`;
     imagePopupElements.previous.hidden = images.length < 2;
     imagePopupElements.next.hidden = images.length < 2;
