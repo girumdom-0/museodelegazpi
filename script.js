@@ -20,8 +20,42 @@ const supabaseTourTextsUrl = 'https://nktoozkerqwrtkzujtdh.supabase.co/rest/v1/t
 const supabaseTourTextsKey = 'sb_publishable_2GnZlRn85BMxrT_5-08-aw_z5DYIV5p';
 const supabaseAssetsUrl = 'https://qysyaobzgltbxrpqjssv.supabase.co/rest/v1/assets';
 const supabaseAssetsKey = 'sb_publishable_NW9pedzYcVN0nIbzusJELQ_G9KsMwrU';
+const assetUrlCache = new Map();
+let assetCatalogPromise;
+
+function assetCacheKey(assetType, storageProvider, storageKey) {
+    return `${assetType}:${storageProvider.trim()}:${storageKey.trim()}`;
+}
+
+function preloadAssetCatalog() {
+    const params = new URLSearchParams({
+        select: 'asset_type,storage_provider,storage_key,public_url',
+    });
+
+    return fetch(`${supabaseAssetsUrl}?${params}`, {
+        cache: 'no-store',
+        headers: { apikey: supabaseAssetsKey, Authorization: `Bearer ${supabaseAssetsKey}` },
+    })
+        .then((response) => response.ok ? response.json() : [])
+        .then((entries) => {
+            entries.forEach((entry) => {
+                const publicUrl = entry.public_url?.trim();
+                if (publicUrl) {
+                    assetUrlCache.set(
+                        assetCacheKey(entry.asset_type, entry.storage_provider, entry.storage_key),
+                        publicUrl
+                    );
+                }
+            });
+        })
+        .catch(() => {});
+}
 
 function fetchAssetPublicUrl(assetType, storageProvider, storageKey, fallbackUrl) {
+    const cacheKey = assetCacheKey(assetType, storageProvider, storageKey);
+    const cachedUrl = assetUrlCache.get(cacheKey);
+    if (cachedUrl) return Promise.resolve(cachedUrl);
+
     const params = new URLSearchParams({
         select: 'public_url',
         asset_type: `eq.${assetType}`,
@@ -30,14 +64,24 @@ function fetchAssetPublicUrl(assetType, storageProvider, storageKey, fallbackUrl
         limit: '1',
     });
 
-    return fetch(`${supabaseAssetsUrl}?${params}`, {
+    const fetchUrl = () => fetch(`${supabaseAssetsUrl}?${params}`, {
         cache: 'no-store',
         headers: { apikey: supabaseAssetsKey, Authorization: `Bearer ${supabaseAssetsKey}` },
     })
         .then((response) => response.ok ? response.json() : [])
-        .then((entries) => entries[0]?.public_url || fallbackUrl)
+        .then((entries) => {
+            const publicUrl = entries[0]?.public_url;
+            if (publicUrl) assetUrlCache.set(cacheKey, publicUrl);
+            return publicUrl || fallbackUrl;
+        })
         .catch(() => fallbackUrl);
+
+    return (assetCatalogPromise || Promise.resolve()).then(() => {
+        return assetUrlCache.get(cacheKey) || fetchUrl();
+    });
 }
+
+assetCatalogPromise = preloadAssetCatalog();
 
 function cacheTourTexts(entries) {
     entries.forEach((entry) => tourTexts.set(entry.action_name, entry));
@@ -279,8 +323,13 @@ function loadGLBModel(glbPath, texturePath) {
     dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
     loader.setDRACOLoader(dracoLoader);
 
-    loader.load(
-        glbPath,
+    const storageKey = glbPath.replace(/^models\//, '');
+    fetchAssetPublicUrl('model', 'cloudflare', storageKey, glbPath)
+        .then((resolvedGlbPath) => {
+            if (request.cancelled) return;
+
+            loader.load(
+        resolvedGlbPath,
         (gltf) => {
             if (request.cancelled) {
                 disposeModel(gltf.scene);
@@ -325,7 +374,8 @@ function loadGLBModel(glbPath, texturePath) {
         },
         undefined,
         (error) => console.error("Error loading GLB:", error)
-    );
+            );
+        });
 }
 
 function toggle3DFullscreen() {
