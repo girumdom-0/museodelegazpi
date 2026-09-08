@@ -22,6 +22,7 @@ const supabaseAssetsUrl = 'https://qysyaobzgltbxrpqjssv.supabase.co/rest/v1/asse
 const supabaseAssetsKey = 'sb_publishable_NW9pedzYcVN0nIbzusJELQ_G9KsMwrU';
 const assetUrlCache = new Map();
 let assetCatalogPromise;
+THREE.Cache.enabled = true;
 
 function assetCacheKey(assetType, storageProvider, storageKey) {
     return `${assetType}:${storageProvider.trim()}:${storageKey.trim()}`;
@@ -47,8 +48,28 @@ function preloadAssetCatalog() {
                     );
                 }
             });
+            return entries;
         })
-        .catch(() => {});
+        .catch(() => []);
+}
+
+function preloadModels(entries) {
+    const modelEntries = entries.filter((entry) => entry.asset_type === 'model' && entry.public_url);
+    if (!modelEntries.length) return;
+
+    const dracoLoader = new THREE.DRACOLoader();
+    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
+
+    modelEntries.forEach((entry) => {
+        const loader = new THREE.GLTFLoader();
+        loader.setDRACOLoader(dracoLoader);
+        loader.load(
+            entry.public_url.trim(),
+            (gltf) => disposeModel(gltf.scene),
+            undefined,
+            () => {}
+        );
+    });
 }
 
 function fetchAssetPublicUrl(assetType, storageProvider, storageKey, fallbackUrl) {
@@ -82,6 +103,7 @@ function fetchAssetPublicUrl(assetType, storageProvider, storageKey, fallbackUrl
 }
 
 assetCatalogPromise = preloadAssetCatalog();
+assetCatalogPromise.then(preloadModels);
 
 function cacheTourTexts(entries) {
     entries.forEach((entry) => tourTexts.set(entry.action_name, entry));
@@ -109,8 +131,6 @@ function setActiveTourTextAction(actionName) {
 }
 
 window.setActiveTourTextAction = setActiveTourTextAction;
-
-THREE.Cache.enabled = true;
 
 // Create the background audio element for the Ibalong music.
 // It loops continuously and starts at a low volume so it feels like ambient background music.
