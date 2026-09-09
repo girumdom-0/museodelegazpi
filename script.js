@@ -344,9 +344,44 @@ function removeCurrentModel() {
     }
 }
 
+const modelDescriptions = {
+    'bust.glb': {
+        title: 'Miguel Lopez de Legazpi Bust',
+        description: 'Explore this three-dimensional representation of Miguel Lopez de Legazpi.'
+    },
+    'general.glb': {
+        title: 'General 3D Exhibit',
+        description: 'Explore the exhibit from every angle using the interactive 3D viewer.'
+    },
+    'orignakintatay.glb': {
+        title: 'Original Kin Tatay Exhibit',
+        description: 'Explore this museum object in three dimensions.'
+    },
+    'planchaflat.glb': {
+        title: 'Plancha Flat Exhibit',
+        description: 'Explore this museum object in three dimensions.'
+    },
+    'plantsadeuling.glb': {
+        title: 'Plant Sa Deuling Exhibit',
+        description: 'Explore this museum object in three dimensions.'
+    },
+    'DZMBMIC.glb': {
+        title: 'DZMBMIC Exhibit',
+        description: 'Explore this museum object in three dimensions.'
+    }
+};
+
 function loadGLBModel(glbPath, texturePath) {
     closeAllModals();
     if (!renderer) initThreeJS();
+
+    const modelName = glbPath.split('/').pop();
+    const modelInfo = modelDescriptions[modelName] || {
+        title: '3D Exhibit',
+        description: 'Explore this museum object in three dimensions.'
+    };
+    document.getElementById('model3d_title').textContent = modelInfo.title;
+    document.getElementById('model3d_description').textContent = modelInfo.description;
 
     document.getElementById("model3d_backdrop").style.display = "block";
     document.getElementById("model3d_modal").style.display = "block";
