@@ -20,8 +20,17 @@ const supabaseTourTextsUrl = 'https://qysyaobzgltbxrpqjssv.supabase.co/rest/v1/t
 const supabaseTourTextsKey = 'sb_publishable_NW9pedzYcVN0nIbzusJELQ_G9KsMwrU';
 const supabaseAssetsUrl = 'https://qysyaobzgltbxrpqjssv.supabase.co/rest/v1/assets';
 const supabaseAssetsKey = 'sb_publishable_NW9pedzYcVN0nIbzusJELQ_G9KsMwrU';
+const cloudflareAssetsUrl = 'https://museodelegazpi-assets.07304476.workers.dev';
 const assetUrlCache = new Map();
 let assetCatalogPromise;
+const modelPaths = [
+    'models/bust.glb',
+    'models/orignakintatay.glb',
+    'models/general.glb',
+    'models/planchaflat.glb',
+    'models/plantsadeuling.glb',
+    'models/DZMBMIC.glb',
+];
 
 const localFullTexts = new Map([
     ['show_sister_city_info', `SISTER CITY-RELATIONSHIP
@@ -79,17 +88,22 @@ function preloadAssetCatalog() {
 }
 
 function preloadModels(entries) {
-    const modelEntries = entries.filter((entry) => entry.asset_type === 'model' && entry.public_url);
-    if (!modelEntries.length) return;
-
     const dracoLoader = new THREE.DRACOLoader();
     dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
 
-    modelEntries.forEach((entry) => {
+    modelPaths.forEach((modelPath) => {
+        const storageKey = modelPath.replace(/^models\//, '');
+        const catalogEntry = entries.find((entry) => (
+            entry.asset_type === 'model' &&
+            entry.storage_provider === 'cloudflare' &&
+            entry.storage_key === storageKey &&
+            entry.public_url
+        ));
+        const modelUrl = catalogEntry?.public_url || `${cloudflareAssetsUrl}/${modelPath}`;
         const loader = new THREE.GLTFLoader();
         loader.setDRACOLoader(dracoLoader);
         loader.load(
-            entry.public_url.trim(),
+            modelUrl.trim(),
             (gltf) => disposeModel(gltf.scene),
             undefined,
             () => {}
@@ -369,7 +383,12 @@ function loadGLBModel(glbPath, texturePath) {
     loader.setDRACOLoader(dracoLoader);
 
     const storageKey = glbPath.replace(/^models\//, '');
-    fetchAssetPublicUrl('model', 'cloudflare', storageKey, glbPath)
+    fetchAssetPublicUrl(
+        'model',
+        'cloudflare',
+        storageKey,
+        `${cloudflareAssetsUrl}/${glbPath}`
+    )
         .then((resolvedGlbPath) => {
             if (request.cancelled) return;
 
