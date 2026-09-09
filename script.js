@@ -563,7 +563,7 @@ function showInfoPanel(title, subtitle, bodyText, introItalic, imgMain, imgMid, 
     const fullText = savedText?.full_text || '';
     if (savedText) {
         title = savedText.title || title;
-        bodyText = savedText.summary_text || bodyText;
+        bodyText = savedText.summary_text || '';
     }
     activeTourTextAction = '';
 
