@@ -458,6 +458,16 @@
              scale="0.3"
              zoom="true"
              onclick="show_spanish_era_panel();" />
+        
+         <!-- 3D Model Hotspot: Opens Three.js 3D viewer for bust model -->
+        <hotspot name="orignakinatatay"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-100"
+                 atv="13"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_3d_obj('models/orignakintatay.glb');" />
 
     </scene>
 
@@ -1051,23 +1061,23 @@
                  onclick="show_clay_gallery();" />
 		<hotspot name="spot2099921542" style="skin_hotspotstyle" ath="176.693" atv="8.295" depth="1000.0" linkedscene="scene_18" linkedscene_lookat="17.1,-2.75,120.0" />
    
-    <hotspot name="pangluto"
+    <hotspot name="flatiron"
                  style="info_hotspotstyle"
                  url="skin/info.png"
                  ath="55"
                  atv="20"
                  scale="0.3"
                  zoom="false"
-                 onclick="show_3d_obj('models/bust.glb');" />
+                 onclick="show_3d_obj('models/planchaflat.glb');" />
 
-    <hotspot name="ironman"
+    <hotspot name="plantsadeuling"
                  style="info_hotspotstyle"
                  url="skin/info.png"
                  ath="100"
                  atv="20"
                  scale="0.3"
                  zoom="false"
-                 onclick="show_3d_obj('models/bust.glb');" />
+                 onclick="show_3d_obj('models/plantsadeuling.glb');" />
    
     </scene>
 
@@ -1283,7 +1293,7 @@
                  atv="9"
                  scale="0.3"
                  zoom="false"
-                 onclick="show_3d_obj('models/bust.glb');" />
+                 onclick="show_3d_obj('models/DZMBMIC.glb');" />
    
     </scene>
 
