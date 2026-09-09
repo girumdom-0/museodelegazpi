@@ -702,6 +702,8 @@ window.toggleInfoTextDetails = toggleInfoTextDetails;
 const imagePopupState = {
     images: [],
     imageIndex: 0,
+    captions: [],
+    galleryTitle: 'Museum image',
     scale: 1,
     x: 0,
     y: 0,
@@ -724,6 +726,7 @@ function initImagePopup() {
     imagePopupElements.previous = document.getElementById('image_popup_previous');
     imagePopupElements.next = document.getElementById('image_popup_next');
     imagePopupElements.counter = document.getElementById('image_popup_counter');
+    imagePopupElements.caption = document.getElementById('image_popup_caption');
 
     if (!imagePopupElements.image || !imagePopupElements.backdrop) return;
 
@@ -821,6 +824,9 @@ function updateImagePopupGallery() {
     }
 
     imagePopupElements.counter.textContent = `${imageIndex + 1} / ${images.length}`;
+    const caption = imagePopupState.captions[imageIndex]
+        || `${imagePopupState.galleryTitle} — Image ${imageIndex + 1}`;
+    imagePopupElements.caption.textContent = caption;
     imagePopupElements.previous.hidden = images.length < 2;
     imagePopupElements.next.hidden = images.length < 2;
     resetImagePopupTransform();
@@ -833,13 +839,15 @@ function changeImagePopup(direction) {
 }
 
 /* Open the image popup and load the provided image source or gallery. */
-function showImagePopup(imageSrc, imageSources) {
+function showImagePopup(imageSrc, imageSources, captions = [], galleryTitle = 'Museum image') {
     closeAllModals();
     if (!imagePopupElements.backdrop || !imagePopupElements.modal || !imagePopupElements.image) return;
 
     imagePopupState.images = Array.isArray(imageSources) && imageSources.length
         ? imageSources
         : [imageSrc];
+    imagePopupState.captions = Array.isArray(captions) ? captions : [];
+    imagePopupState.galleryTitle = galleryTitle;
     imagePopupState.imageIndex = Math.max(0, imagePopupState.images.indexOf(imageSrc));
     updateImagePopupGallery();
     imagePopupElements.backdrop.style.display = 'block';

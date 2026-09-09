@@ -1,4 +1,4 @@
-<!-- File: tour.xml
+﻿<!-- File: tour.xml
     Purpose: Main krpano tour configuration. Defines scenes, layers, hotspots, and includes the skin.
     Notes: This is the primary configuration loaded by `embedpano`. Be cautious editing; prefer editing source files.
 -->
@@ -1003,7 +1003,11 @@
                 "images/mayor28.jpg",
                 "images/mayor29.jpg",
                 "images/mayor30.jpg",
-            ]
+            ],
+            [
+                "Balbino Belarmino, President, Municipality of Legazpi (1901–1903)"
+            ],
+            "Mayors of Legazpi"
         );
     ]]></action>
 
