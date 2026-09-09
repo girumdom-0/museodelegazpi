@@ -155,6 +155,28 @@ html, body {
     font-weight: bold;
 }
 
+#model3d_info_button {
+    position: absolute;
+    right: 13px;
+    top: calc(50% + 30px);
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 50%;
+    color: #ffffff;
+    background: rgba(0, 0, 0, 0.38);
+    font: 700 16px/1 Georgia, serif;
+    z-index: 100002;
+    cursor: pointer;
+}
+
+#model3d_info_button:hover,
+#model3d_info_button:focus-visible {
+    background: rgba(255, 255, 255, 0.25);
+    outline: none;
+}
+
 #model3d_info {
     position: absolute;
     left: 22px;
@@ -168,6 +190,10 @@ html, body {
     border-radius: 6px;
     z-index: 100001;
     pointer-events: none;
+}
+
+#model3d_info[hidden] {
+    display: none;
 }
 
 #model3d_info h2 {

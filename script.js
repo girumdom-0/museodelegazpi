@@ -382,6 +382,9 @@ function loadGLBModel(glbPath, texturePath) {
     };
     document.getElementById('model3d_title').textContent = modelInfo.title;
     document.getElementById('model3d_description').textContent = modelInfo.description;
+    document.getElementById('model3d_info').hidden = true;
+    document.getElementById('model3d_info_button').setAttribute('aria-label', `Show information about ${modelInfo.title}`);
+    document.getElementById('model3d_info_button').title = `Show information about ${modelInfo.title}`;
 
     document.getElementById("model3d_backdrop").style.display = "block";
     document.getElementById("model3d_modal").style.display = "block";
@@ -477,6 +480,17 @@ function loadGLBModel(glbPath, texturePath) {
         });
 }
 
+function toggleModel3DInfo() {
+    const info = document.getElementById('model3d_info');
+    const button = document.getElementById('model3d_info_button');
+    if (!info || !button) return;
+
+    info.hidden = !info.hidden;
+    const action = info.hidden ? 'Show' : 'Hide';
+    button.setAttribute('aria-label', `${action} model information`);
+    button.title = `${action} model information`;
+}
+
 function toggle3DFullscreen() {
     const modal = document.getElementById("model3d_modal");
     modal.classList.toggle("fullscreen");
@@ -496,6 +510,7 @@ function clearGLBModel() {
 window.loadGLBModel = loadGLBModel;
 window.clearGLBModel = clearGLBModel;
 window.toggle3DFullscreen = toggle3DFullscreen;
+window.toggleModel3DInfo = toggleModel3DInfo;
 window.show_3d_obj = loadGLBModel;
 
 function showTextModal(title, subtitle, bodyText, introItalicText) {

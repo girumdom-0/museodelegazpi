@@ -39,7 +39,8 @@
     <div id="model3d_expand" onclick="toggle3DFullscreen()" title="Toggle Fullscreen">⛶</div>
     <div id="model3d_close" onclick="clearGLBModel()" title="Close View">✕</div>
     <div id="model3d_icon">⤢<br>3D</div>
-    <div id="model3d_info">
+    <button id="model3d_info_button" type="button" onclick="toggleModel3DInfo()" title="Show model information" aria-label="Show model information">i</button>
+    <div id="model3d_info" hidden>
         <h2 id="model3d_title"></h2>
         <p id="model3d_description"></p>
     </div>
