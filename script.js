@@ -64,7 +64,7 @@ function assetCacheKey(assetType, storageProvider, storageKey) {
 
 function preloadAssetCatalog() {
     const params = new URLSearchParams({
-        select: 'asset_type,storage_provider,storage_key,public_url',
+        select: 'asset_type,storage_provider,storage_key,public_url,asset_name,title,description',
     });
 
     return fetch(`${supabaseAssetsUrl}?${params}`, {
@@ -73,6 +73,7 @@ function preloadAssetCatalog() {
     })
         .then((response) => response.ok ? response.json() : [])
         .then((entries) => {
+            cacheModelAssetInfo(entries);
             entries.forEach((entry) => {
                 const publicUrl = entry.public_url?.trim();
                 if (publicUrl) {
@@ -371,12 +372,27 @@ const modelDescriptions = {
     }
 };
 
+const modelAssetInfo = new Map();
+const imageAssetInfo = new Map();
+
+function cacheModelAssetInfo(entries) {
+    entries.forEach((entry) => {
+        if (!entry.storage_key) return;
+        const metadata = {
+            title: entry.title?.trim() || entry.asset_name?.trim() || '',
+            description: entry.description?.trim() || ''
+        };
+        if (entry.asset_type === 'model') modelAssetInfo.set(entry.storage_key.trim(), metadata);
+        if (entry.asset_type === 'image') imageAssetInfo.set(entry.storage_key.trim(), metadata);
+    });
+}
+
 function loadGLBModel(glbPath, texturePath) {
     closeAllModals();
     if (!renderer) initThreeJS();
 
     const modelName = glbPath.split('/').pop();
-    const modelInfo = modelDescriptions[modelName] || {
+    const modelInfo = modelAssetInfo.get(modelName) || modelDescriptions[modelName] || {
         title: '3D Exhibit',
         description: 'Explore this museum object in three dimensions.'
     };
@@ -824,7 +840,11 @@ function updateImagePopupGallery() {
     }
 
     imagePopupElements.counter.textContent = `${imageIndex + 1} / ${images.length}`;
+    const storageKey = imageSrc?.replace(/^images\//, '');
+    const databaseCaption = imageAssetInfo.get(storageKey)?.title
+        || imageAssetInfo.get(storageKey)?.description;
     const caption = imagePopupState.captions[imageIndex]
+        || databaseCaption
         || `${imagePopupState.galleryTitle} — Image ${imageIndex + 1}`;
     imagePopupElements.caption.textContent = caption;
     imagePopupElements.previous.hidden = images.length < 2;
