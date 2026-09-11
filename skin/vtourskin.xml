@@ -35,7 +35,7 @@
 	               thumbs_loop="false"
 	               tooltips_buttons="false"
 	               tooltips_thumbs="false"
-	               tooltips_hotspots="false"
+	                   tooltips_hotspots="true"
 	               tooltips_mapspots="false"
 	               deeplinking="false"
 	               loadscene_flags="MERGE"
@@ -286,17 +286,17 @@
 	       onclick="skin_hotspotstyle_click();"
 	       depth="1000"
 	       scale="0.5"
-	       onover.addevent="tween(scale,0.55);"
-	       onout.addevent="tween(scale,0.5);"
+	       onover.addevent="tween(scale,0.55); skin_show_hotspot_tooltip();"
+	       onout.addevent="tween(scale,0.5); skin_hide_hotspot_tooltip();"
 	       onloaded.addevent="skin_hotspotstyle_setup();"
 	       />
 
 	<!-- info_hotspotstyle - animated info icons used throughout the tour -->
 	<style name="info_hotspotstyle" url="skin/info.png" edge="top" distorted="true"
 	       scale="0.3"
-	       onover.addevent="tween(scale,0.34);"
-	       onout.addevent="tween(scale,0.3);"
-	       onloaded.addevent="delayedcall(0.4, info_hotspotstyle_bounce(get(name)));"
+	       onover.addevent="tween(scale,0.34); skin_show_hotspot_tooltip();"
+	       onout.addevent="tween(scale,0.3); skin_hide_hotspot_tooltip();"
+	       onloaded.addevent="delayedcall(0.4, info_hotspotstyle_bounce(get(name))); info_hotspotstyle_setup();"
 	       />
 
 	<action name="skin_hotspotstyle_bounce" scope="local" args="hotspotname">
@@ -321,9 +321,32 @@
 
 	<action name="skin_hotspotstyle_setup" scope="local">
 		if(isvalue(caller.linkedscene) AND skin_settings.tooltips_hotspots,
-			copy(caller.tooltip, scene[get(caller.linkedscene)].title);
+			copy(caller.tooltip, calc:'Go to Scene ' + scene[get(caller.linkedscene)].title);
 			caller.loadstyle(skin_tooltips);
 		);
+	</action>
+
+	<action name="info_hotspotstyle_setup" scope="local">
+		if(skin_settings.tooltips_hotspots,
+			set(caller.tooltip, 'Open Content');
+			caller.loadstyle(skin_tooltips);
+		);
+	</action>
+
+	<action name="skin_show_hotspot_tooltip" scope="local">
+		if(caller.linkedscene,
+			set(layer[skin_tooltip].html, calc:'Go to Scene ' + scene[get(caller.linkedscene)].title);
+		,
+			copy(layer[skin_tooltip].html, caller.tooltip);
+		);
+		copy(layer[skin_tooltip].x, mouse.stagex);
+		copy(layer[skin_tooltip].y, mouse.stagey);
+		set(layer[skin_tooltip].visible, true);
+		tween(layer[skin_tooltip].alpha, 1.0, 0.1);
+	</action>
+
+	<action name="skin_hide_hotspot_tooltip" scope="local">
+		tween(layer[skin_tooltip].alpha, 0.0, 0.1, default, set(layer[skin_tooltip].visible, false));
 	</action>
 
 	<action name="skin_hotspotstyle_click" scope="local">
@@ -399,7 +422,7 @@
 	       align="lefttop" edge="bottom" oy="-2" width="200"
 	       bgalpha="0.0"
 	       txtshadow="get:skin_settings.design_text_txtshadow"
-	       css="calc:skin_settings.design_text_css + ' text-align:center; font-size:16px;'"
+	       css="calc:skin_settings.design_text_css + ' text-align:center; font-size:16px; font-weight:bold;'"
 	       html=""
 	       />
 

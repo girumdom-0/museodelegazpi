@@ -372,6 +372,15 @@ const modelDescriptions = {
     }
 };
 
+const modelTextActions = {
+    'bust.glb': 'model_bust',
+    'general.glb': 'model_general',
+    'orignakintatay.glb': 'model_orignakintatay',
+    'planchaflat.glb': 'model_planchaflat',
+    'plantsadeuling.glb': 'model_plantsadeuling',
+    'DZMBMIC.glb': 'model_DZMBMIC'
+};
+
 const modelAssetInfo = new Map();
 const imageAssetInfo = new Map();
 
@@ -392,7 +401,11 @@ function loadGLBModel(glbPath, texturePath) {
     if (!renderer) initThreeJS();
 
     const modelName = glbPath.split('/').pop();
-    const modelInfo = modelAssetInfo.get(modelName) || modelDescriptions[modelName] || {
+    const modelText = tourTexts.get(modelTextActions[modelName]);
+    const modelInfo = modelText ? {
+        title: modelText.title?.trim() || modelDescriptions[modelName]?.title || '3D Exhibit',
+        description: modelText.summary_text?.trim() || modelText.full_text?.trim() || modelDescriptions[modelName]?.description || 'Explore this museum object in three dimensions.'
+    } : modelAssetInfo.get(modelName) || modelDescriptions[modelName] || {
         title: '3D Exhibit',
         description: 'Explore this museum object in three dimensions.'
     };
@@ -1027,7 +1040,7 @@ function toggleTTS(containerId, playBtnId, stopBtnId) {
 
     const title = container.querySelector('h2, [id$="_title"]')?.innerText || '';
     const subtitle = container.querySelector('[id$="_subtitle"]')?.innerText || '';
-    const bodyText = container.querySelector('[id$="_body"]')?.innerText || '';
+    const bodyText = container.querySelector('[id$="_body"], [id$="_description"], [id$="_summary"]')?.innerText || '';
 
     const fullTextToRead = `${title}. ${subtitle}. ${bodyText}`.trim();
     if (!fullTextToRead) return;

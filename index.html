@@ -41,6 +41,10 @@
     <div id="model3d_icon">⤢<br>3D</div>
     <button id="model3d_info_button" type="button" onclick="toggleModel3DInfo()" title="Show model information" aria-label="Show model information">i</button>
     <div id="model3d_info" hidden>
+        <div class="tts-controls">
+            <button id="tts_model_play_btn" onclick="toggleTTS('model3d_info', 'tts_model_play_btn', 'tts_model_stop_btn')" title="Listen to model description">▶ Listen</button>
+            <button id="tts_model_stop_btn" onclick="stopTTS()" title="Stop audio" style="display: none;">⏹ Stop</button>
+        </div>
         <h2 id="model3d_title"></h2>
         <p id="model3d_description"></p>
     </div>
