@@ -731,8 +731,6 @@ window.toggleInfoTextDetails = toggleInfoTextDetails;
 const imagePopupState = {
     images: [],
     imageIndex: 0,
-    captions: [],
-    galleryTitle: 'Museum image',
     scale: 1,
     x: 0,
     y: 0,
@@ -755,7 +753,6 @@ function initImagePopup() {
     imagePopupElements.previous = document.getElementById('image_popup_previous');
     imagePopupElements.next = document.getElementById('image_popup_next');
     imagePopupElements.counter = document.getElementById('image_popup_counter');
-    imagePopupElements.caption = document.getElementById('image_popup_caption');
 
     if (!imagePopupElements.image || !imagePopupElements.backdrop) return;
 
@@ -842,7 +839,7 @@ function updateImagePopupGallery() {
 
     if (imageSrc && !/^https?:\/\//i.test(imageSrc)) {
         const storageKey = imageSrc.replace(/^images\//, '');
-        fetchAssetPublicUrl('image', 'cloudflare', storageKey, imageSrc)
+        fetchAssetPublicUrl('image', 'cloudflare', storageKey, `${cloudflareAssetsUrl}/${imageSrc}`)
             .then((assetUrl) => {
                 if (imagePopupState.images[imagePopupState.imageIndex] === imageSrc) {
                     imagePopupElements.image.src = assetUrl;
@@ -853,13 +850,6 @@ function updateImagePopupGallery() {
     }
 
     imagePopupElements.counter.textContent = `${imageIndex + 1} / ${images.length}`;
-    const storageKey = imageSrc?.replace(/^images\//, '');
-    const databaseCaption = imageAssetInfo.get(storageKey)?.title
-        || imageAssetInfo.get(storageKey)?.description;
-    const caption = imagePopupState.captions[imageIndex]
-        || databaseCaption
-        || `${imagePopupState.galleryTitle} — Image ${imageIndex + 1}`;
-    imagePopupElements.caption.textContent = caption;
     imagePopupElements.previous.hidden = images.length < 2;
     imagePopupElements.next.hidden = images.length < 2;
     resetImagePopupTransform();
@@ -879,8 +869,6 @@ function showImagePopup(imageSrc, imageSources, captions = [], galleryTitle = 'M
     imagePopupState.images = Array.isArray(imageSources) && imageSources.length
         ? imageSources
         : [imageSrc];
-    imagePopupState.captions = Array.isArray(captions) ? captions : [];
-    imagePopupState.galleryTitle = galleryTitle;
     imagePopupState.imageIndex = Math.max(0, imagePopupState.images.indexOf(imageSrc));
     updateImagePopupGallery();
     imagePopupElements.backdrop.style.display = 'block';

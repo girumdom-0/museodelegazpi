@@ -581,7 +581,7 @@
 		);
 
 		if(skin_settings.littleplanetintro AND !global.startlookat AND device.webgl,
-			skin_setup_littleplanetintro();
+			skin_prepare_littleplanetintro();
 		);
 
 		skin_addthumbs();
@@ -726,13 +726,15 @@
 	</action>
 
 
-	<action name="skin_setup_littleplanetintro" scope="local">
+	<action name="skin_prepare_littleplanetintro" scope="local">
 		skin_hideskin(instant);
 		set(global.lpinfo, scene=get(xml.scene), hlookat=get(view.hlookat), vlookat=get(view.vlookat), fov=get(view.fov), fovmax=get(view.fovmax), limitview=get(view.limitview), hlookatmin=get(view.hlookatmin), hlookatmax=get(view.hlookatmax), vlookatmin=get(view.vlookatmin), vlookatmax=get(view.vlookatmax) );
 		set(view, fovmax=170, limitview=lookto, hlookatmin=-180, hlookatmax=+180, vlookatmin=+90, vlookatmax=+90);
 		lookat(calc(global.lpinfo.hlookat - 180), 90, 150, 1, 0, 0);
-		set(events[lp_events].onloadcomplete,
-			delayedcall(0.5,
+	</action>
+
+	<action name="skin_start_littleplanetintro" scope="local">
+		delayedcall(0.5,
 				if(lpinfo.scene === xml.scene,
 					set(control.usercontrol, off);
 					set(view.limitview, off);
@@ -751,7 +753,6 @@
 				  ,
 					delete(global.lpinfo);
 				);
-			);
 		);
 	</action>
 	

@@ -12,20 +12,20 @@
 
     <!-- 2. OVERLAY LAYERS (UI & POPUPS) -->
 
-    <!-- Intro Instructions Screen Overlay -->
-    <layer name="intro"
-           type="container"
-           keep="true"
-           width="100%"
-           height="100%"
-           bgcolor="0x000000"
-           bgalpha="0.2"
-           zorder="9999"
-           enabled="true"
-           bgcapture="true"
-           onclick="on_intro_click();">
+        <!-- Intro Instructions Screen Overlay -->
+        <layer name="intro"
+            type="container"
+            keep="true"
+            width="100%"
+            height="100%"
+            bgcolor="0x000000"
+            bgalpha="0.2"
+            zorder="9999"
+            enabled="true"
+            bgcapture="true"
+            onclick="on_intro_click();">
 
-        <!-- Image graphic inside the intro layer detailing navigation instructions -->
+         <!-- Image graphic inside the intro layer detailing navigation instructions -->
          <layer name="intro_guide"
              enabled="true"
              visible="true"
@@ -40,7 +40,7 @@
              keep="true"
              onclick="on_intro_click();"
              onresize.mobile="set(layer[intro_guide].width, calc:stagewidth*0.82); set(layer[intro_guide].height, calc:stageheight*0.78);" />
-    </layer>
+        </layer>
 
     <!-- Watermark / Branding Logo fixed at top-left corner -->
     <layer name ="logo"
@@ -57,7 +57,8 @@
 
     <!-- Fades out and hides the intro layer on first user click -->
     <action name="on_intro_click">
-        tween(layer[intro].alpha, 0, 0.5, easeOutQuad, set(layer[intro].visible, false));
+        set(layer[intro].enabled, false);
+        tween(layer[intro].alpha, 0, 0.5, easeOutQuad, set(layer[intro].visible, false); skin_start_littleplanetintro(); );
     </action>
 
 
@@ -313,6 +314,29 @@
         </image>
         <hotspot name="spot2085339706" style="skin_hotspotstyle" ath="59.768" atv="-5.189" depth="1000.0" linkedscene="scene_3" linkedscene_lookat="-17.74,1.12,120.0" />
         <hotspot name="spot2085346480" style="skin_hotspotstyle" ath="167.165" atv="32.759" depth="1000.0" linkedscene="scene_1" linkedscene_lookat="-2.25,-5.16,120.0" />
+    
+     <!-- Info Hotspot: Triggers single image pop-up -->
+        <hotspot name="painting"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-105"
+                 atv="-9"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene1.jpg');" />
+
+    <!-- Info Hotspot: Triggers single image pop-up -->
+        <hotspot name="statue"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="0"
+                 atv="5"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene1(2).jpg');" />
+
+    
+    
     </scene>
 
     <!-- SCENE 3 -->
@@ -325,6 +349,34 @@
         </image>
         <hotspot name="spot2085339894" style="skin_hotspotstyle" ath="-43.326" atv="5.46" depth="1000.0" linkedscene="scene_4" linkedscene_lookat="19.53,-4.49,120.0" />
         <hotspot name="spot2085346232" style="skin_hotspotstyle" ath="104.161" atv="17.351" depth="1000.0" linkedscene="scene_2" linkedscene_lookat="161.41,0.14,120.0" />
+   
+    <hotspot name="phil"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="115"
+                 atv="5"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene3(3).jpg');" />
+
+    <hotspot name="mayonvol"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="50"
+                 atv="5"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene3(2).jpg');" />
+   
+    <hotspot name="help"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-130"
+                 atv="-9"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene3.jpg');" />
+
     </scene>
 
     <!-- SCENE 4 -->
@@ -337,7 +389,39 @@
         </image>
         <hotspot name="spot2085340045" style="skin_hotspotstyle" ath="23.486" atv="-11.429" depth="1000.0" linkedscene="scene_5" linkedscene_lookat="82.4,5.16,120.0" />
         <hotspot name="spot2085346092" style="skin_hotspotstyle" ath="173.115" atv="32.87" depth="1000.0" linkedscene="scene_3" linkedscene_lookat="107.28,2.1,120.0" />
+   
+    <hotspot name="statue1"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-5"
+                 atv="-9"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene4.jpg');" />
+    
+    <hotspot name="spot_vission_gallery"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-40"
+                 atv="0"
+                 scale="0.4"
+                 zoom="false"
+                 onclick="show_vission_gallery();" />
+   
+   
     </scene>
+
+    <action name="show_vission_gallery" type="Javascript"><![CDATA[
+        showImagePopup(
+            "images/vision.jpg",
+            [
+                "images/vision.jpg",
+                "images/mission.jpg",
+                "images/scene4(2).jpg",
+                "images/scene4(3).jpg",
+            ]
+        );
+    ]]></action>
 
     <!-- SCENE 5 -->
     <scene name="scene_5" title="5" onstart="" thumburl="panos/5.tiles/thumb.webp" lat="" lng="" alt="" heading="">
@@ -459,7 +543,6 @@
              zoom="true"
              onclick="show_spanish_era_panel();" />
         
-         <!-- 3D Model Hotspot: Opens Three.js 3D viewer for bust model -->
         <hotspot name="orignakinatatay"
                  style="info_hotspotstyle"
                  url="skin/info.png"
@@ -467,7 +550,25 @@
                  atv="13"
                  scale="0.3"
                  zoom="false"
-                 onclick="show_3d_obj('models/orignakintatay.glb');" />
+                 onclick="show_image_popup('images/orignakinatay.jpg');" />
+
+        <hotspot name="vase1"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-75"
+                 atv="13"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/vase1.jpg');" />
+
+        <hotspot name="vase2"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-130"
+                 atv="13"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/vase2.jpg');" />
 
     </scene>
 
@@ -728,13 +829,12 @@
     <action name="show_regime_panel" type="Javascript"><![CDATA[
         setActiveTourTextAction("show_regime_panel");
         showInfoPanel(
-            "ECONOMIC TRANSFORMATIONS UNDER THE AMERICAN REGIME",
+            "ECONOMIC TRANSFORMATIONS DURING THE AMERICAN REGIME",
             "",
             "",
             "",
             "images/regime.jpg",
-            "images/regime1.jpg",
-            "images/regime2.jpg"
+            "images/regime1.jpg"
         );
     ]]></action>
 
@@ -879,7 +979,57 @@
         </image>
         <hotspot name="spot2085341720" style="skin_hotspotstyle" ath="-112.342" atv="10.435" depth="1000.0" linkedscene="scene_13" linkedscene_lookat="5.61,15.27,120.0" />
         <hotspot name="spot2085343972" style="skin_hotspotstyle" ath="65.459" atv="6.542" depth="1000.0" linkedscene="scene_11" linkedscene_lookat="-164.35,-3.73,120.0" />
+  
+   <hotspot name="spot_legazpito_gallery"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-40"
+                 atv="0"
+                 scale="0.4"
+                 zoom="false"
+                 onclick="show_legazpito_gallery();" />
+
+     <hotspot name="painting2"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="170"
+                 atv="3"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene4-paint(3).jpg');" />
+
+     <hotspot name="painting3"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-165"
+                 atv="3"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene4-paint(2).jpg');" />
+
+     <hotspot name="painting4x"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-145"
+                 atv="3"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/scene4-paint.jpg');" />
+   
+   
     </scene>
+
+    <action name="show_legazpito_gallery" type="Javascript"><![CDATA[
+        showImagePopup(
+            "images/legtoday.jpg",
+            [
+                "images/legtoday.jpg",
+                "images/legtoday1.jpg",
+                "images/legtoday2.jpg",
+            ]
+        );
+    ]]></action>
+   
 
     <!-- SCENE 13 -->
     <scene name="scene_13" title="13" onstart="" thumburl="panos/13.tiles/thumb.webp" lat="" lng="" alt="" heading="">
@@ -1051,6 +1201,7 @@
         </image>
         <hotspot name="spot2085342476" style="skin_hotspotstyle" ath="-90.198" atv="2.977" depth="1000.0" linkedscene="scene_17" linkedscene_lookat="-39.06,-4.27,120.0" />
         <hotspot name="spot2085343232" style="skin_hotspotstyle" ath="-3.935" atv="15.328" depth="1000.0" linkedscene="scene_15" linkedscene_hoffset="0.0" use3dtransition="true" />
+        <hotspot name="spot2099921542" style="skin_hotspotstyle" ath="176.693" atv="8.295" depth="1000.0" linkedscene="scene_18" linkedscene_lookat="17.1,-2.75,120.0" />
 
      <hotspot name="spot_clay_gallery"
                  style="info_hotspotstyle"
@@ -1060,7 +1211,6 @@
                  scale="0.4"
                  zoom="false"
                  onclick="show_clay_gallery();" />
-		<hotspot name="spot2099921542" style="skin_hotspotstyle" ath="176.693" atv="8.295" depth="1000.0" linkedscene="scene_18" linkedscene_lookat="17.1,-2.75,120.0" />
    
     <hotspot name="flatiron"
                  style="info_hotspotstyle"
@@ -1285,13 +1435,22 @@
                  atv="13.5"
                  scale="0.3"
                  zoom="false"
-                 onclick="show_image_popup('images/scene17(9).jpg');" />
+                 onclick="show_image_popup('images/obilisk.jpg');" />
+
+        <hotspot name="micbg"
+                 style="info_hotspotstyle"
+                 url="skin/info.png"
+                 ath="-14"
+                 atv="5"
+                 scale="0.3"
+                 zoom="false"
+                 onclick="show_image_popup('images/micnimic.jpg');" />
 
         <hotspot name="microphone"
                  style="info_hotspotstyle"
                  url="skin/info.png"
                  ath="-7"
-                 atv="9"
+                 atv="6"
                  scale="0.3"
                  zoom="false"
                  onclick="show_3d_obj('models/DZMBMIC.glb');" />
