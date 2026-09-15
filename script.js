@@ -55,7 +55,7 @@ function assetCacheKey(assetType, storageProvider, storageKey) {
 
 function preloadAssetCatalog() {
     const params = new URLSearchParams({
-        select: 'asset_type,storage_provider,storage_key,public_url,asset_name,title,description',
+        select: 'asset_type,storage_provider,storage_key,public_url',
     });
 
     return fetch(`${supabaseAssetsUrl}?${params}`, {
@@ -116,13 +116,11 @@ function cacheTourTexts(entries) {
 }
 
 function fetchTourTexts() {
-    return fetch('/api/tour-texts', { cache: 'no-store' })
-        .then((response) => response.ok ? response.json() : Promise.reject(new Error('Local API unavailable')))
-        .catch(() => fetch(supabaseTourTextsUrl, {
-            cache: 'no-store',
-            headers: { apikey: supabaseTourTextsKey, Authorization: `Bearer ${supabaseTourTextsKey}` },
-        }))
-        .then((response) => response && response.ok ? response.json() : [])
+    return fetch(supabaseTourTextsUrl, {
+        cache: 'no-store',
+        headers: { apikey: supabaseTourTextsKey, Authorization: `Bearer ${supabaseTourTextsKey}` },
+    })
+        .then((response) => response.ok ? response.json() : [])
         .then((entries) => {
             cacheTourTexts(entries || []);
             return entries || [];
@@ -130,7 +128,6 @@ function fetchTourTexts() {
 }
 
 fetchTourTexts().catch(() => {});
-window.setInterval(() => fetchTourTexts().catch(() => {}), 3000);
 
 function setActiveTourTextAction(actionName) {
     activeTourTextAction = actionName;
@@ -620,7 +617,7 @@ function showInfoPanel(title, subtitle, bodyText, introItalic, imgMain, imgMid, 
     const moreButton = document.getElementById("info_panel_more");
     bodyContainer.innerHTML = "";
     moreButton.hidden = !fullText;
-    moreButton.textContent = "See more";
+    moreButton.textContent = "Full Text";
     bodyContainer.dataset.expanded = "false";
 
     if (introItalic) {
@@ -679,10 +676,10 @@ function toggleInfoTextDetails() {
     const moreButton = document.getElementById("info_panel_more");
     if (!summary || !fullText || !moreButton) return;
 
-    const expanded = moreButton.textContent === "See more";
+    const expanded = moreButton.textContent === "Full Text";
     summary.hidden = expanded;
     fullText.hidden = !expanded;
-    moreButton.textContent = expanded ? "Show less" : "See more";
+    moreButton.textContent = expanded ? "Back" : "Full Text";
 }
 
 function closeInfoPanel() {
