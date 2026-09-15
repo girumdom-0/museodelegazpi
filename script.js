@@ -23,15 +23,6 @@ const supabaseAssetsKey = 'sb_publishable_NW9pedzYcVN0nIbzusJELQ_G9KsMwrU';
 const cloudflareAssetsUrl = 'https://museodelegazpi-assets.07304476.workers.dev';
 const assetUrlCache = new Map();
 let assetCatalogPromise;
-const modelPaths = [
-    'models/bust.glb',
-    'models/orignakintatay.glb',
-    'models/general.glb',
-    'models/planchaflat.glb',
-    'models/plantsadeuling.glb',
-    'models/DZMBMIC.glb',
-];
-
 const localFullTexts = new Map([
     ['show_sister_city_info', `SISTER CITY-RELATIONSHIP
 BETWEEN THE CITY OF
@@ -88,30 +79,6 @@ function preloadAssetCatalog() {
         .catch(() => []);
 }
 
-function preloadModels(entries) {
-    const dracoLoader = new THREE.DRACOLoader();
-    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
-
-    modelPaths.forEach((modelPath) => {
-        const storageKey = modelPath.replace(/^models\//, '');
-        const catalogEntry = entries.find((entry) => (
-            entry.asset_type === 'model' &&
-            entry.storage_provider === 'cloudflare' &&
-            entry.storage_key === storageKey &&
-            entry.public_url
-        ));
-        const modelUrl = catalogEntry?.public_url || `${cloudflareAssetsUrl}/${modelPath}`;
-        const loader = new THREE.GLTFLoader();
-        loader.setDRACOLoader(dracoLoader);
-        loader.load(
-            modelUrl.trim(),
-            (gltf) => disposeModel(gltf.scene),
-            undefined,
-            () => {}
-        );
-    });
-}
-
 function fetchAssetPublicUrl(assetType, storageProvider, storageKey, fallbackUrl) {
     const cacheKey = assetCacheKey(assetType, storageProvider, storageKey);
     const cachedUrl = assetUrlCache.get(cacheKey);
@@ -143,7 +110,6 @@ function fetchAssetPublicUrl(assetType, storageProvider, storageKey, fallbackUrl
 }
 
 assetCatalogPromise = preloadAssetCatalog();
-assetCatalogPromise.then(preloadModels);
 
 function cacheTourTexts(entries) {
     entries.forEach((entry) => tourTexts.set(entry.action_name, entry));
@@ -276,7 +242,8 @@ function initThreeJS() {
 
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    const maxPixelRatio = window.matchMedia('(max-width: 900px)').matches ? 1 : 1.5;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, maxPixelRatio));
 
     if ('outputColorSpace' in renderer) {
         renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -582,7 +549,7 @@ function showTextModal(title, subtitle, bodyText, introItalicText) {
         fullTextContainer.hidden = true;
         bodyContainer.appendChild(fullTextContainer);
         moreButton.hidden = false;
-        moreButton.textContent = "See more";
+        moreButton.textContent = "Full Text";
     } else {
         moreButton.hidden = true;
     }
