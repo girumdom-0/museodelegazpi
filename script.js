@@ -698,6 +698,7 @@ window.toggleInfoTextDetails = toggleInfoTextDetails;
 const imagePopupState = {
     images: [],
     imageIndex: 0,
+    requestId: 0,
     scale: 1,
     x: 0,
     y: 0,
@@ -803,17 +804,26 @@ function handleImageWheel(event) {
 function updateImagePopupGallery() {
     const { images, imageIndex } = imagePopupState;
     const imageSrc = images[imageIndex];
+    const requestId = ++imagePopupState.requestId;
+
+    imagePopupElements.image.removeAttribute('src');
+    imagePopupElements.image.alt = 'Loading museum image';
 
     if (imageSrc && !/^https?:\/\//i.test(imageSrc)) {
         const storageKey = imageSrc.replace(/^images\//, '');
-        fetchAssetPublicUrl('image', 'cloudflare', storageKey, `${cloudflareAssetsUrl}/${imageSrc}`)
+        const fallbackUrl = `${cloudflareAssetsUrl}/${imageSrc}`;
+        imagePopupElements.image.src = fallbackUrl;
+        imagePopupElements.image.alt = 'Museum image';
+        fetchAssetPublicUrl('image', 'cloudflare', storageKey, fallbackUrl)
             .then((assetUrl) => {
-                if (imagePopupState.images[imagePopupState.imageIndex] === imageSrc) {
+                if (requestId === imagePopupState.requestId) {
                     imagePopupElements.image.src = assetUrl;
+                    imagePopupElements.image.alt = 'Museum image';
                 }
             });
     } else {
         imagePopupElements.image.src = imageSrc;
+        imagePopupElements.image.alt = 'Museum image';
     }
 
     imagePopupElements.counter.textContent = `${imageIndex + 1} / ${images.length}`;
