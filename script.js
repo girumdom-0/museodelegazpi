@@ -13,6 +13,8 @@
 let scene, camera, renderer, controls, currentModel;
 let currentTexture = null;
 let modelRequest = null;
+let threeResizeHandler = null;
+let threeAnimationActive = false;
 let activeTourTextAction = '';
 const tourTexts = new Map();
 
@@ -209,6 +211,7 @@ setMusicButtonState();
 
 function initThreeJS() {
     const container = document.getElementById("threejs_container");
+    threeAnimationActive = true;
     scene = new THREE.Scene();
 
     camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.01, 1000);
@@ -243,6 +246,7 @@ function initThreeJS() {
     controls.dampingFactor = 0.05;
 
     function animate() {
+        if (!threeAnimationActive) return;
         requestAnimationFrame(animate);
         if (document.getElementById("model3d_modal").style.display !== "none") {
             controls.update();
@@ -251,7 +255,8 @@ function initThreeJS() {
     }
     animate();
 
-    window.addEventListener('resize', updateViewportDimensions);
+    threeResizeHandler = updateViewportDimensions;
+    window.addEventListener('resize', threeResizeHandler);
 }
 
 function updateViewportDimensions() {
@@ -475,6 +480,25 @@ function clearGLBModel() {
     const modal = document.getElementById("model3d_modal");
     modal.style.display = "none";
     modal.classList.remove("fullscreen");
+
+    threeAnimationActive = false;
+    if (threeResizeHandler) {
+        window.removeEventListener('resize', threeResizeHandler);
+        threeResizeHandler = null;
+    }
+    if (controls) {
+        controls.dispose();
+        controls = null;
+    }
+    if (renderer) {
+        renderer.renderLists.dispose();
+        renderer.dispose();
+        if (typeof renderer.forceContextLoss === 'function') renderer.forceContextLoss();
+        renderer.domElement.remove();
+        renderer = null;
+    }
+    scene = null;
+    camera = null;
 }
 
 window.loadGLBModel = loadGLBModel;
