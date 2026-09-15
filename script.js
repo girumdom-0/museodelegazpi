@@ -217,9 +217,14 @@ function initThreeJS() {
     camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.01, 1000);
     camera.position.set(0, 0, 3);
 
-    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    const isMobileDevice = window.matchMedia('(max-width: 900px)').matches;
+    renderer = new THREE.WebGLRenderer({
+        antialias: !isMobileDevice,
+        alpha: true,
+        powerPreference: 'low-power'
+    });
     renderer.setSize(container.clientWidth, container.clientHeight);
-    const maxPixelRatio = window.matchMedia('(max-width: 900px)').matches ? 1 : 1.5;
+    const maxPixelRatio = isMobileDevice ? 0.75 : 1.5;
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, maxPixelRatio));
 
     if ('outputColorSpace' in renderer) {
