@@ -567,7 +567,7 @@ function toggleTextDetails() {
     textDetailsExpanded = !textDetailsExpanded;
     summaryContainer.hidden = textDetailsExpanded;
     fullTextContainer.hidden = !textDetailsExpanded;
-    moreButton.textContent = textDetailsExpanded ? "Show less" : "See more";
+    moreButton.textContent = textDetailsExpanded ? "Back" : "Full Text";
 }
 
 function closeTextModal() {

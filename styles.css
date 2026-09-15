@@ -818,3 +818,81 @@ html, body {
 .tts-controls button:active {
     transform: scale(0.98);
 }
+
+@media (max-width: 700px) {
+    #info_panel_modal {
+        width: calc(100vw - 24px);
+        height: calc(100vh - 24px);
+        max-width: none;
+        max-height: none;
+        padding: 46px 14px 16px;
+        border-radius: 12px;
+    }
+
+    #info_panel_close {
+        top: 10px;
+        right: 12px;
+        width: 34px;
+        height: 34px;
+    }
+
+    #info_panel_container {
+        display: block;
+        height: 100%;
+        padding-right: 4px;
+        overflow-y: auto;
+    }
+
+    #info_panel_gallery {
+        display: flex;
+        position: static;
+        width: 100%;
+        gap: 10px;
+        padding: 0 0 18px;
+    }
+
+    .gallery-img-wrapper img {
+        max-height: 34vh;
+        object-fit: contain;
+    }
+
+    .gallery-bottom-row {
+        gap: 8px;
+    }
+
+    #info_panel_card {
+        width: 100%;
+        min-height: 0;
+        padding: 0 2px 12px;
+    }
+
+    #info_panel_title {
+        margin-right: 42px;
+        font-size: 1.2rem;
+        line-height: 1.2;
+    }
+
+    #info_panel_subtitle,
+    #info_panel_body {
+        font-size: 1rem;
+        line-height: 1.45;
+    }
+
+    #info_panel_subtitle {
+        margin-bottom: 14px;
+    }
+
+    #info_panel_body {
+        text-align: left;
+    }
+
+    #info_panel_more {
+        margin-top: 16px;
+        padding: 9px 14px;
+        font-size: 0.95rem;
+    }
+
+    #info_panel_card .tts-controls {
+        margin-bottom: 12px;
+    }
+}
