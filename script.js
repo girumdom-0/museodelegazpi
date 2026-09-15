@@ -1080,4 +1080,3 @@ function resetTTSUI() {
     activeStopBtnId = null;
 }
 
-embedpano({ xml: "tour.xml", passQueryParameters: "startscene,startlookat", consolelog: true });
