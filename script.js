@@ -30,6 +30,7 @@ const supabaseAssetsUrl = 'https://qysyaobzgltbxrpqjssv.supabase.co/rest/v1/asse
 const supabaseAssetsKey = 'sb_publishable_NW9pedzYcVN0nIbzusJELQ_G9KsMwrU';
 const cloudflareAssetsUrl = 'https://museodelegazpi-assets.07304476.workers.dev';
 const assetUrlCache = new Map();
+const prefetchedModelUrls = new Set();
 let assetCatalogPromise;
 let textDetailsExpanded = false;
 // Enable Three.js internal caching for loaded resources.
@@ -349,6 +350,35 @@ function removeCurrentModel() {
     }
 }
 
+function prefetchRemainingModels(activeUrl) {
+    const connection = navigator.connection;
+    if (connection?.saveData || /(^|-)2g$/.test(connection?.effectiveType || '')) return;
+
+    const modelUrls = Object.keys(modelTextActions).map((modelName) => `${cloudflareAssetsUrl}/models/${modelName}`);
+    const urlsToPrefetch = modelUrls.filter((url) => url !== activeUrl && !prefetchedModelUrls.has(url));
+    if (!urlsToPrefetch.length) return;
+
+    const prefetchNext = () => {
+        const url = urlsToPrefetch.shift();
+        if (!url) return;
+        prefetchedModelUrls.add(url);
+        fetch(url, { cache: 'force-cache' })
+            .then((response) => response.ok ? response.arrayBuffer() : null)
+            .then((data) => {
+                if (data && THREE.Cache.enabled) THREE.Cache.add(url, data);
+            })
+            .catch(() => prefetchedModelUrls.delete(url))
+            .finally(() => {
+                if (urlsToPrefetch.length) {
+                    window.setTimeout(prefetchNext, 1500);
+                }
+            });
+    };
+
+    const schedule = window.requestIdleCallback || ((callback) => window.setTimeout(callback, 2500));
+    schedule(prefetchNext, { timeout: 5000 });
+}
+
 const modelTextActions = {
     // Map each GLB filename to the matching Supabase tour-text action.
     'bust.glb': 'model_bust',
@@ -402,6 +432,7 @@ function loadGLBModel(glbPath, texturePath) {
     document.getElementById('model3d_info_button').setAttribute('aria-label', `Show information about ${modelInfo.title}`);
     document.getElementById('model3d_info_button').title = `Show information about ${modelInfo.title}`;
     document.getElementById('threejs_container').setAttribute('aria-busy', 'true');
+    document.getElementById('threejs_container').setAttribute('data-load-progress', '0%');
 
     // Make the model backdrop and dialog visible before loading begins.
     document.getElementById("model3d_backdrop").style.display = "block";
@@ -441,6 +472,8 @@ function loadGLBModel(glbPath, texturePath) {
     const loader = new THREE.GLTFLoader();
     const dracoLoader = new THREE.DRACOLoader();
     dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
+    // Begin loading the Draco decoder while the model request is in flight.
+    dracoLoader.preload();
     loader.setDRACOLoader(dracoLoader);
 
     const storageKey = glbPath.replace(/^models\//, '');
@@ -499,8 +532,14 @@ function loadGLBModel(glbPath, texturePath) {
 
             controls.target.set(0, 0, 0);
             controls.update();
+            prefetchRemainingModels(resolvedGlbPath);
         },
-        undefined,
+        (progressEvent) => {
+            const container = document.getElementById('threejs_container');
+            if (!container || !progressEvent.lengthComputable) return;
+            const percent = Math.round((progressEvent.loaded / progressEvent.total) * 100);
+            container.setAttribute('data-load-progress', `${percent}%`);
+        },
         (error) => {
             if (request.cancelled || request.loadVersion !== modelLoadVersion) return;
             document.getElementById('threejs_container').setAttribute('aria-busy', 'false');

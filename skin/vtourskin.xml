@@ -296,7 +296,7 @@
 	       scale="0.3"
 	       onover.addevent="tween(scale,0.34); skin_show_hotspot_tooltip();"
 	       onout.addevent="tween(scale,0.3); skin_hide_hotspot_tooltip();"
-	       onloaded.addevent="delayedcall(0.4, info_hotspotstyle_bounce(get(name))); info_hotspotstyle_setup();"
+	       onloaded.addevent="info_hotspotstyle_setup();"
 	       />
 
 	<action name="skin_hotspotstyle_bounce" scope="local" args="hotspotname">

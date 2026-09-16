@@ -264,7 +264,7 @@ html, body {
 }
 
 #threejs_container[aria-busy="true"]::after {
-    content: "Loading 3D exhibit...";
+    content: "Loading 3D exhibit " attr(data-load-progress);
     position: absolute;
     inset: 50% auto auto 50%;
     transform: translate(-50%, -50%);
