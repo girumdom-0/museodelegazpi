@@ -359,6 +359,12 @@ const modelTextActions = {
     'DZMBMIC.glb': 'model_DZMBMIC'
 };
 
+const remoteModelKeys = {
+    'bust.glb': 'models_bust_mobile.glb',
+    'plantsadeuling.glb': 'models_plantsadeuling_mobile.glb',
+    'DZMBMIC.glb': 'models_DZMBMIC_mobile.glb'
+};
+
 // Cache metadata for models and images returned by the asset catalog.
 const modelAssetInfo = new Map();
 const imageAssetInfo = new Map();
@@ -442,12 +448,11 @@ function loadGLBModel(glbPath, texturePath) {
     const loader = new THREE.GLTFLoader();
     const dracoLoader = new THREE.DRACOLoader();
     dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
-    // Begin loading the Draco decoder while the model request is in flight.
-    dracoLoader.preload();
     loader.setDRACOLoader(dracoLoader);
 
-    const storageKey = glbPath.replace(/^models\//, '');
-    const fallbackModelPath = `${cloudflareAssetsUrl}/${glbPath}`;
+    const requestedModelKey = glbPath.replace(/^models\//, '');
+    const storageKey = remoteModelKeys[requestedModelKey] || requestedModelKey;
+    const fallbackModelPath = `${cloudflareAssetsUrl}/models/${storageKey}`;
     const cachedModelPath = assetUrlCache.get(assetCacheKey('model', 'cloudflare', storageKey));
     // Start downloading from the known Cloudflare URL without waiting for Supabase.
     Promise.resolve(cachedModelPath || fallbackModelPath)
