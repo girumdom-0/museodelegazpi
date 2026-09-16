@@ -30,7 +30,6 @@ const supabaseAssetsUrl = 'https://qysyaobzgltbxrpqjssv.supabase.co/rest/v1/asse
 const supabaseAssetsKey = 'sb_publishable_NW9pedzYcVN0nIbzusJELQ_G9KsMwrU';
 const cloudflareAssetsUrl = 'https://museodelegazpi-assets.07304476.workers.dev';
 const assetUrlCache = new Map();
-const prefetchedModelUrls = new Set();
 let assetCatalogPromise;
 let textDetailsExpanded = false;
 // Enable Three.js internal caching for loaded resources.
@@ -257,7 +256,7 @@ function initThreeJS() {
         powerPreference: 'low-power'
     });
     renderer.setSize(container.clientWidth, container.clientHeight);
-    const maxPixelRatio = isMobileDevice ? 0.75 : 1.5;
+    const maxPixelRatio = isMobileDevice ? 0.5 : 1.5;
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, maxPixelRatio));
 
     // Use the correct color-management API for the loaded Three.js version.
@@ -348,35 +347,6 @@ function removeCurrentModel() {
         currentTexture.dispose();
         currentTexture = null;
     }
-}
-
-function prefetchRemainingModels(activeUrl) {
-    const connection = navigator.connection;
-    if (connection?.saveData || /(^|-)2g$/.test(connection?.effectiveType || '')) return;
-
-    const modelUrls = Object.keys(modelTextActions).map((modelName) => `${cloudflareAssetsUrl}/models/${modelName}`);
-    const urlsToPrefetch = modelUrls.filter((url) => url !== activeUrl && !prefetchedModelUrls.has(url));
-    if (!urlsToPrefetch.length) return;
-
-    const prefetchNext = () => {
-        const url = urlsToPrefetch.shift();
-        if (!url) return;
-        prefetchedModelUrls.add(url);
-        fetch(url, { cache: 'force-cache' })
-            .then((response) => response.ok ? response.arrayBuffer() : null)
-            .then((data) => {
-                if (data && THREE.Cache.enabled) THREE.Cache.add(url, data);
-            })
-            .catch(() => prefetchedModelUrls.delete(url))
-            .finally(() => {
-                if (urlsToPrefetch.length) {
-                    window.setTimeout(prefetchNext, 1500);
-                }
-            });
-    };
-
-    const schedule = window.requestIdleCallback || ((callback) => window.setTimeout(callback, 2500));
-    schedule(prefetchNext, { timeout: 5000 });
 }
 
 const modelTextActions = {
@@ -532,7 +502,6 @@ function loadGLBModel(glbPath, texturePath) {
 
             controls.target.set(0, 0, 0);
             controls.update();
-            prefetchRemainingModels(resolvedGlbPath);
         },
         (progressEvent) => {
             const container = document.getElementById('threejs_container');
