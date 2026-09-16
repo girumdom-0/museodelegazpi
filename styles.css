@@ -5,6 +5,7 @@
         - Keep responsive rules and modal z-index ordering when modifying.
 */
 /* Global Reset and Layout */
+/* Establish the full-screen page canvas and shared base typography/colors. */
 html, body {
     height: 100%;
     overflow: hidden;
@@ -16,6 +17,7 @@ html, body {
     background-color: #000000;
 }
 
+/* Position the optional music control above the Krpano viewer. */
 .skin-music-button {
     position: fixed;
     top: 18px;
@@ -37,12 +39,14 @@ html, body {
     transition: background-color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
 }
 
+/* Brighten and lift the music control when the pointer is over it. */
 .skin-music-button:hover {
     background: rgba(20, 20, 20, 0.6);
     border-color: rgba(255, 255, 255, 0.5);
     transform: translateY(-1px);
 }
 
+/* Show the muted visual state when background music is disabled. */
 .skin-music-button.muted {
     background: rgba(40, 40, 40, 0.55);
     border-color: rgba(255, 255, 255, 0.2);
@@ -50,6 +54,7 @@ html, body {
 }
 
 /* 1. 3D MODEL MODAL STYLES */
+/* Dim and blur the page behind the 3D viewer. */
 #model3d_backdrop {
     display: none;
     position: fixed;
@@ -63,6 +68,7 @@ html, body {
     z-index: 99998;
 }
 
+/* Center the main 3D viewer dialog and establish its stacking order. */
 #model3d_modal {
     display: none;
     position: fixed;
@@ -82,6 +88,7 @@ html, body {
     transition: width 0.25s ease, height 0.25s ease, max-width 0.25s ease, max-height 0.25s ease, border-radius 0.25s ease;
 }
 
+/* Expand the 3D dialog to the entire viewport in fullscreen mode. */
 #model3d_modal.fullscreen {
     width: 100vw !important;
     height: 100vh !important;
@@ -91,6 +98,7 @@ html, body {
     border: none !important;
 }
 
+/* Style the circular close control in the 3D viewer. */
 #model3d_close {
     position: absolute;
     top: 12px;
@@ -111,11 +119,13 @@ html, body {
     user-select: none;
 }
 
+/* Highlight the 3D close control on hover. */
 #model3d_close:hover {
     background: rgba(255, 255, 255, 0.25);
     transform: scale(1.05);
 }
 
+/* Style the circular fullscreen toggle in the 3D viewer. */
 #model3d_expand {
     position: absolute;
     top: 12px;
@@ -136,12 +146,14 @@ html, body {
     transition: all 0.2s ease;
 }
 
+/* Highlight the fullscreen toggle on hover. */
 #model3d_expand:hover {
     color: #ffffff;
     background: rgba(255, 255, 255, 0.25);
     transform: scale(1.05);
 }
 
+/* Display the non-interactive 3D marker along the viewer edge. */
 #model3d_icon {
     position: absolute;
     right: 15px;
@@ -155,6 +167,7 @@ html, body {
     font-weight: bold;
 }
 
+/* Position the button that reveals model information. */
 #model3d_info_button {
     position: absolute;
     right: 13px;
@@ -171,12 +184,14 @@ html, body {
     cursor: pointer;
 }
 
+/* Give the model-information button a visible keyboard and hover state. */
 #model3d_info_button:hover,
 #model3d_info_button:focus-visible {
     background: rgba(255, 255, 255, 0.25);
     outline: none;
 }
 
+/* Render the expandable model title and description panel. */
 #model3d_info {
     position: absolute;
     left: 22px;
@@ -192,16 +207,19 @@ html, body {
     pointer-events: auto;
 }
 
+/* Keep hidden model information removed from the layout. */
 #model3d_info[hidden] {
     display: none;
 }
 
+/* Arrange model TTS controls in a compact horizontal row. */
 #model3d_info .tts-controls {
     display: flex;
     gap: 8px;
     margin-bottom: 10px;
 }
 
+/* Style the smaller TTS buttons inside the model-information panel. */
 #model3d_info .tts-controls button {
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 999px;
@@ -212,12 +230,14 @@ html, body {
     cursor: pointer;
 }
 
+/* Set the model-information heading spacing and scale. */
 #model3d_info h2 {
     margin: 0 0 7px;
     font-size: 1.05rem;
     line-height: 1.25;
 }
 
+/* Set the model-information paragraph readability. */
 #model3d_info p {
     margin: 0;
     color: rgba(255, 255, 255, 0.82);
@@ -225,6 +245,7 @@ html, body {
     line-height: 1.45;
 }
 
+/* Fill the modal with the Three.js canvas behind the controls. */
 #threejs_container {
     width: 100%;
     height: 100%;
@@ -232,9 +253,18 @@ html, body {
     top: 0;
     left: 0;
     z-index: 100000;
+    touch-action: none;
+    overscroll-behavior: none;
+}
+
+/* Let OrbitControls receive one- and two-finger gestures without Safari scrolling the page. */
+#threejs_container canvas {
+    display: block;
+    touch-action: none;
 }
 
 /* Battle of Legazpi video modal */
+/* Dim the page behind the historical video dialog. */
 #battle_video_backdrop {
     display: none;
     position: fixed;
@@ -245,6 +275,7 @@ html, body {
     z-index: 99998;
 }
 
+/* Center and size the Battle of Legazpi video dialog. */
 #battle_video_modal {
     display: none;
     position: fixed;
@@ -262,12 +293,14 @@ html, body {
     z-index: 99999;
 }
 
+/* Style the video dialog heading. */
 #battle_video_modal h2 {
     margin: 0 48px 16px 0;
     color: #ffffff;
     font-size: 1.25rem;
 }
 
+/* Make the video fill the available dialog width. */
 #battle_video {
     display: block;
     width: 100%;
@@ -275,6 +308,7 @@ html, body {
     background: #000000;
 }
 
+/* Position the video dialog close control. */
 #battle_video_close {
     position: absolute;
     top: 14px;
@@ -289,6 +323,7 @@ html, body {
 }
 
 /* 2. TEXT-ONLY MODAL STYLES */
+/* Share the backdrop treatment between supported text modal IDs. */
 #text_backdrop,
 #text_modal_backdrop {
     display: none;
@@ -303,6 +338,7 @@ html, body {
     z-index: 99998;
 }
 
+/* Center the scrollable text-only modal and apply its visual theme. */
 #text_modal_card {
     display: none;
     position: fixed;
@@ -323,19 +359,23 @@ html, body {
     z-index: 99999;
 }
 
+/* Use a compact scrollbar for the long text modal. */
 #text_modal_card {
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 255, 255, 0.28) transparent;
 }
 
+/* Set the width of the text modal's WebKit scrollbar. */
 #text_modal_card::-webkit-scrollbar {
     width: 9px;
 }
 
+/* Keep the scrollbar track transparent. */
 #text_modal_card::-webkit-scrollbar-track {
     background: transparent;
 }
 
+/* Style the draggable scrollbar thumb. */
 #text_modal_card::-webkit-scrollbar-thumb {
     min-height: 44px;
     border: 3px solid transparent;
@@ -344,23 +384,27 @@ html, body {
     background-color: rgba(255, 255, 255, 0.28);
 }
 
+/* Reserve space for supported scrollbar arrow buttons. */
 #text_modal_card::-webkit-scrollbar-button:single-button {
     height: 14px;
     background-color: transparent;
 }
 
+/* Draw the upward scrollbar arrow. */
 #text_modal_card::-webkit-scrollbar-button:single-button:vertical:decrement {
     border-width: 0 4px 5px;
     border-style: solid;
     border-color: transparent transparent rgba(255, 255, 255, 0.28);
 }
 
+/* Draw the downward scrollbar arrow. */
 #text_modal_card::-webkit-scrollbar-button:single-button:vertical:increment {
     border-width: 5px 4px 0;
     border-style: solid;
     border-color: rgba(255, 255, 255, 0.28) transparent transparent;
 }
 
+/* Position and style the text modal close button. */
 #text_modal_close {
     position: absolute;
     top: 18px;
@@ -383,11 +427,13 @@ html, body {
     pointer-events: auto;
 }
 
+/* Highlight the text modal close button on hover. */
 #text_modal_close:hover {
     background: rgba(0, 0, 0, 0.15);
     transform: scale(1.08);
 }
 
+/* Format the text modal title. */
 #text_modal_title {
     font-size: 1.33rem;
     font-weight: 700;
@@ -396,6 +442,7 @@ html, body {
     line-height: 1.3;
 }
 
+/* Format the optional text modal subtitle. */
 #text_modal_subtitle {
     font-size: 1.23rem;
     font-weight: 400;
@@ -404,6 +451,7 @@ html, body {
     text-align: justify;
 }
 
+/* Format the main text modal body and preserve line breaks. */
 #text_modal_body {
     font-size: 1.23rem;
     line-height: 1.6;
@@ -412,12 +460,14 @@ html, body {
     text-align: justify;
 }
 
+/* Separate expanded text from the summary with a divider. */
 #text_modal_full_text {
     margin-top: 20px;
     padding-top: 20px;
     border-top: 1px solid rgba(0, 0, 0, 0.25);
 }
 
+/* Style the button that switches between summary and full text. */
 #text_modal_more {
     margin-top: 22px;
     padding: 10px 18px;
@@ -429,12 +479,14 @@ html, body {
     cursor: pointer;
 }
 
+/* Format optional introductory copy in italic text. */
 .text-italic-intro {
     font-style: italic;
     margin-bottom: 18px;
 }
 
 /* 3. COMBINED IMAGE & TEXT MODAL STYLES */
+/* Dim and blur the page behind the combined exhibit panel. */
 #info_panel_backdrop {
     display: none;
     position: fixed;
@@ -448,6 +500,7 @@ html, body {
     z-index: 99998;
 }
 
+/* Center and size the combined image-and-text exhibit panel. */
 #info_panel_modal {
     display: none;
     position: fixed;
@@ -467,6 +520,7 @@ html, body {
     overflow: hidden;
 }
 
+/* Create the darker backdrop for the full-screen image popup. */
 #image_popup_backdrop {
     display: none;
     position: fixed;
@@ -480,6 +534,7 @@ html, body {
     -webkit-backdrop-filter: blur(6px);
 }
 
+/* Create the image popup frame and its vertical content layout. */
 #image_popup_modal {
     display: none;
     position: fixed;
@@ -499,6 +554,7 @@ html, body {
     overflow: hidden;
 }
 
+/* Center the active image within the popup content region. */
 #image_popup_content {
     flex: 1;
     position: relative;
@@ -509,6 +565,7 @@ html, body {
     background: rgba(0, 0, 0, 0.12);
 }
 
+/* Share base styling between previous and next gallery controls. */
 #image_popup_previous,
 #image_popup_next {
     position: absolute;
@@ -527,20 +584,24 @@ html, body {
     transition: background 0.2s ease, transform 0.2s ease;
 }
 
+/* Place the previous-image control on the left edge. */
 #image_popup_previous {
     left: 16px;
 }
 
+/* Place the next-image control on the right edge. */
 #image_popup_next {
     right: 16px;
 }
 
+/* Highlight and slightly enlarge gallery navigation controls on hover. */
 #image_popup_previous:hover,
 #image_popup_next:hover {
     background: rgba(255, 255, 255, 0.28);
     transform: translateY(-50%) scale(1.04);
 }
 
+/* Allow the image to be panned and zoomed without browser gesture interference. */
 #image_popup_image {
     max-width: none;
     max-height: none;
@@ -557,6 +618,7 @@ html, body {
     max-width: calc(100% - 20px);
 }
 
+/* Arrange image zoom buttons and the gallery counter beneath the image. */
 #image_popup_controls {
     display: flex;
     justify-content: space-between;
@@ -567,6 +629,7 @@ html, body {
     background: rgba(10, 11, 14, 0.9);
 }
 
+/* Style the image popup zoom buttons. */
 #image_popup_controls button {
     border: none;
     background: rgba(255, 255, 255, 0.12);
@@ -580,11 +643,13 @@ html, body {
     transition: background 0.2s ease, transform 0.2s ease;
 }
 
+/* Lift zoom buttons slightly when hovered. */
 #image_popup_controls button:hover {
     background: rgba(255, 255, 255, 0.22);
     transform: translateY(-1px);
 }
 
+/* Position the image popup close button above the image. */
 #image_popup_close {
     position: absolute;
     top: 14px;
@@ -605,22 +670,26 @@ html, body {
     transition: background 0.2s ease, transform 0.2s ease;
 }
 
+/* Highlight the image popup close button on hover. */
 #image_popup_close:hover {
     background: rgba(255, 255, 255, 0.26);
     transform: scale(1.04);
 }
 
+/* Keep zoom controls grouped together. */
 #image_popup_zoom_buttons {
     display: flex;
     gap: 10px;
 }
 
+/* Format the current image counter with stable numeric spacing. */
 #image_popup_counter {
     color: rgba(255, 255, 255, 0.78);
     font-size: 14px;
     font-variant-numeric: tabular-nums;
 }
 
+/* Position the combined exhibit panel close button. */
 #info_panel_close {
     position: absolute;
     top: 10px;
@@ -643,11 +712,13 @@ html, body {
     pointer-events: auto;
 }
 
+/* Highlight the combined panel close button on hover. */
 #info_panel_close:hover {
     background: rgba(0, 0, 0, 0.15);
     transform: scale(1.08);
 }
 
+/* Lay out the exhibit gallery and text card inside a scrollable container. */
 #info_panel_container {
     display: flex;
     gap: 20px;
@@ -665,11 +736,13 @@ html, body {
 
 /* Info Panel: layout and gallery styling for the combined image + text modal. */
 
+/* Style the exhibit panel scrollbar. */
 #info_panel_container::-webkit-scrollbar {
     width: 12px;
     background: transparent;
 }
 
+/* Style the exhibit panel scrollbar thumb. */
 #info_panel_container::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.28);
     border-radius: 999px;
@@ -677,6 +750,7 @@ html, body {
     background-clip: padding-box;
 }
 
+/* Arrange exhibit images in a vertically spaced gallery column. */
 #info_panel_gallery {
     flex: 1.5;
     position: sticky;
@@ -692,6 +766,7 @@ html, body {
     background: #b39917;
 }
 
+/* Center each gallery image inside its wrapper. */
 .gallery-img-wrapper {
     position: relative;
     width: 100%;
@@ -704,6 +779,7 @@ html, body {
     justify-content: center;
 }
 
+/* Preserve the original image proportions in the gallery. */
 .gallery-img-wrapper img {
     width: 100%;
     height: auto;
@@ -714,6 +790,7 @@ html, body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
+/* Arrange paired lower gallery images in one row. */
 .gallery-bottom-row {
     display: flex;
     gap: 14px;
@@ -721,11 +798,13 @@ html, body {
     align-items: center;
 }
 
+/* Give each lower gallery image half of the row width. */
 .gallery-bottom-row .gallery-img-wrapper {
     flex: 1;
     width: 50%;
 }
 
+/* Style and size the exhibit description card beside the gallery. */
 #info_panel_card {
     flex: 1;
     align-self: flex-start;
@@ -743,6 +822,7 @@ html, body {
     border: none;
 }
 
+/* Format the exhibit panel title. */
 #info_panel_title {
     font-size: 1.33rem;
     font-weight: 700;
@@ -751,12 +831,14 @@ html, body {
     line-height: 1.3;
 }
 
+/* Format the optional exhibit subtitle. */
 #info_panel_subtitle {
     font-size: 1.23rem;
     margin: 0 0 20px 0;
     color: #333333;
 }
 
+/* Format the exhibit description body. */
 #info_panel_body {
     font-size: 1.23rem;
     line-height: 1.6;
@@ -765,12 +847,14 @@ html, body {
     text-align: justify;
 }
 
+/* Separate expanded exhibit text from its summary. */
 #info_panel_full_text {
     margin-top: 20px;
     padding-top: 20px;
     border-top: 1px solid rgba(0, 0, 0, 0.25);
 }
 
+/* Style the exhibit full-text toggle. */
 #info_panel_more {
     margin-top: 22px;
     padding: 10px 18px;
@@ -782,11 +866,13 @@ html, body {
     cursor: pointer;
 }
 
+/* Format optional italic introductory exhibit text. */
 .panel-italic-intro {
     font-style: italic;
     margin-bottom: 16px;
 }
 
+/* Arrange text-to-speech controls horizontally. */
 .tts-controls {
     display: flex;
     gap: 8px;
@@ -795,6 +881,7 @@ html, body {
 
 /* TTS Controls: styles for the Listen / Stop buttons used across modals. */
 
+/* Define the shared appearance of all TTS buttons. */
 .tts-controls button {
     background-color: #000000;
     color: #ffffff;
@@ -810,16 +897,20 @@ html, body {
     transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
+/* Highlight TTS buttons when hovered. */
 .tts-controls button:hover {
     background-color: #333333;
     transform: scale(1.03);
 }
 
+/* Give TTS buttons a pressed interaction state. */
 .tts-controls button:active {
     transform: scale(0.98);
 }
 
+/* Reflow the combined exhibit panel into a mobile-friendly single column. */
 @media (max-width: 700px) {
+    /* Use nearly the entire viewport for the mobile exhibit panel. */
     #info_panel_modal {
         width: calc(100vw - 24px);
         height: calc(100vh - 24px);
@@ -829,6 +920,7 @@ html, body {
         border-radius: 12px;
     }
 
+    /* Keep the mobile close button reachable in the panel corner. */
     #info_panel_close {
         top: 10px;
         right: 12px;
@@ -836,6 +928,7 @@ html, body {
         height: 34px;
     }
 
+    /* Stack the gallery and description vertically on small screens. */
     #info_panel_container {
         display: block;
         height: 100%;
@@ -843,6 +936,7 @@ html, body {
         overflow-y: auto;
     }
 
+    /* Make the gallery full width and remove desktop sticky positioning. */
     #info_panel_gallery {
         display: flex;
         position: static;
@@ -851,47 +945,56 @@ html, body {
         padding: 0 0 18px;
     }
 
+    /* Limit mobile gallery image height while preserving its aspect ratio. */
     .gallery-img-wrapper img {
         max-height: 34vh;
         object-fit: contain;
     }
 
+    /* Tighten spacing between paired mobile gallery images. */
     .gallery-bottom-row {
         gap: 8px;
     }
 
+    /* Let the text card occupy the full mobile panel width. */
     #info_panel_card {
         width: 100%;
         min-height: 0;
         padding: 0 2px 12px;
     }
 
+    /* Reduce mobile title size and preserve space for the close control. */
     #info_panel_title {
         margin-right: 42px;
         font-size: 1.2rem;
         line-height: 1.2;
     }
 
+    /* Reduce mobile subtitle and body typography for the smaller viewport. */
     #info_panel_subtitle,
     #info_panel_body {
         font-size: 1rem;
         line-height: 1.45;
     }
 
+    /* Reduce the mobile subtitle's bottom spacing. */
     #info_panel_subtitle {
         margin-bottom: 14px;
     }
 
+    /* Use left-aligned body text for easier mobile reading. */
     #info_panel_body {
         text-align: left;
     }
 
+    /* Compact the mobile full-text toggle. */
     #info_panel_more {
         margin-top: 16px;
         padding: 9px 14px;
         font-size: 0.95rem;
     }
 
+    /* Tighten TTS spacing inside the mobile exhibit card. */
     #info_panel_card .tts-controls {
         margin-bottom: 12px;
     }

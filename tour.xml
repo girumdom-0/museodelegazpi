@@ -5,14 +5,16 @@
 
 <krpano version="1.24" title="Virtual Tour">
 
+    <!-- The include loads the reusable Krpano skin and its standard controls. -->
     <!-- 1. GLOBAL INCLUDES -->
     <!-- Imports the default tour skin (controls bar, default hotspot styles, thumbnail list) -->
     <include url="skin/vtourskin.xml" />
 
 
-    <!-- 2. OVERLAY LAYERS (UI & POPUPS) -->
+    <!-- 2. OVERLAY LAYERS (UI & POPUPS): persistent layers sit above panorama scenes. -->
 
         <!-- Intro Instructions Screen Overlay -->
+        <!-- The intro container blocks interaction until the visitor dismisses it. -->
         <layer name="intro"
             type="container"
             keep="true"
@@ -26,6 +28,7 @@
             onclick="on_intro_click();">
 
          <!-- Image graphic inside the intro layer detailing navigation instructions -->
+         <!-- The guide image explains the available tour navigation controls. -->
          <layer name="intro_guide"
              enabled="true"
              visible="true"
@@ -43,6 +46,7 @@
         </layer>
 
     <!-- Watermark / Branding Logo fixed at top-left corner -->
+    <!-- Keep the museum logo visible in the tour corner. -->
     <layer name ="logo"
            url="skin/logo.png"
            align="topleft"
@@ -51,18 +55,20 @@
     </layer>
 
     <!-- Final-scene video hotspot opens the Battle of Legazpi clip. -->
+    <!-- Forward the Battle of Legazpi hotspot action to the page-level video modal. -->
     <action name="show_battle_video" type="Javascript"><![CDATA[
         showBattleVideo();
     ]]></action>
 
     <!-- Fades out and hides the intro layer on first user click -->
+    <!-- Disable the intro overlay and start the skin's little-planet transition. -->
     <action name="on_intro_click">
         set(layer[intro].enabled, false);
         tween(layer[intro].alpha, 0, 0.5, easeOutQuad, set(layer[intro].visible, false); skin_start_littleplanetintro(); );
     </action>
 
 
-    <!-- 2A. IMAGE POPUP LAYERS (Legacy / Fallback Overlays) -->
+    <!-- 2A. IMAGE POPUP LAYERS (Legacy / Fallback Overlays): retained for Krpano fallback behavior. -->
 
     <!-- Basic Image Popup Background Container -->
     <layer name="img_popup_bg_fallback"
@@ -159,20 +165,23 @@
     </layer>
 
 
-    <!-- 2B. IMAGE POPUP ACTIONS -->
+    <!-- 2B. IMAGE POPUP ACTIONS: bridge Krpano hotspots to JavaScript image controls. -->
 
 
     <!-- Opens image modal, resets position/scale, and fades in -->
+    <!-- Pass the selected image path from Krpano to the JavaScript popup. -->
     <action name="show_image_popup">
         js(showImagePopup(%1));
     </action>
 
     <!-- Smoothly fades out and hides image modal -->
+    <!-- Ask JavaScript to close the active image popup. -->
     <action name="hide_image_popup">
         js(hideImagePopup());
     </action>
 
     <!-- Asynchronous loop handling dynamic mouse-dragging for layers -->
+    <!-- Track pointer movement and update the legacy Krpano image layer position. -->
     <action name="draglayer">
         copy(drag_x, mouse.stagex);
         copy(drag_y, mouse.stagey);
@@ -187,9 +196,10 @@
     </action>
 
 
-    <!-- 2C. 3D MODEL OVERLAY CONTAINER & ACTIONS -->
+    <!-- 2C. 3D MODEL OVERLAY CONTAINER & ACTIONS: bridge Krpano model hotspots to Three.js. -->
 
     <!-- Fullscreen dimming backdrop layer for 3D views -->
+    <!-- Provide a Krpano-side backdrop and fallback controls for the 3D viewer. -->
     <layer name="model3d_container"
            type="container"
            keep="true"
@@ -202,6 +212,7 @@
            alpha="0.0"
            bgcapture="true">
 
+        <!-- Close the JavaScript 3D viewer from the fallback Krpano control. -->
         <layer name="model3d_close"
                type="text"
                html="✕ Close 3D View"
@@ -210,6 +221,7 @@
                bg="false"
                onclick="hide_3d_obj();" />
 
+        <!-- Display interaction guidance when the fallback layer is enabled. -->
         <layer name="model3d_hint"
                type="text"
                html="[ Left Click + Drag to Rotate • Scroll to Zoom ]"
@@ -220,17 +232,19 @@
     </layer>
 
     <!-- Displays 3D modal and communicates with Three.js via JS interface -->
+    <!-- Pass model and optional texture paths to the JavaScript Three.js loader. -->
     <action name="show_3d_obj">
         js(loadGLBModel(%1, %2));
     </action>
 
     <!-- Closes 3D modal and disposes active 3D geometries in JavaScript -->
+    <!-- Tell JavaScript to close the model and release its WebGL resources. -->
     <action name="hide_3d_obj">
         js(clearGLBModel());
     </action>
 
 
-    <!-- 3. GLOBAL TOUR SKIN SETTINGS -->
+    <!-- 3. GLOBAL TOUR SKIN SETTINGS: configure navigation, thumbnails, transitions, and device features. -->
     <skin_settings maps="false"
                    maps_type="openstreetmaps"
                    maps_bing_api_key=""
@@ -286,25 +300,32 @@
                    design_text_shadow="1"
     />
 
-    <!-- Selected visual theme style stylesheet -->
+    <!-- Load the selected glass visual theme for the Krpano skin. -->
     <include url="skin/vtourskin_design_glass.xml" />
 
 
-    <!-- 4. PANORAMA SCENES -->
+    <!-- 4. PANORAMA SCENES: each scene contains a panorama, camera defaults, and hotspot actions. -->
+
+    <!-- Scene pattern: control sets limits, view sets the initial camera, preview provides a low-resolution placeholder, and image loads the multiresolution panorama. -->
 
     <!-- SCENE 1 -->
     <scene name="scene_1" title="1" onstart="" thumburl="panos/1.tiles/thumb.jpg" lat="" lng="" alt="" heading="">
+        <!-- Enable Krpano's image-dependent camera boundary behavior. -->
         <control bouncinglimits="calc:image.cube ? true : false" />
+        <!-- Set the initial view and allowed field-of-view range for this scene. -->
         <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+        <!-- Show a quick preview while the multiresolution panorama loads. -->
         <preview url="panos/1.tiles/preview.jpg" />
+        <!-- Load the tiled spherical panorama at progressively higher resolutions. -->
         <image>
             <sphere url="panos/1.tiles/l%l/%0v/l%l_%0v_%0h.jpg" multires="512,2048x1024,4096x2048,7936x3968" />
         </image>
         <!-- Navigation hotspot pointing forward to Scene 2 -->
+        <!-- Navigate from this scene to the next scene at its saved look-at position. -->
         <hotspot name="spot2085339555" style="skin_hotspotstyle" ath="-12.103" atv="4.788" depth="1000.0" linkedscene="scene_2" linkedscene_lookat="19.08,1.35,120.0" />
     </scene>
 
-    <!-- SCENE 2 -->
+    <!-- SCENE 2: panorama navigation and exhibit image hotspots. -->
     <scene name="scene_2" title="2" onstart="" thumburl="panos/2.tiles/thumb.webp" lat="" lng="" alt="" heading="">
         <control bouncinglimits="calc:image.cube ? true : false" />
         <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
@@ -339,7 +360,7 @@
     
     </scene>
 
-    <!-- SCENE 3 -->
+    <!-- SCENE 3: panorama navigation and historical image hotspots. -->
     <scene name="scene_3" title="3" onstart="" thumburl="panos/3.tiles/thumb.webp" lat="" lng="" alt="" heading="">
         <control bouncinglimits="calc:image.cube ? true : false" />
         <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
@@ -379,7 +400,7 @@
 
     </scene>
 
-    <!-- SCENE 4 -->
+    <!-- SCENE 4: panorama navigation and the vision/mission gallery hotspot. -->
     <scene name="scene_4" title="4" onstart="" thumburl="panos/4.tiles/thumb.webp" lat="" lng="" alt="" heading="">
         <control bouncinglimits="calc:image.cube ? true : false" />
         <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
@@ -423,7 +444,7 @@
         );
     ]]></action>
 
-    <!-- SCENE 5 -->
+    <!-- SCENE 5: panorama navigation between the fourth and sixth scenes. -->
     <scene name="scene_5" title="5" onstart="" thumburl="panos/5.tiles/thumb.webp" lat="" lng="" alt="" heading="">
         <control bouncinglimits="calc:image.cube ? true : false" />
         <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
@@ -435,7 +456,7 @@
         <hotspot name="spot2085345652" style="skin_hotspotstyle" ath="14.119" atv="17.232" depth="1000.0" linkedscene="scene_4" linkedscene_lookat="177.32,4.65,120.0" />
     </scene>
 
-    <!-- SCENE 6 (Contains Interactive Information Hotspots) -->
+    <!-- SCENE 6: interactive image, 3D model, text, and exhibit panel hotspots. -->
     <scene name="scene_6" title="6" onstart="" thumburl="panos/6.tiles/thumb.webp" lat="" lng="" alt="" heading="">
         <control bouncinglimits="calc:image.cube ? true : false" />
         <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
@@ -512,7 +533,7 @@
         );
     ]]></action>
 
-    <!-- SCENE 7 -->
+    <!-- SCENE 7: panorama navigation and historical exhibit panels. -->
     <scene name="scene_7" title="7" onstart="" thumburl="panos/7.tiles/thumb.webp" lat="" lng="" alt="" heading="">
         <control bouncinglimits="calc:image.cube ? true : false" />
         <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
@@ -600,7 +621,7 @@
         );
     ]]></action>
 
-    <!-- SCENE 8 -->
+    <!-- SCENE 8: panorama navigation and Albay history exhibit panels. -->
     <scene name="scene_8" title="8" onstart="" thumburl="panos/8.tiles/thumb.webp" lat="" lng="" alt="" heading="">
         <control bouncinglimits="calc:image.cube ? true : false" />
         <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
@@ -681,7 +702,7 @@
     ]]></action>
 
 
-    <!-- SCENE 9 -->
+    <!-- SCENE 9: panorama navigation and sea, battle, and economic history panels. -->
     <scene name="scene_9" title="9" onstart="" thumburl="panos/9.tiles/thumb.webp" lat="" lng="" alt="" heading="">
         <control bouncinglimits="calc:image.cube ? true : false" />
         <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
@@ -761,7 +782,7 @@
         );
     ]]></action>
 
-    <!-- SCENE 10 -->
+    <!-- SCENE 10: panorama navigation and occupation/transport history panels. -->
     <scene name="scene_10" title="10" onstart="" thumburl="panos/10.tiles/thumb.webp" lat="" lng="" alt="" heading="">
         <control bouncinglimits="calc:image.cube ? true : false" />
         <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
@@ -839,7 +860,7 @@
     ]]></action>
 
 
-    <!-- SCENE 11 -->
+    <!-- SCENE 11: panorama navigation, republic/progress panels, galleries, and a 3D model. -->
     <scene name="scene_11" title="11" onstart="" thumburl="panos/11.tiles/thumb.webp" lat="" lng="" alt="" heading="">
         <control bouncinglimits="calc:image.cube ? true : false" />
         <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
@@ -969,7 +990,7 @@
         );
     ]]></action>
 
-    <!-- SCENE 12 -->
+    <!-- SCENE 12: panorama navigation and the Legazpito image gallery. -->
     <scene name="scene_12" title="12" onstart="" thumburl="panos/12.tiles/thumb.webp" lat="" lng="" alt="" heading="">
         <control bouncinglimits="calc:image.cube ? true : false" />
         <view hlookat="0.0" vlookat="0.0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />

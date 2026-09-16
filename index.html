@@ -8,65 +8,96 @@
 -->
 <html>
 <head>
+    <!-- Sets the browser tab title for the virtual tour. -->
     <title>Museo De Legazpi</title>
+    <!-- Uses the project logo as the browser and mobile shortcut icon. -->
     <link rel="icon" href="skin/logo.png" type="image/png" />
+    <!-- Makes the page responsive and prevents unwanted browser scaling. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
+    <!-- Allows the page to behave like a standalone iOS web application. -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- Uses a black status-bar style when opened as an iOS web application. -->
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <!-- Allows supported mobile browsers to treat the page as a web application. -->
     <meta name="mobile-web-app-capable" content="yes" />
+    <!-- Declares the character encoding used by this document. -->
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 
+    <!-- Opens early connections to the remote asset, CDN, and library servers. -->
     <link rel="preconnect" href="https://museodelegazpi-assets.07304476.workers.dev" crossorigin />
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     
+    <!-- Loads the stylesheet for the tour layout, modals, and controls. -->
     <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
 <!-- Krpano configuration script source -->
+<!-- Loads the generated Krpano tour configuration and viewer helpers. -->
 <script src="tour.js"></script>
 
 <!-- External Three.js libraries for 3D GLTF/GLB model rendering -->
+<!-- Loads the Three.js rendering engine. -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<!-- Loads the GLTF/GLB model parser used by the 3D viewer. -->
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <!-- Loads compressed-model support for models encoded with Draco. -->
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
+<!-- Loads orbit controls for rotating and zooming the 3D model. -->
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
 <!-- 3D Modal Structure container -->
 <!-- 3D Model Viewer Modal: displays GLB/GLTF models using Three.js in `threejs_container`. -->
+<!-- Closes the 3D viewer when the user clicks outside the modal. -->
 <div id="model3d_backdrop" onclick="clearGLBModel()"></div>
 <div id="model3d_modal">
+    <!-- Toggles the 3D viewer between normal and fullscreen display. -->
     <div id="model3d_expand" onclick="toggle3DFullscreen()" title="Toggle Fullscreen">⛶</div>
+    <!-- Closes the 3D model viewer. -->
     <div id="model3d_close" onclick="clearGLBModel()" title="Close View">✕</div>
+    <!-- Displays the visual marker identifying this as a 3D model viewer. -->
     <div id="model3d_icon">⤢<br>3D</div>
+    <!-- Shows or hides the selected model's information panel. -->
     <button id="model3d_info_button" type="button" onclick="toggleModel3DInfo()" title="Show model information" aria-label="Show model information">i</button>
+    <!-- Contains the model title, description, and text-to-speech controls. -->
     <div id="model3d_info" hidden>
         <div class="tts-controls">
+            <!-- Starts speech synthesis for the model description. -->
             <button id="tts_model_play_btn" onclick="toggleTTS('model3d_info', 'tts_model_play_btn', 'tts_model_stop_btn')" title="Listen to model description">▶ Listen</button>
+            <!-- Stops the active speech-synthesis playback. -->
             <button id="tts_model_stop_btn" onclick="stopTTS()" title="Stop audio" style="display: none;">⏹ Stop</button>
         </div>
+        <!-- Receives the selected model's name from the application script. -->
         <h2 id="model3d_title"></h2>
+        <!-- Receives the selected model's description from the application script. -->
         <p id="model3d_description"></p>
     </div>
     <div id="threejs_container"></div>
 </div>
 
 <!-- Final tour video: opened by the Battle of Legazpi hotspot in scene 18. -->
+<!-- Dims the page behind the video dialog and closes the dialog when clicked. -->
 <div id="battle_video_backdrop" onclick="hideBattleVideo()"></div>
 <div id="battle_video_modal" role="dialog" aria-modal="true" aria-label="Battle of Legazpi video">
+    <!-- Closes the Battle of Legazpi video dialog. -->
     <button id="battle_video_close" type="button" onclick="hideBattleVideo()" title="Close video">X</button>
+    <!-- Labels the video dialog with the historical event title. -->
     <h2>Battle of Legazpi</h2>
+    <!-- Provides native video controls and delays loading until the dialog is opened. -->
     <video id="battle_video" controls controlslist="nodownload" playsinline preload="none">
+    <!-- Identifies the remotely hosted MP4 file used by the video player. -->
     <source data-asset-type="video" data-storage-provider="github" data-storage-key="v1.0.0/Episode.1.Battle.of.Legazpi.mp4" data-src="https://github.com/girumdom-0/museodelegazpi/releases/download/v1.0.0/Episode.1.Battle.of.Legazpi.mp4" type="video/mp4" />
     </video>
 </div>
 
+<!-- Loads the application logic for hotspots, modals, media, and 3D models. -->
 <script src="script.js?v=20260915-webgl"></script>
 
 <!-- Krpano panoramic viewer container wrapper -->
 <!-- Krpano embed: loads `tour.xml` and initializes the panorama viewer. -->
 <div style="width:100%;height:100%;">
+    <!-- Displays a fallback message when JavaScript is disabled. -->
     <noscript>
         <table style="width:100%;height:100%;">
             <tr style="vertical-align:middle;text-align:center;">
@@ -74,30 +105,48 @@
             </tr>
         </table>
     </noscript>
+    <!-- Starts Krpano with the tour XML and permits URL-based starting positions. -->
     <script>
-        embedpano({xml:"tour.xml?v=20260903-texts", passQueryParameters:"startscene,startlookat", consolelog:true});
+        embedpano({
+            // Loads the panorama scenes and their hotspot definitions.
+            xml: "tour.xml?v=20260903-texts",
+            // Allows startscene and startlookat values from the page URL.
+            passQueryParameters: "startscene,startlookat",
+            // Enables Krpano diagnostic messages in the browser console.
+            consolelog: true
+        });
     </script>
 </div>
 
 <!-- SINGLE TEXT-ONLY MODAL CONTAINER -->
 <!-- Text Modal: reusable single-column modal for long-form descriptions and TTS controls. -->
+<!-- Dims the page and closes the text modal when the backdrop is clicked. -->
 <div id="text_backdrop" onclick="closeTextModal()"></div>
 <div id="text_modal_card">
+    <!-- Closes the reusable text modal. -->
     <button id="text_modal_close" onclick="closeTextModal()" title="Close">✕</button>
     <div class="tts-controls">
+        <!-- Reads the text modal contents aloud with speech synthesis. -->
         <button id="tts_text_play_btn" onclick="toggleTTS('text_modal_card', 'tts_text_play_btn', 'tts_text_stop_btn')" title="Listen to text">▶ Listen</button>
+        <!-- Stops speech synthesis for the text modal. -->
         <button id="tts_text_stop_btn" onclick="stopTTS()" title="Stop audio" style="display: none;">⏹ Stop</button>
     </div>
+    <!-- Receives the text modal heading dynamically. -->
     <h2 id="text_modal_title"></h2>
+    <!-- Receives the optional text modal subtitle dynamically. -->
     <div id="text_modal_subtitle"></div>
+    <!-- Receives the main text modal content dynamically. -->
     <div id="text_modal_body"></div>
+    <!-- Expands truncated text when additional details are available. -->
     <button id="text_modal_more" type="button" onclick="toggleTextDetails()" hidden>Full Text</button>
 </div>
 
 <!-- COMBINED IMAGE & TEXT MODAL -->
 <!-- Info Panel: combined gallery + text card used for exhibit details with image gallery and TTS. -->
+<!-- Dims the page and closes the exhibit panel when the backdrop is clicked. -->
 <div id="info_panel_backdrop" onclick="closeInfoPanel()"></div>
 <div id="info_panel_modal">
+    <!-- Closes the exhibit information panel. -->
     <div id="info_panel_close" onclick="closeInfoPanel()" title="Close">✕</div>
     <div id="info_panel_container">
         <!-- Gallery side containing uncropped original-size images -->
@@ -105,12 +154,18 @@
         <!-- Card side containing descriptive text and audio controls -->
         <div id="info_panel_card">
             <div class="tts-controls">
+                <!-- Reads the exhibit information aloud. -->
                 <button id="tts_info_play_btn" onclick="toggleTTS('info_panel_card', 'tts_info_play_btn', 'tts_info_stop_btn')" title="Listen to text">▶ Listen</button>
+                <!-- Stops speech synthesis for the exhibit information. -->
                 <button id="tts_info_stop_btn" onclick="stopTTS()" title="Stop audio" style="display: none;">⏹ Stop</button>
             </div>
+            <!-- Receives the exhibit title dynamically. -->
             <h2 id="info_panel_title"></h2>
+            <!-- Receives the optional exhibit subtitle dynamically. -->
             <div id="info_panel_subtitle"></div>
+            <!-- Receives the exhibit description dynamically. -->
             <div id="info_panel_body"></div>
+            <!-- Expands truncated exhibit text when more content is available. -->
             <button id="info_panel_more" type="button" onclick="toggleInfoTextDetails()" hidden>Full Text</button>
         </div>
     </div>
@@ -120,16 +175,23 @@
     <!-- Image Popup: full-screen image viewer with pan/zoom controls. -->
     <div id="image_popup_modal" role="dialog" aria-modal="true" aria-label="Image popup">
         <div id="image_popup_content">
+            <!-- Displays the currently selected gallery image. -->
             <img id="image_popup_image" src="" alt="Popup image" draggable="false" />
+            <!-- Navigates to the previous image in the gallery. -->
             <button id="image_popup_previous" type="button" title="Previous image" aria-label="Previous image">&#10094;</button>
+            <!-- Navigates to the next image in the gallery. -->
             <button id="image_popup_next" type="button" title="Next image" aria-label="Next image">&#10095;</button>
         </div>
+        <!-- Closes the full-screen image viewer. -->
         <button id="image_popup_close" type="button" title="Close popup">✕</button>
         <div id="image_popup_controls">
             <div id="image_popup_zoom_buttons">
+                <!-- Enlarges the image in the popup. -->
                 <button id="image_popup_zoom_in" type="button" title="Zoom in">+</button>
+                <!-- Reduces the image scale in the popup. -->
                 <button id="image_popup_zoom_out" type="button" title="Zoom out">−</button>
             </div>
+            <!-- Announces the current image position to assistive technology. -->
             <span id="image_popup_counter" aria-live="polite"></span>
         </div>
     </div>
