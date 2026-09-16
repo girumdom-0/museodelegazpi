@@ -15,6 +15,7 @@ let scene, camera, renderer, controls, currentModel;
 // Track the optional texture, pending model request, resize listener, and active tour text.
 let currentTexture = null;
 let modelRequest = null;
+let modelLoadVersion = 0;
 let threeResizeHandler = null;
 let threeAnimationActive = false;
 let threeContextLost = false;
@@ -98,10 +99,10 @@ function fetchAssetPublicUrl(assetType, storageProvider, storageKey, fallbackUrl
         })
         .catch(() => fallbackUrl);
 
-    // Wait for the initial catalog before making a second request, then reuse any URL it found.
-    return (assetCatalogPromise || Promise.resolve()).then(() => {
-        return assetUrlCache.get(cacheKey) || fetchUrl();
-    });
+    // Resolve this asset immediately instead of waiting for the full catalog.
+    // The catalog still warms the cache in parallel, but it must not block a model
+    // download when the visitor has already requested that model.
+    return fetchUrl().then((resolvedUrl) => assetUrlCache.get(cacheKey) || resolvedUrl);
 }
 
 // Begin loading the asset catalog while the rest of the page initializes.
@@ -298,9 +299,8 @@ function initThreeJS() {
 
     // Render only while the viewer is active, and update orbit damping each frame.
     function animate() {
-        if (!threeAnimationActive) return;
         requestAnimationFrame(animate);
-        if (!threeContextLost && document.getElementById("model3d_modal").style.display !== "none") {
+        if (threeAnimationActive && !threeContextLost && document.getElementById("model3d_modal").style.display !== "none") {
             controls.update();
             renderer.render(scene, camera);
         }
@@ -380,6 +380,7 @@ function cacheModelAssetInfo(entries) {
 function loadGLBModel(glbPath, texturePath) {
     // Close competing views before opening the model viewer.
     closeAllModals();
+    const loadVersion = ++modelLoadVersion;
 
     // Resolve the model's display text from the remote catalog, then use local defaults.
     const modelName = glbPath.split('/').pop();
@@ -400,6 +401,7 @@ function loadGLBModel(glbPath, texturePath) {
     document.getElementById('model3d_info').hidden = true;
     document.getElementById('model3d_info_button').setAttribute('aria-label', `Show information about ${modelInfo.title}`);
     document.getElementById('model3d_info_button').title = `Show information about ${modelInfo.title}`;
+    document.getElementById('threejs_container').setAttribute('aria-busy', 'true');
 
     // Make the model backdrop and dialog visible before loading begins.
     document.getElementById("model3d_backdrop").style.display = "block";
@@ -412,7 +414,7 @@ function loadGLBModel(glbPath, texturePath) {
     removeCurrentModel();
 
     // Use a request token to ignore late responses from older model loads.
-    const request = { cancelled: false };
+    const request = { cancelled: false, loadVersion };
     modelRequest = request;
     let pngTexture = null;
     // Load an optional texture and configure it for the model's material color space.
@@ -421,7 +423,7 @@ function loadGLBModel(glbPath, texturePath) {
         textureLoader.setCrossOrigin('anonymous');
         pngTexture = textureLoader.load(texturePath, (tex) => {
             // Discard a texture if the user opened a different model while it loaded.
-            if (request.cancelled) {
+            if (request.cancelled || request.loadVersion !== modelLoadVersion) {
                 tex.dispose();
                 return;
             }
@@ -442,27 +444,25 @@ function loadGLBModel(glbPath, texturePath) {
     loader.setDRACOLoader(dracoLoader);
 
     const storageKey = glbPath.replace(/^models\//, '');
-    // Resolve the model's public URL before asking GLTFLoader to download it.
-    fetchAssetPublicUrl(
-        'model',
-        'cloudflare',
-        storageKey,
-        `${cloudflareAssetsUrl}/${glbPath}`
-    )
+    const fallbackModelPath = `${cloudflareAssetsUrl}/${glbPath}`;
+    const cachedModelPath = assetUrlCache.get(assetCacheKey('model', 'cloudflare', storageKey));
+    // Start downloading from the known Cloudflare URL without waiting for Supabase.
+    Promise.resolve(cachedModelPath || fallbackModelPath)
         .then((resolvedGlbPath) => {
-            if (request.cancelled) return;
+            if (request.cancelled || request.loadVersion !== modelLoadVersion) return;
 
             // Load, center, scale, and add the model after its asset URL is resolved.
             loader.load(
         resolvedGlbPath,
         (gltf) => {
-            if (request.cancelled) {
+            if (request.cancelled || request.loadVersion !== modelLoadVersion) {
                 disposeModel(gltf.scene);
                 return;
             }
 
             // Mark the request complete and retain the loaded scene as the active model.
             modelRequest = null;
+            document.getElementById('threejs_container').setAttribute('aria-busy', 'false');
             currentModel = gltf.scene;
 
             // Apply the optional replacement texture or make existing materials double-sided.
@@ -501,7 +501,11 @@ function loadGLBModel(glbPath, texturePath) {
             controls.update();
         },
         undefined,
-        (error) => console.error("Error loading GLB:", error)
+        (error) => {
+            if (request.cancelled || request.loadVersion !== modelLoadVersion) return;
+            document.getElementById('threejs_container').setAttribute('aria-busy', 'false');
+            console.error("Error loading GLB:", error);
+        }
             );
         });
 }
@@ -530,6 +534,7 @@ function toggle3DFullscreen() {
 // Close the 3D viewer and release the current model without destroying its WebGL context.
 function clearGLBModel() {
     // Stop pending loads, remove the model, and pause rendering on close.
+    modelLoadVersion += 1;
     if (modelRequest) modelRequest.cancelled = true;
     modelRequest = null;
     removeCurrentModel();

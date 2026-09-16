@@ -263,6 +263,20 @@ html, body {
     touch-action: none;
 }
 
+#threejs_container[aria-busy="true"]::after {
+    content: "Loading 3D exhibit...";
+    position: absolute;
+    inset: 50% auto auto 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 6px;
+    color: rgba(255, 255, 255, 0.82);
+    background: rgba(0, 0, 0, 0.55);
+    font-size: 0.85rem;
+    pointer-events: none;
+}
+
 /* Battle of Legazpi video modal */
 /* Dim the page behind the historical video dialog. */
 #battle_video_backdrop {
@@ -910,6 +924,43 @@ html, body {
 
 /* Reflow the combined exhibit panel into a mobile-friendly single column. */
 @media (max-width: 700px) {
+    /* Give the 3D viewer a stable touch-friendly viewport on phones. */
+    #model3d_modal {
+        width: calc(100vw - 16px);
+        height: calc(100dvh - 16px);
+        max-width: none;
+        max-height: none;
+        border-radius: 6px;
+    }
+
+    #model3d_modal.fullscreen {
+        width: 100vw !important;
+        height: 100dvh !important;
+    }
+
+    #model3d_close,
+    #model3d_expand {
+        width: 40px;
+        height: 40px;
+        top: max(10px, env(safe-area-inset-top));
+    }
+
+    #model3d_close {
+        right: max(10px, env(safe-area-inset-right));
+    }
+
+    #model3d_expand {
+        left: max(10px, env(safe-area-inset-left));
+    }
+
+    #model3d_info {
+        left: 12px;
+        bottom: max(12px, env(safe-area-inset-bottom));
+        width: calc(100% - 24px);
+        max-height: 35%;
+        overflow-y: auto;
+    }
+
     /* Use nearly the entire viewport for the mobile exhibit panel. */
     #info_panel_modal {
         width: calc(100vw - 24px);
