@@ -1,13 +1,17 @@
 /*
     File: script.js
-    Purpose: Handles UI interactions outside of krpano: background music, text-to-speech (TTS), 3D model loading via Three.js, image popups, modal management, and utility helpers.
-    Summary of responsibilities:
-        - Background audio management and krpano skin integration
-        - Initialize and manage Three.js scene for GLB/GLTF models
-        - Modal open/close helpers for text, image, info and 3D viewers
-        - Image popup panning/zoom controls and keyboard handlers
-        - Text-to-speech control (play/pause/stop) and TTS UI updates
-    Note: Exposes a few functions globally for krpano or UI to call (e.g., `loadGLBModel`, `toggleBackgroundMusic`).
+    Purpose: Handles the non-krpano interactive layer of the virtual tour.
+
+    This script manages the browser-side experience for:
+        - Background music playback and krpano skin synchronization
+        - Loading and displaying 3D GLB/GTLF exhibits with Three.js
+        - Opening and closing text, info, image, and 3D modal views
+        - Gallery zoom, pan, and keyboard navigation for image popups
+        - Text-to-speech playback and related UI controls
+        - Fetching tour text and asset metadata from Supabase/Cloudflare
+
+    Several functions are exposed globally so krpano hotspot actions and HTML controls
+    can trigger them directly, such as loadGLBModel(), showInfoPanel(), and toggleBackgroundMusic().
 */
 
 // Store the Three.js objects used by the interactive 3D model viewer.
@@ -20,8 +24,50 @@ let threeResizeHandler = null;
 let threeAnimationActive = false;
 let threeContextLost = false;
 let activeTourTextAction = '';
+const tourPositionStorageKey = 'museo-de-legazpi-tour-position';
 // Cache remote tour descriptions so modal content can be reused without repeated requests.
 const tourTexts = new Map();
+
+function saveTourPosition() {
+    const viewer = window.krpano;
+    if (!viewer || typeof viewer.get !== 'function') return;
+
+    const scene = viewer.get('xml.scene');
+    if (!scene) return;
+
+    try {
+        localStorage.setItem(tourPositionStorageKey, JSON.stringify({
+            scene,
+            hlookat: Number(viewer.get('view.hlookat')) || 0,
+            vlookat: Number(viewer.get('view.vlookat')) || 0,
+            fov: Number(viewer.get('view.fov')) || 0,
+            savedAt: Date.now()
+        }));
+    } catch (error) {
+        // Ignore storage restrictions in private browsing or embedded webviews.
+    }
+}
+
+function restoreTourPosition() {
+    const viewer = window.krpano;
+    if (!viewer || typeof viewer.call !== 'function') {
+        window.setTimeout(restoreTourPosition, 500);
+        return;
+    }
+
+    try {
+        const saved = JSON.parse(localStorage.getItem(tourPositionStorageKey) || 'null');
+        if (!saved?.scene || Date.now() - saved.savedAt > 86400000) return;
+
+        const lookat = [saved.hlookat, saved.vlookat, saved.fov].join(',');
+        viewer.call(`loadscene(${saved.scene}, null, MERGE|KEEPVIEW, BLEND(0.2)); lookat(${lookat});`);
+    } catch (error) {
+        // Ignore malformed or unavailable saved state and keep the normal start scene.
+    }
+}
+
+window.setInterval(saveTourPosition, 1000);
+window.addEventListener('load', () => window.setTimeout(restoreTourPosition, 1200));
 
 // Define the Supabase and Cloudflare endpoints used to retrieve text and media metadata.
 const supabaseTourTextsUrl = 'https://qysyaobzgltbxrpqjssv.supabase.co/rest/v1/tour_texts?select=action_name,title,summary_text,full_text';
